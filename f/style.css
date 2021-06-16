@@ -1,0 +1,63 @@
+@media only screen and (max-width: 680px) {
+    #root {
+        margin: 0 auto;
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 680px) {
+    #root {
+        margin: 0 auto;
+        width: 680px;
+    }
+}
+
+.quattro {
+    font: 16px/1.5 "iA Writer Quattro", monospace;
+}
+
+.regular {
+    font-weight: normal;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.normal {
+    font-style: normal;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.footer-div {
+    font-size: 75%;
+    border-top: 1px solid black;
+    padding-top: 4px;
+}
+
+h2 {
+    border-bottom: 1px solid black;
+}
+
+a {
+    color: rgb(0,0,200);
+    text-decoration-style: dotted;
+}
+
+a:visited {
+    text-decoration-color: white !important;
+}
+
+code {
+    background-color: #eee;
+    padding: 3px;
+    width: 100%;
+    display: inline-block;
+}
+
+blockquote {
+    font-style: italic;
+}
