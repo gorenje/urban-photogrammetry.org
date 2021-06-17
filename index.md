@@ -1,5 +1,6 @@
 ---
 permalink: /
+title: Urban Photogrammetry
 ---
 
 ## Urban Photogrammetry
