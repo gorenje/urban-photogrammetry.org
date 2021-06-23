@@ -1,5 +1,5 @@
 {% assign pnum = page.path | split: "/" | last | abs %}
-{% assign last_page = 12 %}
+{% assign last_page = 19 %}
 
 <div>
 
@@ -8,6 +8,8 @@
 {% else %}
 <a href="/berlin/{{ pnum | minus: 1 | at_least: 0 }}">« Previous</a>
 {% endif %}
+
+<a style="position: absolute; left: 49%;" href="/berlin">Index</a>
 
 {% if pnum == last_page %}
 <a style="float: right" href="/berlin/0">Next »</a>

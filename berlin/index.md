@@ -20,5 +20,12 @@ So far, the following make up the tour:
 - [Sitting Man](/berlin/10)
 - [Stolpersteine](/berlin/11)
 - [Spanienkämpferdenkmal](/berlin/12)
+- [Heinrich Heine](/berlin/13)
+- [Irene Kubischik](/berlin/14)
+- [Struck by Lightening](/berlin/15)
+- [Gravestones](/berlin/16)
+- [Stauffenberg](/berlin/17)
+- [Liegende Wapiti-Hirsche](/berlin/18)
+- [Frieda Seidlitz](/berlin/19)
 
-There is also a [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) available at [SketchFab](https://sketchfab.com).
+The [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) is available at [SketchFab](https://sketchfab.com).
