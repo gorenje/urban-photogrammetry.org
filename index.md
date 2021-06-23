@@ -17,9 +17,9 @@ There are many objects of interest but obscurity can be a good indicating of int
 
 {% include model.html mlid="46af2175f9ee432989d7a0d485ea8302" %}
 
+## Virtual Tours
 
-[Initial collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) available at [SketchFab](https://sketchfab.com).
-
+[Berlin Virtual Tour](/berlin)
 
 ## Similar Projects
 
