@@ -29,5 +29,6 @@ So far, the following make up the tour:
 - [Frieda Seidlitz](/berlin/19)
 - [Großer Janus II](/berlin/20)
 - [Skulpturen gegen den Krieg](/berlin/21)
+- [Maria Jastram](/berlin/22)
 
 The [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) is available at [SketchFab](https://sketchfab.com).
