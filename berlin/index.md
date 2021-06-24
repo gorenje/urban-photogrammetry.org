@@ -27,5 +27,6 @@ So far, the following make up the tour:
 - [Stauffenberg](/berlin/17)
 - [Liegende Wapiti-Hirsche](/berlin/18)
 - [Frieda Seidlitz](/berlin/19)
+- [Großer Janus II](/berlin/20)
 
 The [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) is available at [SketchFab](https://sketchfab.com).
