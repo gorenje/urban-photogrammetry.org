@@ -31,5 +31,12 @@ So far, the following make up the tour:
 - [Skulpturen gegen den Krieg](/berlin/21)
 - [Maria Jastram](/berlin/22)
 - [Iida Yoshikuni](/berlin/23)
+- [Liebig 34](/berlin/24)
+- [Tegel Airport](/berlin/25)
+- [Frankfurter Allee 6](/berlin/26)
+- [Lukas Apotheke](/berlin/27)
+- [Olympiastadion](/berlin/28)
+- [Gabriel Max Strasse 13](/berlin/29)
+- [Intimes Cinema](/berlin/30)
 
 The [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) is available at [SketchFab](https://sketchfab.com).
