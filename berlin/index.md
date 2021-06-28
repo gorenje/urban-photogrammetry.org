@@ -30,5 +30,6 @@ So far, the following make up the tour:
 - [Großer Janus II](/berlin/20)
 - [Skulpturen gegen den Krieg](/berlin/21)
 - [Maria Jastram](/berlin/22)
+- [Iida Yoshikuni](/berlin/23)
 
 The [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) is available at [SketchFab](https://sketchfab.com).
