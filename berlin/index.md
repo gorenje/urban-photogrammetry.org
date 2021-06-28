@@ -3,40 +3,40 @@ title: Berlin Tour
 permalink: /berlin
 ---
 
-A three-dimensional tour of Berlin, Germany.
+# Three-dimensional virtual tour of Berlin
+
+<link rel="stylesheet" href="/f/leaflet.css"/>
+<script src="/f/leaflet.js"></script>
+
+<script>
+var map;
+  function init(){
+    map = L.map('map').setView([52.5221, 13.4071], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+  }
+  window.addEventListener("load", init);
+</script>
+
+<div id="map" class="map map-home" style="height: 600px; margin-top: 50px"></div>
 
 So far, the following make up the tour:
 
-- [Make Art, Not War](/berlin/0)
-- [Volksbühne](/berlin/1)
-- [Gropius Wood](/berlin/2)
-- [Alois Senefelder](/berlin/3)
-- [Marx & Engels](/berlin/4)
-- [Ernst Thälmann](/berlin/5)
-- [Petra Tschortner](/berlin/6)
-- [Broken Cross Gravestone](/berlin/7)
-- [Rosa Luxemburg](/berlin/8)
-- [Elias Pipping](/berlin/9)
-- [Sitting Man](/berlin/10)
-- [Stolpersteine](/berlin/11)
-- [Spanienkämpferdenkmal](/berlin/12)
-- [Heinrich Heine](/berlin/13)
-- [Irene Kubischik](/berlin/14)
-- [Struck by Lightening](/berlin/15)
-- [Gravestones](/berlin/16)
-- [Stauffenberg](/berlin/17)
-- [Liegende Wapiti-Hirsche](/berlin/18)
-- [Frieda Seidlitz](/berlin/19)
-- [Großer Janus II](/berlin/20)
-- [Skulpturen gegen den Krieg](/berlin/21)
-- [Maria Jastram](/berlin/22)
-- [Iida Yoshikuni](/berlin/23)
-- [Liebig 34](/berlin/24)
-- [Tegel Airport](/berlin/25)
-- [Frankfurter Allee 6](/berlin/26)
-- [Lukas Apotheke](/berlin/27)
-- [Olympiastadion](/berlin/28)
-- [Gabriel Max Strasse 13](/berlin/29)
-- [Intimes Cinema](/berlin/30)
+{%- assign cnt = 0 %}
+{%- for site in site.data.berlin %}
+  - [{{site.idx | default: site.title}}](/berlin/{{ cnt }})
+  {%- assign cnt = cnt | plus: 1 %}
+{%- endfor %}
+
+{%- assign cnt = 0 %}
+{%- for site in site.data.berlin %}
+  {%- if site.loc and site.loc != "" %}
+    {%- include marker.html loc=site.loc mlid=site.mlid cnt=cnt %}
+  {%- endif %}
+  {%- assign cnt = cnt | plus: 1 %}
+{%- endfor %}
 
 The [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) is available at [SketchFab](https://sketchfab.com).
