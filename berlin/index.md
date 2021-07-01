@@ -8,8 +8,15 @@ permalink: /berlin
 <link rel="stylesheet" href="/f/leaflet.css"/>
 <script src="/f/leaflet.js"></script>
 
+<style>
+.leaflet-popup-content {
+    width: 510px !important;
+    height: 440px;
+}
+</style>
+
 <script>
-var map;
+  var map;
   function init(){
     map = L.map('map').setView([52.5221, 13.4071], 11);
 
