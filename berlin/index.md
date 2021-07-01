@@ -40,3 +40,8 @@ So far, the following make up the tour:
 {%- endfor %}
 
 The [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) is available at [SketchFab](https://sketchfab.com).
+
+## Similar Projects
+
+- [Niederösterreich 3D](https://www.noe-3d.at/)
+- [City Museum Berlin](https://sketchfab.com/stadtmuseumBLN)
