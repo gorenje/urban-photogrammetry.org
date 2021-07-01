@@ -1,14 +1,14 @@
-@media only screen and (max-width: 680px) {
+@media only screen and (max-width: 800px) {
     #root {
         margin: 0 auto;
         width: 100%;
     }
 }
 
-@media only screen and (min-width: 680px) {
+@media only screen and (min-width: 800px) {
     #root {
         margin: 0 auto;
-        width: 680px;
+        width: 800px;
     }
 }
 
