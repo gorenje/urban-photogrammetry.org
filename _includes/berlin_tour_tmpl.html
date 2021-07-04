@@ -1,7 +1,7 @@
 {% assign idx = page.path | split: "/" | last | abs %}
 {% assign data = site.data.berlin[idx] %}
 
-# {{ data.title }}
+{% include berlin_title.html title=data.title %}
 
 {% include model.html mlid=data.mlid %}
 
