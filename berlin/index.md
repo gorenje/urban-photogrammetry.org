@@ -36,7 +36,7 @@ So far, the following make up the tour:
 {%- assign cnt = 0 %}
 <ul>
 {%- for site in site.data.berlin %}
-  <li><a href="/berlin/{{ cnt }}">{{site.idx | default: site.title}}</a></li>
+  <li><a href="/berlin/{{ site["mlid"] }}">{{site.idx | default: site.title}}</a></li>
   {%- if site.loc and site.loc != "" %}
     {%- include marker.js loc=site.loc mlid=site.mlid cnt=cnt %}
   {%- endif %}

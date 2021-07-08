@@ -1,0 +1,15 @@
+{%- assign pnum = page.path | split: "/" | last | split: "." | first %}
+
+{%- if pnum.size > 10 %}
+  {%- assign cnt = 0 %}
+  {%- for site in site.data.berlin %}
+     {%- if site["mlid"] == pnum %}
+         {%- assign pnum = cnt %}
+     {%- endif %}
+     {%- assign cnt = cnt | plus: 1 %}
+  {%- endfor %}
+{%- else %}
+   {%- assign pnum = pnum | abs %}
+{%- endif %}
+
+{{ pnum }}
