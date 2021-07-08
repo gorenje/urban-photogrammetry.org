@@ -1,4 +1,6 @@
-{% assign idx = page.path | split: "/" | last | abs %}
+{% capture idx %}{% include berlin_get_page_idx.html %}{% endcapture %}
+{% assign idx = idx | abs %}
+
 {% assign data = site.data.berlin[idx] %}
 
 {% include berlin_title.html title=data.title %}

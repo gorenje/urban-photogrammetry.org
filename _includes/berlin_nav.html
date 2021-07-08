@@ -1,20 +1,24 @@
-{% assign pnum = page.path | split: "/" | last | abs %}
+{% capture pnum %}{% include berlin_get_page_idx.html %}{% endcapture %}
+{% assign pnum = pnum | abs %}
+
 {% assign last_page = site.data.berlin.size | minus: 1 %}
 
 <div>
 
 {% if pnum == 0 %}
-<a href="/berlin/{{ last_page }}">« Previous</a>
+<a href="/berlin/{{ site.data.berlin.last["mlid"] }}">« Previous</a>
 {% else %}
-<a href="/berlin/{{ pnum | minus: 1 | at_least: 0 }}">« Previous</a>
+{% assign idx = pnum | minus: 1 | at_least: 0 %}
+<a href="/berlin/{{ site.data.berlin[idx]["mlid"] }}">« Previous</a>
 {% endif %}
 
 <a style="position: absolute; left: 49%;" href="/berlin">Index</a>
 
 {% if pnum == last_page %}
-<a style="float: right" href="/berlin/0">Next »</a>
+<a style="float: right" href="/berlin/{{ site.data.berlin.first["mlid"] }}">Next »</a>
 {% else %}
-<a style="float: right" href="/berlin/{{ pnum | plus: 1 | at_most: last_page }}">Next »</a>
+{% assign idx = pnum | plus: 1 | at_most: last_page %}
+<a style="float: right" href="/berlin/{{ site.data.berlin[idx]["mlid"] }}">Next »</a>
 {% endif %}
 
 </div>
