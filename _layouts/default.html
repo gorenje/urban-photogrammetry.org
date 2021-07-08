@@ -23,6 +23,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/f/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/f/favicon-16x16.png">
     <link rel="manifest" href="/f/site.webmanifest">
+    {%- if page.redirect %}
+      {% capture pnum %}{% include berlin_get_page_idx.html %}{% endcapture %}
+      {% assign pnum = pnum | abs %}
+      <meta http-equiv="Refresh" content="0; url='{{ site.data.berlin[pnum]["mlid"] }}'" />
+    {%- endif %}
   </head>
 
   <body>
