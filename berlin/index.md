@@ -3,7 +3,11 @@ title: Berlin Tour
 permalink: /berlin
 ---
 
-# Three Dimensional Berlin Virtual Tour
+# Berlin 3D Virtual Tour
+
+Presenting a three dimensional virtual tour of Berlin! The tour is made up of
+interesting urban objects found within Berlin. There is neither rhyme nor
+reason to the tour, it is simply an active documentation of Berlins urban space.
 
 <link rel="stylesheet" href="/f/leaflet.css"/>
 <script src="/f/leaflet.js"></script>
@@ -28,14 +32,13 @@ permalink: /berlin
   window.addEventListener("load", init);
 </script>
 
-<div id="map" class="map map-home" style="height: 600px; margin-top: 50px"></div>
-(Green Markers are external links)
 
-So far, the following make up the tour:
+Currently the tour is made up of the following 3D models:
 
 {%- assign cnt = 0 %}
 <ul>
-{%- for site in site.data.berlin %}
+{%- assign sortedcollection = site.data.berlin | sort: "title" %}
+{%- for site in sortedcollection %}
   <li><a href="/berlin/{{ site["mlid"] }}">{{site.idx | default: site.title}}</a></li>
   {%- if site.loc and site.loc != "" %}
     {%- include marker.js loc=site.loc mlid=site.mlid cnt=cnt %}
@@ -44,9 +47,13 @@ So far, the following make up the tour:
 {%- endfor %}
 </ul>
 
-The [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) is available at [SketchFab](https://sketchfab.com).
+<div id="map" class="map map-home" style="height: 600px; margin-top: 50px"></div>
 
-## More External Models
+The complete [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry) is available at [SketchFab](https://sketchfab.com).
+
+## External Models
+
+These are models that are not available on SketchFab.
 
 {%- assign cnt = 0 %}
 <ul>
