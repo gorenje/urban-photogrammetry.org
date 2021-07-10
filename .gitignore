@@ -3,3 +3,5 @@
 .jekyll-metadata
 _site
 berlin/_tmpl.html
+script.py
+Makefile

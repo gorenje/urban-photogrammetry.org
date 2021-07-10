@@ -179,3 +179,35 @@
   idx: "Kneeling Angel"
   mlid: "7c6471d3946d4dc0bbe99a1b492a3f01"
   loc: "52.53907,13.37857"
+
+- title: "Goethe Monument"
+  mlid: "b51b20872b914c1287299c2570dc28f7"
+  loc: "52.51379,13.37663"
+
+- title: "Victory Column / Siegessäule"
+  mlid: "516e2c582864410b9f7862614ef339e1"
+  loc: "52.51451,13.35011"
+
+- title: "Moltke Statue"
+  mlid: "1d506c3af70b4d46b1329a99bae697b8"
+  loc: "52.51540,13.35064"
+
+- title: "Abhörstation Teufelsberg - Listening station"
+  mlid: "1cb8c603cc284512b2d8239f703af4e9"
+  loc: "52.49730,13.24079"
+
+- title: "Prussian Monument for the Liberation Wars"
+  mlid: "96bdaab10782476fb305ee64cad04963"
+  loc: "52.48763,13.38147"
+
+- title: "Der Abend"
+  mlid: "a885aa597a47412c9e1ef404201da2ed"
+  loc: "52.47441,13.34185"
+
+- title: "Bismark Denkmal"
+  mlid: "d8eb594e959e4883a77f3cdc38ed618f"
+  loc: "52.51587,13.34973"
+
+- title: "Fassade - Rathaus Schöneberg"
+  mlid: "1b8964732bae48a4a52fa53048bd76e6"
+  loc: "52.48493,13.34326"
