@@ -2,21 +2,33 @@
 {%- assign mlon = include.mlon | default: include.loc | split: "," | last %}
 
 <script>
-  function onload{{include.cnt}}(){
-    var elem = document.createElement('iframe')
+function onload{{include.cnt}}(){
+  var cntr  = document.createElement("div")
 
-    elem.height = "420"
-    elem.width = "500"
-    elem.frameborder="0"
-    elem.allowfullscreen = "allowfullscreen"
-    elem.mozallowfullscreen="true"
-    elem.webkitallowfullscreen="true"
-    elem.allow="fullscreen; autoplay; vr"
-    elem.src="https://sketchfab.com/models/{{ include.mlid }}/embed?autostart=1&annotations_visible=0&sound=0&autoplay=0"
+  var frme = document.createElement('iframe')
 
-    var mrkr = L.marker([{{ mlat }}, {{ mlon }}]);
-    mrkr.addTo(map).bindPopup(elem);
-  }
+  frme.height = "210"
+  frme.width = "300"
+  frme.frameborder="0"
+  frme.allowfullscreen = "allowfullscreen"
+  frme.mozallowfullscreen="true"
+  frme.webkitallowfullscreen="true"
+  frme.allow="fullscreen; autoplay; vr"
+  frme.src="https://sketchfab.com/models/{{ include.mlid }}/embed?autostart=1&annotations_visible=0&sound=0&autoplay=0"
+  cntr.append(frme)
+  cntr.append(document.createElement("p"))
 
-  window.addEventListener("load", onload{{include.cnt}});
+  var lnk = document.createElement("a")
+  lnk.href = "/berlin/{{ include.mlid }}"
+  lnk.target = "_blank"
+
+  var lnktxt = document.createTextNode("{{ include.title }}")
+  lnk.appendChild(lnktxt)
+  cntr.append(lnk)
+
+  var mrkr = L.marker([{{ mlat }}, {{ mlon }}]);
+  mrkr.addTo(map).bindPopup(cntr);
+}
+
+window.addEventListener("load", onload{{include.cnt}});
 </script>
