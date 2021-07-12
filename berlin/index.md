@@ -14,8 +14,8 @@ reason to the tour, it is simply an active documentation of Berlins urban space.
 
 <style>
 .leaflet-popup-content {
-    width: 510px !important;
-    height: 440px;
+    width: 350px !important;
+    height: 300px;
 }
 </style>
 
@@ -41,7 +41,7 @@ Currently the tour is made up of the following 3D models:
 {%- for site in sortedcollection %}
   <li><a href="/berlin/{{ site["mlid"] }}">{{site.idx | default: site.title}}</a></li>
   {%- if site.loc and site.loc != "" %}
-    {%- include marker.js loc=site.loc mlid=site.mlid cnt=cnt %}
+    {%- include marker.js loc=site.loc mlid=site.mlid cnt=cnt title=site.title %}
   {%- endif %}
   {%- assign cnt = cnt | plus: 1 %}
 {%- endfor %}
