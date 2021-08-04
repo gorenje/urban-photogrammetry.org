@@ -15,11 +15,13 @@
 - title: "Alois Senefelder"
   mlid: "2c37ef0e1b9043809514e10c59f82661"
   loc: "52.53190,13.41270"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/denkmal-fuer-alois-senefelder/"
 
 - title: "Marx & Engels Memorial"
   idx: "Marx & Engels"
   mlid: "04684a56cce44825b5912e57cd721121"
   loc: "52.51868,13.40309"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/marx-engels-denkmal/"
 
 - title: "Ernst Thälmann Memorial"
   idx: "Ernst Thälmann"
@@ -39,6 +41,7 @@
   idx: "Rosa Luxemburg"
   mlid: "1db1215c7d7d4d7b91b30ed3f8d47b40"
   loc: "52.52708,13.41407"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/denkmal-fuer-rosa-luxemburg/"
 
 - title: "Gravestone - Elias Pipping"
   idx: "Elias Pipping"
@@ -57,11 +60,13 @@
 - title: "Spanienkämpferdenkmal"
   mlid: "3d0f151bf808494a9eb1b2a81665e832"
   loc: "52.52605,13.42966"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/denkmal-fuer-die-deutschen-interbrigadisten/"
 
 - title: "Heinrich Heine Memorial"
   idx: "Heinrich Heine"
   mlid: "1d29af777a43470489965a5bd51954a4"
   loc: "52.51824,13.39480"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/heinrich-heine-denkmal/"
 
 - title: "Gravestone - Dr. Irene Kubischik"
   idx: "Irene Kubischik"
@@ -85,6 +90,7 @@
 - title: "Liegende Wapiti-Hirsche"
   mlid: "849f0331d956447db09dd03460716ce7"
   loc: "52.51422,13.36938"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/amazone-zu-pferd/"
 
 - title: "Gravestone - Frieda Seidlitz, Else Jahn & Berthold Manzke"
   idx: "Frieda Seidlitz"
@@ -95,6 +101,7 @@
   idx: "Großer Janus II"
   mlid: "bb3207ff1bba4465bb331bd38054ffe5"
   loc: "52.50798,13.36619"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/grosser-janus-ii/"
 
 - title: "Skulpturen gegen den Krieg, Tiergarten"
   idx: "Skulpturen gegen den Krieg"
@@ -110,6 +117,7 @@
   idx: "Iida Yoshikuni"
   mlid: "b582f8af0b934f4dbbf055c63d4e882e"
   loc: "52.51913,13.36894"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/abstrakte-skulptur-3/"
 
 - title: "Liebig 34 - Squatter House"
   idx: "Liebig 34"
@@ -152,6 +160,7 @@
 - title: "Amazone zu Pferde"
   mlid: "7770af0084454d0ba0c98e5eca1661cc"
   loc: "52.52041,13.39808"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/amazone-zu-pferd-2/"
 
 - title: "Stuck in der Mitte"
   mlid: "f872fa552f714d95a379cda519b3c3e2"
@@ -174,6 +183,7 @@
   idx: "Opfer des Widerstandes"
   mlid: "70fcd5892cb346429c04c1d852b96169"
   loc: "52.53858,13.42697"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/fuer-die-opfer-des-widerstandes/"
 
 - title: "Kniende Engel - Kneeling Angel - 1 of 2"
   idx: "Kneeling Angel #1"
@@ -204,9 +214,10 @@
   mlid: "a885aa597a47412c9e1ef404201da2ed"
   loc: "52.47441,13.34185"
 
-- title: "Bismark Denkmal"
+- title: "Bismarck Denkmal"
   mlid: "d8eb594e959e4883a77f3cdc38ed618f"
   loc: "52.51587,13.34973"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/bismarck-denkmal/"
 
 - title: "Fassade - Rathaus Schöneberg"
   mlid: "1b8964732bae48a4a52fa53048bd76e6"
@@ -215,6 +226,7 @@
 - title: "Mother and Child Fountain"
   mlid: "a581e67273e6429082e761c7251cc8e7"
   loc: "52.46872,13.31892"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/mutter-kind-brunnen/"
 
 - title: "Nickelmann Fountain"
   mlid: "c5965c02848e4ea5bb2f9646ea6819aa"
@@ -223,14 +235,17 @@
 - title: "Elefantentor"
   mlid: "bf2b7a9364e94615bf7b13fcd46ee472"
   loc: "52.50561,13.33975"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/elefantentor/"
 
 - title: "Ammonitenbrunnen"
   mlid: "a4310cb29d014043b0d0029b946b6d78"
   loc: "52.50559,13.34070"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/ammonitenbrunnen/"
 
 - title: "Julius Fucik Memorial"
   mlid: "45ce067400d248c6b232401054348bad"
   loc: "52.57091,13.39684"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/julius-fucik-denkmal/"
 
 - title: "Große Vegetative Landschaft / Giant Vegetative Landscape"
   idx: "Große Vegetative Landschaft"
@@ -254,6 +269,7 @@
 - title: "Weisser Stein / White Stone"
   mlid: "082e56875ea942e6b6c3586f4fe355c3"
   loc: "52.47549,13.37802"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/weisser-stein/"
 
 - title: "Drei Harlekine / Three Harlequins"
   mlid: "924b850d72bd46478ab650cfa353d94d"
@@ -262,10 +278,15 @@
 - title: "Trinkbrunnen mit zwei Seelöwen"
   mlid: "376ca0e2ff6b43f8a80cf3abbca8030b"
   loc: "52.50687,13.28655"
+  biburl: "https://bildhauerei-in-berlin.de/bildwerk/trinkbrunnen-mit-zwei-seeloewen/"
 
 - title: "Graveyard of Gravestones"
   mlid: "8e9f528940e44226bc3f6ced6088dd44"
   loc: "52.57124,13.38586"
+
+- title: "Gravestone Karl Dussmann"
+  mlid: "7b48179aaac44e399f9c849e778f9a96"
+  loc: "52.53876,13.37862"
 
 # - title: ""
 #   mlid: ""
