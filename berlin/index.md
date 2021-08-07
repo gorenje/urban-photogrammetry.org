@@ -27,13 +27,14 @@ reason to the tour, it is simply an active documentation of Berlins urban space.
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-
   }
   window.addEventListener("load", init);
 </script>
 
 
 Currently the tour is made up of the following 3D models:
+
+<div id="map" class="map map-home" style="height: 600px; margin-top: 50px"></div>
 
 {%- assign cnt = 0 %}
 <ul>
@@ -47,7 +48,6 @@ Currently the tour is made up of the following 3D models:
 {%- endfor %}
 </ul>
 
-<div id="map" class="map map-home" style="height: 600px; margin-top: 50px"></div>
 
 The complete [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry-berlin) is available at [SketchFab](https://sketchfab.com).
 
