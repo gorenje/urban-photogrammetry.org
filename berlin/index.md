@@ -49,7 +49,7 @@ Currently the tour is made up of the following 3D models:
 </ul>
 
 
-The complete [collection](https://sketchfab.com/gorenje23/collections/urban-photogrammetry-berlin) is available at [SketchFab](https://sketchfab.com).
+The complete [collection](https://sketchfab.com/urban.photogrammetry/collections/urban-photogrammetry-berlin) is available at [SketchFab](https://sketchfab.com).
 
 ## External Models
 
