@@ -288,6 +288,14 @@
   mlid: "7b48179aaac44e399f9c849e778f9a96"
   loc: "52.53876,13.37862"
 
+- title: "Soviet War Memorial Berlin - Der Befreier"
+  mlid: "da3ebfdaec95457e86194211b163c9b4"
+  loc: "52.48690,13.47030"
+
+- title: "Berlin Cathedral - Berliner Dom"
+  mlid: "ab58c97e48894dfa9a6f2a38494c093c"
+  loc: "52.51908,13.40107"
+
 # - title: ""
 #   mlid: ""
 #   loc: ""
