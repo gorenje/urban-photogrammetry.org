@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ page.title }}</title>
+
+    <meta name="generator" content="Jekyll v3.9.0" />
+    <meta property="og:title" content="Urban Photogrammetry" />
+    <meta property="og:locale" content="en_AU" />
+    <link rel="canonical" href="https://urban-photogrammetry.org/" />
+    <meta property="og:url" content="https://urban-photogrammetry.org/" />
+    <meta property="og:site_name" content="urban-photogrammetry.org" />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="{{ page.title }}" />
+
+    <link rel="stylesheet" href="/f/iA Writer Quattro/Webfonts/index.css">
+    <link rel="stylesheet" href="/f/style.css?cb=1234">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/f/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/f/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/f/favicon-16x16.png">
+    <link rel="manifest" href="/f/site.webmanifest">
+    {%- if page.redirect %}
+      {% capture pnum %}{% include berlin_get_page_idx.html %}{% endcapture %}
+      {% assign pnum = pnum | abs %}
+      <meta http-equiv="Refresh" content="0; url='{{ site.data.berlin[pnum]["mlid"] }}'" />
+    {%- endif %}
+  </head>
+
+  <body>
+    <div id="3dcontainer"></div>
+    <div id="root">
+      <div class="quattro">
+
+        {{ content }}
+
+        <div class="footer-div">
+          <a href="mailto:contact@website.urban-photogrammetry.org">Contact</a>
+          <a href="/">Home</a>
+          <div style="float: right;">
+          <a href="https://www.instagram.com/urban.photogrammetry/">Instagram</a>
+          <a href="https://www.youtube.com/channel/UC3hzKyjUcDIuqP8iR5K8dmQ">YouTube</a>
+          <a href="https://sketchfab.com/urban.photogrammetry">Sketchfab</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
