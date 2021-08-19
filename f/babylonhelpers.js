@@ -38,11 +38,46 @@ function addKeyboardObserver(scene, skyboxMesh) {
 		}})
 }
 
+// register the fader for transistions between models.
+var ppFactor = -0.01;
+var ppFadeLevel = 1.0;
+var fadeOutCb = function(){};
+var stop_transition = true;
+
+function initScene(scene) {
+	var postProcess = new BABYLON.PostProcess("Fade", "fade", ["fadeLevel"],
+                                                null, 1.0, scene.activeCamera);
+	postProcess.onApply = (effect) => {
+   	effect.setFloat("fadeLevel", ppFadeLevel);
+  };
+  scene.registerBeforeRender(function () {
+    if ( !stop_transition ) {
+		  ppFadeLevel += ppFactor;
+      if ( ppFadeLevel > 1 ) {
+        stop_transition = true;
+      }
+      if ( ppFadeLevel < 0 ) {
+        stop_transition = true;
+        fadeOutCb()
+        ppFactor = 0.01
+      }
+    }
+  })
+}
+
+function prepareFadeOut(func) {
+  ppFadeLevel = 1.0;
+  ppFactor = -0.01;
+  stop_transition = false;
+  fadeOutCb = func;
+}
+
 function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
   var txt = new BABYLON.EquiRectangularCubeTexture('/m/' + mlid +
                                                    '/background-' +
                                                    sze + '.jpg',
                                                    scene, sze);
+  txt.vAngle = Math.PI;
   var mat = new BABYLON.PBRMaterial("skyBox"+sze, scene);
 
   mat.reflectionTexture = txt
@@ -84,6 +119,17 @@ function initCamera(scene) {
   camera.minZ = 0.001;
   camera.attachControl(true);
 
+  initScene(scene)
+  // try {
+  //   new BABYLON.AsciiArtPostProcess("myAscii", camera, { font: '5px Monospace'});
+  // } catch(e) {
+  //   console.log(e)
+  // }
+  // try {
+  //   new BABYLON.SharpenPostProcess("myAscii", 1.7, camera);
+  // } catch(e) {
+  //   console.log(e)
+  // }
   cameraInitialised = true;
 }
 
@@ -97,11 +143,15 @@ function createSkyBox(scene) {
   return [skyboxMesh, multimat]
 }
 
-function loadModel(mlid, scene, skyboxMesh, multimat, sizes) {
+var prevLODIdx = 0;
+function loadModel(mlid, rotateFactor, scene, skyboxMesh, multimat, sizes) {
   BABYLON.SceneLoader.Append("/m/"+mlid+"/", "model-512.glb", scene, function (scene) {
 
     initCamera(scene)
     modelMesh = scene.meshes[2];
+    modelMesh.rotate(new BABYLON.Vector3(0,1,0),
+                     Math.PI * rotateFactor,
+                     BABYLON.Space.WORLD )
 
     // setup the differenet skybox materials for the LOD Level, i.e. as
     // you zoom in, the skybox loses details. As you zoom out, you gain
@@ -111,9 +161,6 @@ function loadModel(mlid, scene, skyboxMesh, multimat, sizes) {
 
       if ( (Date.now() - startTimeStamp) < 15000 ) return;
 
-      if ( selectedMesh == prevLODMesh ) return;
-      prevLODMesh = selectedMesh;
-
       if ( typeof(alltextures) == 'undefined' ||  alltextures.length < 2 ) return;
 
       if ( num < 3 ) { idx = 0 }
@@ -122,10 +169,12 @@ function loadModel(mlid, scene, skyboxMesh, multimat, sizes) {
       if ( num >= 8            && alltextures[3].isReady() ) { idx = 3 }
 
       // console.log(num + " --> " + idx + " [ " + selectedMesh.name)
-
-      new BABYLON.SubMesh(idx, 0, skyboxMesh.getTotalVertices(),
-                          0, skyboxMesh.getTotalIndices(),
-                          skyboxMesh);
+      if ( prevLODIdx != idx ) {
+        new BABYLON.SubMesh(idx, 0, skyboxMesh.getTotalVertices(),
+                            0, skyboxMesh.getTotalIndices(),
+                            skyboxMesh);
+        prevLODIdx = idx
+      }
     }
 
     // Load the various LODs for the model and once they are all loaded,
