@@ -11,16 +11,10 @@ layout: 3dtour
 <script src="/f/bjs/babylonjs.loaders.js"></script>
 <script src="/f/bjs/babylonjs.serializers.min.js"></script>
 <script src="/f/bjs/babylon.gui.min.js"></script>
+<script src="/f/babylonhelpers.js"></script>
 
 
 <script>
-  function replaceTextureOnSkyBox(material) {
-    material.backFaceCulling = false;
-    material.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-    material.microSurface = 1.0;
-    material.disableLighting = true;
-  }
-
   BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
       if (document.getElementById("customLoadingScreenDiv")) {
           // Do not add a loading screen if there is already one
@@ -59,12 +53,16 @@ layout: 3dtour
 
   var canvas = document.getElementById("3dcanvas");
   var alltextures = []
-  var tstamp = Date.now();
   var engine = null;
   var scene = null;
   var multimat = null
   var sceneToRender = null;
-  var prevMesh = null;
+  var prevLODMesh = null;
+  var startTimeStamp = Date.now();
+  var skyboxMesh = null;
+  var initMlid = "3d0f151bf808494a9eb1b2a81665e832"
+  var baseMaterialSizes = [64, 256, 512, 1024]
+
   var createDefaultEngine = function() {
     return new BABYLON.Engine(canvas, true, {
       preserveDrawingBuffer: true,
@@ -73,110 +71,113 @@ layout: 3dtour
   };
 
   var delayCreateScene = function () {
-            // Create a scene.
     var scene = new BABYLON.Scene(engine);
     BABYLON.SceneLoader.ShowLoadingScreen = true;
 
-    var skyboxMesh = BABYLON.Mesh.CreateBox("hdrSkyBox64", 1000.0, scene);
-    skyboxMesh.infiniteDistance = true;
+    var r = createSkyBox(scene)
+    skyboxMesh = r[0]
+    multimat = r[1]
 
-    multimat = new BABYLON.MultiMaterial("multi", scene);
-    skyboxMesh.material = multimat
+    loadSkyBoxMaterial(initMlid,baseMaterialSizes[0],alltextures,multimat,scene)
 
-    var sizes = [64, 128, 256, 512, 1024]
+    addKeyboardObserver(scene, skyboxMesh);
 
-    for ( var idx = 0; idx < 1; idx++ ) {
-      var sze = sizes[idx];
-      var txt = new BABYLON.EquiRectangularCubeTexture('/m/background-'+sze+'.png',
-                                                       scene, sze);
-      var mat = new BABYLON.PBRMaterial("skyBox"+sze, scene);
-      mat.reflectionTexture = txt
-      replaceTextureOnSkyBox(mat)
-      multimat.subMaterials.push(mat)
-      alltextures.push(txt)
-    }
+    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-
-    BABYLON.SceneLoader.Append("/m/", "model-512.glb", scene, function (scene) {
-      // console.log( scene.meshes)
-      scene.createDefaultCameraOrLight(true, true, true);
-
-      scene.activeCamera.alpha += Math.PI;
-
-      var camera = scene.activeCamera;
-
-      camera.useFramingBehavior = true;
-
-      var framingBehavior = camera.getBehaviorByName("Framing");
-      framingBehavior.framingTime = 0;
-      framingBehavior.elevationReturnTime = -1;
-
-      camera.lowerRadiusLimit = null;
-
-      var worldExtends = scene.getWorldExtends(function (mesh) {
-        return mesh.isVisible && mesh.isEnabled();
-      });
-      framingBehavior.zoomOnBoundingInfo(worldExtends.min, worldExtends.max);
-
-      camera.pinchPrecision = 200 / camera.radius;
-      camera.upperRadiusLimit = 5 * camera.radius;
-
-      camera.wheelDeltaPercentage = 0.01;
-      camera.pinchDeltaPercentage = 0.01;
-      // camera.zoomToMouseLocation = true;
-      // camera.checkCollisions = false;
-      camera.minZ = 0.001;
-      camera.attachControl(true);
-
-      scene.meshes[2].onLODLevelSelection = function(num,mesh,selectedMesh) {
-        var idx = 0
-
-        if ( selectedMesh == prevMesh ) return;
-        prevMesh = selectedMesh;
-
-        // console.log( typeof(alltextures) + " " + alltextures.length )
-        if ( typeof(alltextures) == 'undefined' ||  alltextures.length < 4 ) return;
-
-        if ( (Date.now() - tstamp) < 10000 ) return
-
-        if ( num < 1 ) { idx = 0 }
-        if ( num > 1 && num < 3 && alltextures[1].isReady() ) { idx = 1 }
-        if ( num > 3 && num < 4 && alltextures[2].isReady() ) { idx = 2 }
-        if ( num > 4 && num < 5 && alltextures[3].isReady() ) { idx = 3 }
-        if ( num > 5 && alltextures[4].isReady() ) { idx = 4 }
-        // console.log( idx )
-
-        new BABYLON.SubMesh(idx, 0, skyboxMesh.getTotalVertices(),
-                            0, skyboxMesh.getTotalIndices(),
-                            skyboxMesh);
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "Previous");
+    button.width = "100px";
+    button.height = "30px";
+    button.color = "white";
+    button.left = "-45%";
+    button.top = "45%";
+    button.background = "#22222255";
+    button.cornerRadius = 20;
+    button.onPointerClickObservable.add(function(b){
+      // destruction
+      skyboxMesh.dispose()
+      skyboxMesh = null
+      for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
+        scene.meshes[idx].dispose()
       }
+      scene.meshes.length = 0
+      alltextures.length = 0
 
-      BABYLON.SceneLoader.ImportMeshAsync("", "/m/","model-1k.glb",scene).then(
-        function(mesh) {
-          scene.meshes[2].addLODLevel(20,scene.meshes[2].clone())
-          scene.meshes[2].addLODLevel(15,mesh.meshes[1])
-          BABYLON.SceneLoader.ImportMeshAsync("", "/m/","model-2k.glb",scene).then(
-            function(mesh) {
-              scene.meshes[2].addLODLevel(5,mesh.meshes[1])
-              BABYLON.SceneLoader.ImportMeshAsync("", "/m/","model-4k.glb",scene).then(function(mesh) {
-                scene.meshes[2].addLODLevel(3,mesh.meshes[1])
-                BABYLON.SceneLoader.ImportMeshAsync("", "/m/","model-8k.glb",scene).then(function(mesh) {
-                  scene.meshes[2].addLODLevel(0,mesh.meshes[1])
-                  for ( var idx = 1; idx < sizes.length; idx++ ) {
-                    var sze = sizes[idx];
-                    var txt = new BABYLON.EquiRectangularCubeTexture('/m/background-'+sze+'.png',
-                                                                     scene, sze);
-                    var mat = new BABYLON.PBRMaterial("skyBox"+sze, scene);
-                    mat.reflectionTexture = txt
-                    replaceTextureOnSkyBox(mat)
-                    multimat.subMaterials.push(mat)
-                    alltextures.push(txt)
-                  }
-                })
-              })
-            })
-        })
-    });
+      // restruction
+      var mlid = initMlid;
+      var r = createSkyBox(scene)
+      skyboxMesh = r[0]
+      multimat = r[1]
+      startTimeStamp = Date.now();
+
+      loadSkyBoxMaterial(mlid,baseMaterialSizes[0],alltextures,multimat,scene)
+      addKeyboardObserver(scene, skyboxMesh);
+      loadModel(mlid, scene, skyboxMesh, multimat, baseMaterialSizes)
+
+    })
+    advancedTexture.addControl(button);
+
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "Next");
+    button.width = "100px";
+    button.height = "30px";
+    button.color = "white";
+    button.left = "45%";
+    button.top = "45%";
+    button.background = "#22222255";
+    button.cornerRadius = 20;
+    button.onPointerClickObservable.add(function(b){
+      // destruction
+      skyboxMesh.dispose()
+      skyboxMesh = null
+      for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
+        scene.meshes[idx].dispose()
+      }
+      scene.meshes.length = 0
+      alltextures.length = 0
+
+      // restruction
+      var mlid = "0ec35096975442188f5278665013bfae";
+      var r = createSkyBox(scene)
+      skyboxMesh = r[0]
+      multimat = r[1]
+      startTimeStamp = Date.now();
+
+      loadSkyBoxMaterial(mlid,baseMaterialSizes[0],alltextures,multimat,scene)
+      addKeyboardObserver(scene, skyboxMesh);
+      loadModel(mlid, scene, skyboxMesh, multimat, baseMaterialSizes)
+    })
+    advancedTexture.addControl(button);
+
+    var textBlock = new BABYLON.GUI.TextBlock()
+    textBlock.text = `
+      <a href='dd'>dads</a>
+    `
+    textBlock.isVisible = false;
+    textBlock.width = "100px";
+    textBlock.height = "300px";
+    textBlock.color = "white";
+    textBlock.left = "45%";
+    textBlock.top = "-40%";
+    textBlock.background = "red";
+    textBlock.cornerRadius = 20;
+    textBlock.fontSize = "10px"
+    advancedTexture.addControl(textBlock);
+
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "Info");
+    button.width = "100px";
+    button.height = "30px";
+    button.color = "white";
+    button.left = "45%";
+    button.top = "-45%";
+    button.background = "#22222255";
+    button.cornerRadius = 20;
+    button.fontSize = "10px"
+    button.onPointerClickObservable.add(function(b){
+      textBlock.isVisible = !textBlock.isVisible;
+    })
+    advancedTexture.addControl(button);
+
+
+    loadModel(initMlid, scene, skyboxMesh, multimat, baseMaterialSizes)
 
     return scene;
   };
