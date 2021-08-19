@@ -21,11 +21,50 @@ layout: 3dtour
     material.disableLighting = true;
   }
 
-  var canvas = document.getElementById("3dcanvas");
+  BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
+      if (document.getElementById("customLoadingScreenDiv")) {
+          // Do not add a loading screen if there is already one
+          document.getElementById("customLoadingScreenDiv").style.display = "initial";
+          return;
+      }
+      this._loadingDiv = document.createElement("div");
+      this._loadingDiv.id = "customLoadingScreenDiv";
+      this._loadingDiv.innerHTML = "<span>loading...</span>";
+      var customLoadingScreenCss = document.createElement('style');
+      customLoadingScreenCss.type = 'text/css';
+    customLoadingScreenCss.innerHTML = `
+    #customLoadingScreenDiv{
 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        min-height: 200px;
+        padding: 20px;
+        background-color: #000000;
+        color: white;
+        font-size:50px;
+    }
+    `;
+      document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
+      this._resizeLoadingUI();
+      window.addEventListener("resize", this._resizeLoadingUI);
+      document.body.appendChild(this._loadingDiv);
+  };
+
+  BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
+      document.getElementById("customLoadingScreenDiv").style.display = "none";
+  }
+
+
+  var canvas = document.getElementById("3dcanvas");
+  var alltextures = []
+  var tstamp = Date.now();
   var engine = null;
   var scene = null;
+  var multimat = null
   var sceneToRender = null;
+  var prevMesh = null;
   var createDefaultEngine = function() {
     return new BABYLON.Engine(canvas, true, {
       preserveDrawingBuffer: true,
@@ -36,18 +75,17 @@ layout: 3dtour
   var delayCreateScene = function () {
             // Create a scene.
     var scene = new BABYLON.Scene(engine);
-    BABYLON.SceneLoader.ShowLoadingScreen = false;
+    BABYLON.SceneLoader.ShowLoadingScreen = true;
 
     var skyboxMesh = BABYLON.Mesh.CreateBox("hdrSkyBox64", 1000.0, scene);
     skyboxMesh.infiniteDistance = true;
 
-    var multimat = new BABYLON.MultiMaterial("multi", scene);
+    multimat = new BABYLON.MultiMaterial("multi", scene);
     skyboxMesh.material = multimat
 
     var sizes = [64, 128, 256, 512, 1024]
-    var alltextures = []
 
-    for ( var idx = 0; idx < sizes.length; idx++ ) {
+    for ( var idx = 0; idx < 1; idx++ ) {
       var sze = sizes[idx];
       var txt = new BABYLON.EquiRectangularCubeTexture('/m/background-'+sze+'.png',
                                                        scene, sze);
@@ -60,7 +98,7 @@ layout: 3dtour
 
 
     BABYLON.SceneLoader.Append("/m/", "model-512.glb", scene, function (scene) {
-      console.log( scene.meshes)
+      // console.log( scene.meshes)
       scene.createDefaultCameraOrLight(true, true, true);
 
       scene.activeCamera.alpha += Math.PI;
@@ -90,16 +128,24 @@ layout: 3dtour
       camera.minZ = 0.001;
       camera.attachControl(true);
 
-      scene.meshes[2].onLODLevelSelection = function(num,mesh,lvl) {
+      scene.meshes[2].onLODLevelSelection = function(num,mesh,selectedMesh) {
         var idx = 0
+
+        if ( selectedMesh == prevMesh ) return;
+        prevMesh = selectedMesh;
+
+        // console.log( typeof(alltextures) + " " + alltextures.length )
+        if ( typeof(alltextures) == 'undefined' ||  alltextures.length < 4 ) return;
+
+        if ( (Date.now() - tstamp) < 10000 ) return
+
         if ( num < 1 ) { idx = 0 }
         if ( num > 1 && num < 3 && alltextures[1].isReady() ) { idx = 1 }
         if ( num > 3 && num < 4 && alltextures[2].isReady() ) { idx = 2 }
         if ( num > 4 && num < 5 && alltextures[3].isReady() ) { idx = 3 }
         if ( num > 5 && alltextures[4].isReady() ) { idx = 4 }
-        console.log( idx )
+        // console.log( idx )
 
-        idx = 0
         new BABYLON.SubMesh(idx, 0, skyboxMesh.getTotalVertices(),
                             0, skyboxMesh.getTotalIndices(),
                             skyboxMesh);
@@ -108,18 +154,24 @@ layout: 3dtour
       BABYLON.SceneLoader.ImportMeshAsync("", "/m/","model-1k.glb",scene).then(
         function(mesh) {
           scene.meshes[2].addLODLevel(20,scene.meshes[2].clone())
-          console.log( "loaded 1k")
           scene.meshes[2].addLODLevel(15,mesh.meshes[1])
           BABYLON.SceneLoader.ImportMeshAsync("", "/m/","model-2k.glb",scene).then(
             function(mesh) {
-              console.log( "loaded 2k")
               scene.meshes[2].addLODLevel(5,mesh.meshes[1])
               BABYLON.SceneLoader.ImportMeshAsync("", "/m/","model-4k.glb",scene).then(function(mesh) {
-                console.log( "loaded 4k") ;
                 scene.meshes[2].addLODLevel(3,mesh.meshes[1])
                 BABYLON.SceneLoader.ImportMeshAsync("", "/m/","model-8k.glb",scene).then(function(mesh) {
-                  console.log( "loaded 8k") ;
                   scene.meshes[2].addLODLevel(0,mesh.meshes[1])
+                  for ( var idx = 1; idx < sizes.length; idx++ ) {
+                    var sze = sizes[idx];
+                    var txt = new BABYLON.EquiRectangularCubeTexture('/m/background-'+sze+'.png',
+                                                                     scene, sze);
+                    var mat = new BABYLON.PBRMaterial("skyBox"+sze, scene);
+                    mat.reflectionTexture = txt
+                    replaceTextureOnSkyBox(mat)
+                    multimat.subMaterials.push(mat)
+                    alltextures.push(txt)
+                  }
                 })
               })
             })
