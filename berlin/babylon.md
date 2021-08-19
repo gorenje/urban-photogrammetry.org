@@ -13,20 +13,7 @@ layout: 3dtour
 <script src="/f/bjs/babylon.gui.min.js"></script>
 <script src="/f/babylonhelpers.js"></script>
 
-
-<script>
-  BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
-      if (document.getElementById("customLoadingScreenDiv")) {
-          // Do not add a loading screen if there is already one
-          document.getElementById("customLoadingScreenDiv").style.display = "initial";
-          return;
-      }
-      this._loadingDiv = document.createElement("div");
-      this._loadingDiv.id = "customLoadingScreenDiv";
-      this._loadingDiv.innerHTML = "<span>loading...</span>";
-      var customLoadingScreenCss = document.createElement('style');
-      customLoadingScreenCss.type = 'text/css';
-    customLoadingScreenCss.innerHTML = `
+<style type='text/css'>
     #customLoadingScreenDiv{
 
         display: flex;
@@ -39,15 +26,37 @@ layout: 3dtour
         color: white;
         font-size:50px;
     }
-    `;
-      document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
+</style>
+
+<script>
+  BABYLON.Effect.RegisterShader("fade", "precision highp float;" +
+                                "varying vec2 vUV;" +
+                                "uniform sampler2D textureSampler; " +
+                                "uniform float fadeLevel; " +
+                                "void main(void){" +
+                                "vec4 baseColor = texture2D(textureSampler, vUV) * fadeLevel;" +
+                                "baseColor.a = 1.0;" +
+                                "gl_FragColor = baseColor;" + "}");
+
+  BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
+      if (document.getElementById("customLoadingScreenDiv")) {
+          // Do not add a loading screen if there is already one
+          document.getElementById("customLoadingScreenDiv").style.display = "initial";
+          return;
+      }
+      this._loadingDiv = document.createElement("div");
+      this._loadingDiv.id = "customLoadingScreenDiv";
+      this._loadingDiv.innerHTML = "<span>loading...</span>";
       this._resizeLoadingUI();
       window.addEventListener("resize", this._resizeLoadingUI);
       document.body.appendChild(this._loadingDiv);
   };
 
   BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
-      document.getElementById("customLoadingScreenDiv").style.display = "none";
+    document.getElementById("customLoadingScreenDiv").style.display = "none";
+    // if the loader screen is complete and we're in the middle of a fadeOut
+    // then trigger the fadeIn again.
+    if (ppFadeLevel < 0) stop_transition = false;
   }
 
 
@@ -57,7 +66,6 @@ layout: 3dtour
   var scene = null;
   var multimat = null
   var sceneToRender = null;
-  var prevLODMesh = null;
   var startTimeStamp = Date.now();
   var skyboxMesh = null;
   var initMlid = "3d0f151bf808494a9eb1b2a81665e832"
@@ -84,7 +92,7 @@ layout: 3dtour
 
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "Previous");
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "<<<");
     button.width = "100px";
     button.height = "30px";
     button.color = "white";
@@ -93,30 +101,31 @@ layout: 3dtour
     button.background = "#22222255";
     button.cornerRadius = 20;
     button.onPointerClickObservable.add(function(b){
-      // destruction
-      skyboxMesh.dispose()
-      skyboxMesh = null
-      for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
-        scene.meshes[idx].dispose()
-      }
-      scene.meshes.length = 0
-      alltextures.length = 0
+      prepareFadeOut(function() {
+        // destruction
+        skyboxMesh.dispose()
+        skyboxMesh = null
+        for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
+          scene.meshes[idx].dispose()
+        }
+        scene.meshes.length = 0
+        alltextures.length = 0
 
-      // restruction
-      var mlid = initMlid;
-      var r = createSkyBox(scene)
-      skyboxMesh = r[0]
-      multimat = r[1]
-      startTimeStamp = Date.now();
+        // restruction
+        var mlid = initMlid;
+        var r = createSkyBox(scene)
+        skyboxMesh = r[0]
+        multimat = r[1]
+        startTimeStamp = Date.now();
 
-      loadSkyBoxMaterial(mlid,baseMaterialSizes[0],alltextures,multimat,scene)
-      addKeyboardObserver(scene, skyboxMesh);
-      loadModel(mlid, scene, skyboxMesh, multimat, baseMaterialSizes)
-
+        loadSkyBoxMaterial(mlid,baseMaterialSizes[0],alltextures,multimat,scene)
+        addKeyboardObserver(scene, skyboxMesh);
+        loadModel(mlid, -0.25, scene, skyboxMesh, multimat, baseMaterialSizes)
+      })
     })
     advancedTexture.addControl(button);
 
-    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "Next");
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", ">>>");
     button.width = "100px";
     button.height = "30px";
     button.color = "white";
@@ -125,25 +134,28 @@ layout: 3dtour
     button.background = "#22222255";
     button.cornerRadius = 20;
     button.onPointerClickObservable.add(function(b){
-      // destruction
-      skyboxMesh.dispose()
-      skyboxMesh = null
-      for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
-        scene.meshes[idx].dispose()
-      }
-      scene.meshes.length = 0
-      alltextures.length = 0
+      prepareFadeOut(function() {
+	      // destruction
+        skyboxMesh.dispose()
+        skyboxMesh = null
+        for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
+          scene.meshes[idx].dispose()
+        }
+        scene.meshes.length = 0
+        alltextures.length = 0
 
-      // restruction
-      var mlid = "0ec35096975442188f5278665013bfae";
-      var r = createSkyBox(scene)
-      skyboxMesh = r[0]
-      multimat = r[1]
-      startTimeStamp = Date.now();
+        // restruction
+        var mlid = "0ec35096975442188f5278665013bfae";
+        var r = createSkyBox(scene)
+        skyboxMesh = r[0]
+        multimat = r[1]
+        startTimeStamp = Date.now();
 
-      loadSkyBoxMaterial(mlid,baseMaterialSizes[0],alltextures,multimat,scene)
-      addKeyboardObserver(scene, skyboxMesh);
-      loadModel(mlid, scene, skyboxMesh, multimat, baseMaterialSizes)
+        loadSkyBoxMaterial(mlid, baseMaterialSizes[0],alltextures,multimat,scene)
+        addKeyboardObserver(scene, skyboxMesh);
+        loadModel(mlid, 1.25, scene, skyboxMesh, multimat, baseMaterialSizes)
+      })
+
     })
     advancedTexture.addControl(button);
 
@@ -162,12 +174,12 @@ layout: 3dtour
     textBlock.fontSize = "10px"
     advancedTexture.addControl(textBlock);
 
-    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "Info");
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "???");
     button.width = "100px";
     button.height = "30px";
     button.color = "white";
-    button.left = "45%";
-    button.top = "-45%";
+    button.left = "0%";
+    button.top = "45%";
     button.background = "#22222255";
     button.cornerRadius = 20;
     button.fontSize = "10px"
@@ -177,7 +189,7 @@ layout: 3dtour
     advancedTexture.addControl(button);
 
 
-    loadModel(initMlid, scene, skyboxMesh, multimat, baseMaterialSizes)
+    loadModel(initMlid, -0.25, scene, skyboxMesh, multimat, baseMaterialSizes)
 
     return scene;
   };
