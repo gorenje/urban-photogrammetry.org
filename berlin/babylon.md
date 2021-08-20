@@ -12,6 +12,7 @@ layout: 3dtour
 <script src="/f/bjs/babylonjs.serializers.min.js"></script>
 <script src="/f/bjs/babylon.gui.min.js"></script>
 <script src="/f/babylonhelpers.js"></script>
+<script src="/f/models.js"></script>
 
 <style type='text/css'>
     #customLoadingScreenDiv{
@@ -46,7 +47,7 @@ layout: 3dtour
       }
       this._loadingDiv = document.createElement("div");
       this._loadingDiv.id = "customLoadingScreenDiv";
-      this._loadingDiv.innerHTML = "<span>loading...</span>";
+      this._loadingDiv.innerHTML = "loading...";
       this._resizeLoadingUI();
       window.addEventListener("resize", this._resizeLoadingUI);
       document.body.appendChild(this._loadingDiv);
@@ -66,10 +67,12 @@ layout: 3dtour
   var scene = null;
   var multimat = null
   var sceneToRender = null;
-  var startTimeStamp = Date.now();
   var skyboxMesh = null;
-  var initMlid = "3d0f151bf808494a9eb1b2a81665e832"
+  var currModel = UPModels.init();
   var baseMaterialSizes = [64, 256, 512, 1024]
+  var textBlock = null;
+
+  var cameraPath = []
 
   var createDefaultEngine = function() {
     return new BABYLON.Engine(canvas, true, {
@@ -86,7 +89,7 @@ layout: 3dtour
     skyboxMesh = r[0]
     multimat = r[1]
 
-    loadSkyBoxMaterial(initMlid,baseMaterialSizes[0],alltextures,multimat,scene)
+    loadSkyBoxMaterial(currModel.mlid,baseMaterialSizes[0],alltextures,multimat,scene)
 
     addKeyboardObserver(scene, skyboxMesh);
 
@@ -103,24 +106,21 @@ layout: 3dtour
     button.onPointerClickObservable.add(function(b){
       prepareFadeOut(function() {
         // destruction
-        skyboxMesh.dispose()
-        skyboxMesh = null
-        for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
-          scene.meshes[idx].dispose()
-        }
-        scene.meshes.length = 0
-        alltextures.length = 0
+        clearScene(scene, skyboxMesh, alltextures)
 
         // restruction
-        var mlid = initMlid;
-        var r = createSkyBox(scene)
-        skyboxMesh = r[0]
-        multimat = r[1]
+        currModel      = UPModels.previous(currModel)
+        var r          = createSkyBox(scene)
+        skyboxMesh     = r[0]
+        multimat       = r[1]
         startTimeStamp = Date.now();
+        textBlock.text = currModel.text;
 
-        loadSkyBoxMaterial(mlid,baseMaterialSizes[0],alltextures,multimat,scene)
+        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
+                           alltextures, multimat,scene)
         addKeyboardObserver(scene, skyboxMesh);
-        loadModel(mlid, -0.25, scene, skyboxMesh, multimat, baseMaterialSizes)
+        loadModel(currModel.mlid, currModel.rotate, scene,
+                  skyboxMesh, multimat, baseMaterialSizes)
       })
     })
     advancedTexture.addControl(button);
@@ -136,35 +136,29 @@ layout: 3dtour
     button.onPointerClickObservable.add(function(b){
       prepareFadeOut(function() {
 	      // destruction
-        skyboxMesh.dispose()
-        skyboxMesh = null
-        for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
-          scene.meshes[idx].dispose()
-        }
-        scene.meshes.length = 0
-        alltextures.length = 0
+        clearScene(scene, skyboxMesh, alltextures)
 
         // restruction
-        var mlid = "0ec35096975442188f5278665013bfae";
-        var r = createSkyBox(scene)
-        skyboxMesh = r[0]
-        multimat = r[1]
+        currModel      = UPModels.next(currModel)
+        var r          = createSkyBox(scene)
+        skyboxMesh     = r[0]
+        multimat       = r[1]
         startTimeStamp = Date.now();
+        textBlock.text = currModel.text;
 
-        loadSkyBoxMaterial(mlid, baseMaterialSizes[0],alltextures,multimat,scene)
+        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
+                           alltextures, multimat,scene)
         addKeyboardObserver(scene, skyboxMesh);
-        loadModel(mlid, 1.25, scene, skyboxMesh, multimat, baseMaterialSizes)
+        loadModel(currModel.mlid, currModel.rotate, scene,
+                  skyboxMesh, multimat, baseMaterialSizes)
       })
-
     })
     advancedTexture.addControl(button);
 
-    var textBlock = new BABYLON.GUI.TextBlock()
-    textBlock.text = `
-      <a href='dd'>dads</a>
-    `
+    textBlock = new BABYLON.GUI.TextBlock()
+    textBlock.text = currModel.text;
     textBlock.isVisible = false;
-    textBlock.width = "100px";
+    textBlock.width = "300px";
     textBlock.height = "300px";
     textBlock.color = "white";
     textBlock.left = "45%";
@@ -174,7 +168,7 @@ layout: 3dtour
     textBlock.fontSize = "10px"
     advancedTexture.addControl(textBlock);
 
-    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "???");
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "&#128712;");
     button.width = "100px";
     button.height = "30px";
     button.color = "white";
@@ -188,8 +182,139 @@ layout: 3dtour
     })
     advancedTexture.addControl(button);
 
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "play");
+    button.width = "100px";
+    button.height = "30px";
+    button.color = "white";
+    button.left = "45%";
+    button.top = "0%";
+    button.background = "#22222255";
+    button.cornerRadius = 20;
+    button.onPointerClickObservable.add(function(b){
+      console.log( "play button pressed" )
+      try {
+        var camera = scene.activeCamera;
+        var frameRate = 20;
+        var pathDump = [];
 
-    loadModel(initMlid, -0.25, scene, skyboxMesh, multimat, baseMaterialSizes)
+        var anims = [
+          new BABYLON.Animation(
+            "movein",
+            "position",
+            frameRate,
+            BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+            BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+          ),
+          new BABYLON.Animation(
+            "alpha",
+            "alpha",
+            frameRate,
+            BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+            BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+          ),
+          new BABYLON.Animation(
+            "beta",
+            "beta",
+            frameRate,
+            BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+            BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+          ),
+          new BABYLON.Animation(
+            "radius",
+            "radius",
+            frameRate,
+            BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+            BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+          ),
+        ]
+
+        var attrs = [ [], [], [], [] ];
+
+        var startFrame = cameraPath[0].frame;
+        var lastFrame = 0;
+
+        for ( var idx = 0; idx < cameraPath.length; idx++ ) {
+          var dp = cameraPath[idx]
+          var frame = (dp.frame - startFrame)
+          attrs[0].push({ frame: frame, value: dp.position })
+          attrs[1].push({ frame: frame, value: dp.rotation.alpha })
+          attrs[2].push({ frame: frame, value: dp.rotation.beta })
+          attrs[3].push({ frame: frame, value: dp.rotation.radius })
+          pathDump.push( "{ frame: " + frame + ", alpha: " + dp.rotation.alpha +
+                         ", beta: " + dp.rotation.beta + ", radius: " +
+                         dp.rotation.radius + ", position: " + dp.position +"}")
+          lastFrame = frame;
+        }
+
+        for ( var idx = 0; idx < 4; idx++ ) { anims[idx].setKeys( attrs[idx] ) }
+
+        console.log( pathDump.join("\n") )
+        scene.beginDirectAnimation(camera, anims, 0, lastFrame, false);
+      } catch(e) {
+        console.log(e)
+      }
+    })
+    advancedTexture.addControl(button);
+
+
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "keyF");
+    button.width = "100px";
+    button.height = "30px";
+    button.color = "white";
+    button.left = "45%";
+    button.top = "10%";
+    button.background = "#22222255";
+    button.cornerRadius = 20;
+    button.onPointerClickObservable.add(function(b){
+      var camera = scene.activeCamera;
+
+      cameraPath.push({
+        frame: frameCounter,
+        rotation: {
+          alpha: camera.alpha,
+          beta: camera.beta,
+          radius: camera.radius
+        },
+        position: camera.position.clone()
+      })
+    })
+    advancedTexture.addControl(button);
+
+
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "clear");
+    button.width = "100px";
+    button.height = "30px";
+    button.color = "white";
+    button.left = "45%";
+    button.top = "20%";
+    button.background = "#22222255";
+    button.cornerRadius = 20;
+    button.fontSize = "10px"
+    button.onPointerClickObservable.add(function(b){
+      cameraPath.length = 0;
+      scene.stopAllAnimations()
+    })
+    advancedTexture.addControl(button);
+
+    var button = BABYLON.GUI.Button.CreateSimpleButton("but", "info");
+    button.width = "100px";
+    button.height = "30px";
+    button.color = "white";
+    button.left = "45%";
+    button.top = "30%";
+    button.background = "#22222255";
+    button.cornerRadius = 20;
+    button.fontSize = "10px"
+    button.onPointerClickObservable.add(function(b){
+      console.log( scene.activeCamera.viewport )
+    })
+    advancedTexture.addControl(button);
+
+
+
+    // Finally load the model.
+    loadModel(currModel.mlid, currModel.rotate, scene, skyboxMesh, multimat,
+              baseMaterialSizes)
 
     return scene;
   };
