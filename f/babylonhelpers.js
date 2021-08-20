@@ -1,10 +1,3 @@
-function replaceTextureOnSkyBox(material) {
-  material.backFaceCulling = false;
-  material.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-  material.microSurface = 1.0;
-  material.disableLighting = true;
-}
-
 var keybrdObserver = null;
 function addKeyboardObserver(scene, skyboxMesh) {
   if ( keybrdObserver != null ) scene.onKeyboardObservable.remove(keybrdObserver)
@@ -43,6 +36,7 @@ var ppFactor = -0.01;
 var ppFadeLevel = 1.0;
 var fadeOutCb = function(){};
 var stop_transition = true;
+var frameCounter = 0;
 
 function initScene(scene) {
 	var postProcess = new BABYLON.PostProcess("Fade", "fade", ["fadeLevel"],
@@ -51,6 +45,7 @@ function initScene(scene) {
    	effect.setFloat("fadeLevel", ppFadeLevel);
   };
   scene.registerBeforeRender(function () {
+    frameCounter++;
     if ( !stop_transition ) {
 		  ppFadeLevel += ppFactor;
       if ( ppFadeLevel > 1 ) {
@@ -72,18 +67,33 @@ function prepareFadeOut(func) {
   fadeOutCb = func;
 }
 
+function configMaterial(material) {
+  material.backFaceCulling = false;
+  material.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+  material.microSurface = 1.0;
+  material.disableLighting = true;
+}
+
 function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
   var txt = new BABYLON.EquiRectangularCubeTexture('/m/' + mlid +
                                                    '/background-' +
                                                    sze + '.jpg',
                                                    scene, sze);
-  txt.vAngle = Math.PI;
-  var mat = new BABYLON.PBRMaterial("skyBox"+sze, scene);
+  var mat = new BABYLON.StandardMaterial("skyBox"+sze, scene);
 
   mat.reflectionTexture = txt
-  replaceTextureOnSkyBox(mat)
+  configMaterial(mat)
   multimat.subMaterials.push(mat)
   alltextures.push(txt)
+}
+
+function clearScene(scene, skyboxMesh, alltextures) {
+  skyboxMesh.dispose()
+  for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
+    scene.meshes[idx].dispose()
+  }
+  scene.meshes.length = 0
+  alltextures.length = 0
 }
 
 var cameraInitialised = false;
@@ -118,6 +128,11 @@ function initCamera(scene) {
   // camera.checkCollisions = false;
   camera.minZ = 0.001;
   camera.attachControl(true);
+
+
+  camera.onViewMatrixChangedObservable.add(() => {
+    // console.log(camera.getViewMatrix())
+  })
 
   initScene(scene)
   // try {
@@ -159,8 +174,6 @@ function loadModel(mlid, rotateFactor, scene, skyboxMesh, multimat, sizes) {
     modelMesh.onLODLevelSelection = function(num,mesh,selectedMesh) {
       var idx = 0
 
-      if ( (Date.now() - startTimeStamp) < 15000 ) return;
-
       if ( typeof(alltextures) == 'undefined' ||  alltextures.length < 2 ) return;
 
       if ( num < 3 ) { idx = 0 }
@@ -168,7 +181,6 @@ function loadModel(mlid, rotateFactor, scene, skyboxMesh, multimat, sizes) {
       if ( num >= 6 && num < 8 && alltextures[2].isReady() ) { idx = 2 }
       if ( num >= 8            && alltextures[3].isReady() ) { idx = 3 }
 
-      // console.log(num + " --> " + idx + " [ " + selectedMesh.name)
       if ( prevLODIdx != idx ) {
         new BABYLON.SubMesh(idx, 0, skyboxMesh.getTotalVertices(),
                             0, skyboxMesh.getTotalIndices(),
