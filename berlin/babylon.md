@@ -4,30 +4,27 @@ permalink: /berlin/babylon
 layout: 3dtour
 ---
 
+
+<script src="/f/bjs/jquery.js"></script>
+<script src="/f/bjs/jquery.qrcode.min.js"></script>
+<script src="/f/bjs/ammo.js"></script>
+<script src="/f/bjs/recast.js"></script>
+<script src="/f/bjs/cannon.js"></script>
+<script src="/f/bjs/Oimo.js"></script>
+<script src="/f/bjs/earcut.min.js"></script>
 <script src="/f/bjs/babylon.js"></script>
 <script src="/f/bjs/babylonjs.materials.min.js"></script>
 <script src="/f/bjs/babylonjs.proceduralTextures.min.js"></script>
 <script src="/f/bjs/babylonjs.postProcess.min.js"></script>
-<script src="/f/bjs/babylonjs.loaders.js"></script>
+<script src="/f/bjs/babylonjs.loaders.min.js"></script>
 <script src="/f/bjs/babylonjs.serializers.min.js"></script>
 <script src="/f/bjs/babylon.gui.min.js"></script>
+<script src="/f/bjs/babylon.inspector.bundle.js"></script>
+<script src="/f/bjs/babylon.nodeEditor.js"></script>
+<script src="/f/bjs/babylon.guiEditor.js"></script>
 <script src="/f/babylonhelpers.js"></script>
 <script src="/f/models.js"></script>
-
-<style type='text/css'>
-    #customLoadingScreenDiv{
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        min-height: 200px;
-        padding: 20px;
-        background-color: #000000;
-        color: white;
-        font-size:50px;
-    }
-</style>
+<script src="/f/modelcache.js"></script>
 
 <script>
   BABYLON.Effect.RegisterShader("fade", "precision highp float;" +
@@ -40,21 +37,15 @@ layout: 3dtour
                                 "gl_FragColor = baseColor;" + "}");
 
   BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
-      if (document.getElementById("customLoadingScreenDiv")) {
-          // Do not add a loading screen if there is already one
-          document.getElementById("customLoadingScreenDiv").style.display = "initial";
-          return;
-      }
-      this._loadingDiv = document.createElement("div");
-      this._loadingDiv.id = "customLoadingScreenDiv";
-      this._loadingDiv.innerHTML = "loading...";
-      this._resizeLoadingUI();
+    document.getElementById("loadingScreen").innerHTML = "loading... " + this.loadingUIText;
+    if ( typeof(this._onceonly) == "undefined" ) {
       window.addEventListener("resize", this._resizeLoadingUI);
-      document.body.appendChild(this._loadingDiv);
+      this._onceonly = "defined"
+    }
   };
 
   BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
-    document.getElementById("customLoadingScreenDiv").style.display = "none";
+    document.getElementById("loadingScreen").style.display = "none";
     // if the loader screen is complete and we're in the middle of a fadeOut
     // then trigger the fadeIn again.
     if (ppFadeLevel < 0) stop_transition = false;
@@ -71,7 +62,6 @@ layout: 3dtour
   var currModel = UPModels.init();
   var baseMaterialSizes = [64, 256, 512, 1024]
   var textBlock = null;
-
   var cameraPath = []
 
   var createDefaultEngine = function() {
@@ -83,7 +73,8 @@ layout: 3dtour
 
   var delayCreateScene = function () {
     var scene = new BABYLON.Scene(engine);
-    BABYLON.SceneLoader.ShowLoadingScreen = true;
+    document.getElementById("loadingScreen").style.display = "none";
+    BABYLON.SceneLoader.ShowLoadingScreen = false;
 
     var r = createSkyBox(scene)
     skyboxMesh = r[0]
@@ -119,8 +110,7 @@ layout: 3dtour
         loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
                            alltextures, multimat,scene)
         addKeyboardObserver(scene, skyboxMesh);
-        loadModel(currModel.mlid, currModel.rotate, scene,
-                  skyboxMesh, multimat, baseMaterialSizes)
+        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
       })
     })
     advancedTexture.addControl(button);
@@ -147,10 +137,9 @@ layout: 3dtour
         textBlock.text = currModel.text;
 
         loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                           alltextures, multimat,scene)
+                           alltextures, multimat, scene)
         addKeyboardObserver(scene, skyboxMesh);
-        loadModel(currModel.mlid, currModel.rotate, scene,
-                  skyboxMesh, multimat, baseMaterialSizes)
+        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
       })
     })
     advancedTexture.addControl(button);
@@ -306,15 +295,25 @@ layout: 3dtour
     button.cornerRadius = 20;
     button.fontSize = "10px"
     button.onPointerClickObservable.add(function(b){
-      console.log( scene.activeCamera.viewport )
+
+      var camera = scene.activeCamera;
+
+      console.log({
+        frame: frameCounter,
+        rotation: {
+          alpha: camera.alpha,
+          beta: camera.beta,
+          radius: camera.radius
+        },
+        position: camera.position.clone()
+      })
     })
     advancedTexture.addControl(button);
 
 
 
     // Finally load the model.
-    loadModel(currModel.mlid, currModel.rotate, scene, skyboxMesh, multimat,
-              baseMaterialSizes)
+    loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
 
     return scene;
   };
