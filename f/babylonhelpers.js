@@ -60,6 +60,50 @@ function initScene(scene) {
   })
 }
 
+function prepareAnimations(frameRate) {
+  return [
+    new BABYLON.Animation(
+      "movein",
+      "position",
+      frameRate,
+      BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    ),
+    new BABYLON.Animation(
+      "alpha",
+      "alpha",
+      frameRate,
+      BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    ),
+    new BABYLON.Animation(
+      "beta",
+      "beta",
+      frameRate,
+      BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    ),
+    new BABYLON.Animation(
+      "radius",
+      "radius",
+      frameRate,
+      BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    ),
+    new BABYLON.Animation(
+      "targetting",
+      "target",
+      frameRate,
+      BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    ),
+  ]
+}
+
+function vector3FromHash(hsh) {
+  return new BABYLON.Vector3(hsh.x || hsh.X, hsh.y || hsh.Y, hsh.z || hsh.Z)
+}
+
 function prepareFadeOut(func) {
   ppFadeLevel = 1.0;
   ppFactor = -0.01;
@@ -72,6 +116,18 @@ function configMaterial(material) {
   material.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
   material.microSurface = 1.0;
   material.disableLighting = true;
+}
+
+function createButton(name, text, left, top) {
+  button = BABYLON.GUI.Button.CreateSimpleButton(name, text);
+  button.width = "100px";
+  button.height = "30px";
+  button.color = "white";
+  button.left = left;
+  button.top = top;
+  button.background = "#22222255";
+  button.cornerRadius = 20;
+  return button;
 }
 
 function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
@@ -98,63 +154,52 @@ function clearScene(scene, skyboxMesh, alltextures) {
 }
 
 var cameraInitialised = false;
-function initCamera(scene, model) {
+function initCamera(scene) {
+  if ( cameraInitialised ) return;
 
-  if ( !cameraInitialised ) {
-    scene.createDefaultCameraOrLight(true, true, true);
-    scene.activeCamera.alpha += Math.PI;
+  scene.createDefaultCameraOrLight(true, true, true);
+  scene.activeCamera.alpha += Math.PI;
 
-    var camera = scene.activeCamera;
-    camera.useFramingBehavior = true;
+  var camera = scene.activeCamera;
+  camera.useFramingBehavior = true;
 
-    var framingBehavior = camera.getBehaviorByName("Framing");
-    framingBehavior.framingTime = 0;
-    framingBehavior.elevationReturnTime = -1;
+  var framingBehavior = camera.getBehaviorByName("Framing");
+  framingBehavior.framingTime = 0;
+  framingBehavior.elevationReturnTime = -1;
 
-    camera.lowerRadiusLimit = null;
+  camera.lowerRadiusLimit = null;
 
-    var worldExtends = scene.getWorldExtends(function (mesh) {
-      return mesh.isVisible && mesh.isEnabled();
-    });
-    framingBehavior.zoomOnBoundingInfo(worldExtends.min, worldExtends.max);
+  var worldExtends = scene.getWorldExtends(function (mesh) {
+    return mesh.isVisible && mesh.isEnabled();
+  });
+  framingBehavior.zoomOnBoundingInfo(worldExtends.min, worldExtends.max);
 
-    camera.pinchPrecision = 200 / camera.radius;
-    camera.upperRadiusLimit = 5 * camera.radius;
+  camera.pinchPrecision = 200 / camera.radius;
+  camera.upperRadiusLimit = 5 * camera.radius;
 
-    camera.wheelDeltaPercentage = 0.01;
-    camera.pinchDeltaPercentage = 0.01;
-    // camera.zoomToMouseLocation = true;
-    // camera.checkCollisions = false;
-    camera.minZ = 0.001;
-    camera.attachControl(true);
+  camera.wheelDeltaPercentage = 0.01;
+  camera.pinchDeltaPercentage = 0.01;
+  // camera.zoomToMouseLocation = true;
+  // camera.checkCollisions = false;
+  camera.minZ = 0.001;
+  camera.attachControl(true);
 
-    camera.onViewMatrixChangedObservable.add(() => {
-      // console.log(camera.getViewMatrix())
-    })
+  camera.onViewMatrixChangedObservable.add(() => {
+    // console.log(camera.getViewMatrix())
+  })
 
-    initScene(scene)
-    // try {
-    //   new BABYLON.AsciiArtPostProcess("myAscii", camera, { font: '5px Monospace'});
-    // } catch(e) {
-    //   console.log(e)
-    // }
-    // try {
-    //   new BABYLON.SharpenPostProcess("myAscii", 1.7, camera);
-    // } catch(e) {
-    //   console.log(e)
-    // }
-    cameraInitialised = true;
-  }
-
-  if ( model.camera != undefined ) {
-    var camera = scene.activeCamera;
-    camera.position = new BABYLON.Vector3(model.camera.x,
-                                          model.camera.y,
-                                          model.camera.z)
-    camera.alpha = model.camera.alpha;
-    camera.beta = model.camera.beta;
-    camera.radius = model.camera.radius;
-  }
+  initScene(scene)
+  // try {
+  //   new BABYLON.AsciiArtPostProcess("myAscii", camera, { font: '5px Monospace'});
+  // } catch(e) {
+  //   console.log(e)
+  // }
+  // try {
+  //   new BABYLON.SharpenPostProcess("myAscii", 1.7, camera);
+  // } catch(e) {
+  //   console.log(e)
+  // }
+  cameraInitialised = true;
 }
 
 function createSkyBox(scene) {
@@ -180,10 +225,22 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
     modelName = cacheEntry
   }
 
+  scene.stopAllAnimations()
+
   BABYLON.SceneLoader.Append(rootUrl, modelName, scene, function (scene) {
     if (ppFadeLevel < 0) stop_transition = false;
 
     initCamera(scene, model)
+
+    if ( model.camera != undefined ) {
+      var camera = scene.activeCamera;
+      camera.position = vector3FromHash(model.camera)
+      camera.target   = vector3FromHash(model.camera.target)
+      camera.alpha    = model.camera.alpha;
+      camera.beta     = model.camera.beta;
+      camera.radius   = model.camera.radius;
+    }
+
     modelMesh = scene.meshes[2];
     modelMesh.rotate(new BABYLON.Vector3(0,1,0),
                      Math.PI * rotateFactor,

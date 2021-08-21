@@ -1,6 +1,6 @@
 ---
 title: 3D Tour
-permalink: /berlin/babylon
+permalink: /berlin/3dtour
 layout: 3dtour
 ---
 
@@ -144,15 +144,9 @@ layout: 3dtour
     advancedTexture.addControl(button);
 
 
-    var button = createButton("butInfo", "&#128712;", "0%", "45%");
+    var button = createButton("butPlay", "tour", "0%", "45%")
     button.onPointerClickObservable.add(function(b){
-      textBlock.isVisible = !textBlock.isVisible;
-    })
-    advancedTexture.addControl(button);
-
-    var button = createButton("butPlay", "fly>", "45%", "-10%")
-    button.onPointerClickObservable.add(function(b){
-      var frameRate = 40;
+      var frameRate = 80;
       var anims = prepareAnimations(frameRate)
       var startFrame = currModel.flythrough[0].frame;
       var lastFrame = 0;
@@ -189,98 +183,6 @@ layout: 3dtour
       })
     })
     advancedTexture.addControl(button);
-
-    var button = createButton("butFTPrint", "play", "45%", "0%")
-    button.onPointerClickObservable.add(function(b){
-      console.log( "play button pressed" )
-      try {
-        var camera = scene.activeCamera;
-        var frameRate = 30;
-        var pathDump = [];
-
-        var anims = prepareAnimations(frameRate)
-        var attrs = [ [], [], [], [], [] ];
-
-        var startFrame = cameraPath[0].frame;
-        var lastFrame = 0;
-
-        for ( var idx = 0; idx < cameraPath.length; idx++ ) {
-          var dp = cameraPath[idx]
-          var frame = (dp.frame - startFrame)
-          attrs[0].push({ frame: frame, value: dp.position })
-          attrs[1].push({ frame: frame, value: dp.rotation.alpha })
-          attrs[2].push({ frame: frame, value: dp.rotation.beta })
-          attrs[3].push({ frame: frame, value: dp.rotation.radius })
-          attrs[4].push({ frame: frame, value: dp.target })
-
-          pathDump.push( "{ frame: " + frame +
-                         ", alpha: " + dp.rotation.alpha +
-                         ", beta: " + dp.rotation.beta +
-                         ", radius: " + dp.rotation.radius +
-                         ", position: { X:" + dp.position.x +
-                                     ", Y: " + dp.position.y +
-                                     ", Z: " + dp.position.z +
-                         "}, target: { X:" + dp.target.x +
-                                   ", Y: " + dp.target.y +
-                                   ", Z: " + dp.target.z
-                         +"}},")
-          lastFrame = frame;
-        }
-
-        $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
-
-        console.log( pathDump.join("\n") )
-        scene.beginDirectAnimation(camera, anims, 0, lastFrame, false);
-      } catch(e) {
-        console.log(e)
-      }
-    })
-    advancedTexture.addControl(button);
-
-
-    var button = createButton("butKeyFrame", "keyF", "45%", "10%")
-    button.onPointerClickObservable.add(function(b){
-      var camera = scene.activeCamera;
-
-      cameraPath.push({
-        frame: frameCounter,
-        rotation: {
-          alpha: camera.alpha,
-          beta: camera.beta,
-          radius: camera.radius
-        },
-        position: camera.position.clone(),
-        target: camera.target.clone()
-      })
-    })
-    advancedTexture.addControl(button);
-
-
-    var button = createButton("butClear", "clear", "45%", "20%")
-    button.onPointerClickObservable.add(function(b){
-      cameraPath.length = 0;
-      scene.stopAllAnimations()
-    })
-    advancedTexture.addControl(button);
-
-    var button = createButton("butKFInfo", "info", "45%", "30%")
-    button.onPointerClickObservable.add(function(b){
-      var camera = scene.activeCamera;
-
-      console.log({
-        frame: frameCounter,
-        rotation: {
-          alpha: camera.alpha,
-          beta: camera.beta,
-          radius: camera.radius
-        },
-        position: camera.position.clone(),
-        target: camera.target.clone()
-      })
-    })
-    advancedTexture.addControl(button);
-
-
 
     // Finally load the model.
     loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
