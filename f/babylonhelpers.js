@@ -75,10 +75,11 @@ function configMaterial(material) {
 }
 
 function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
-  var txt = new BABYLON.EquiRectangularCubeTexture('/m/' + mlid +
-                                                   '/background-' +
-                                                   sze + '.jpg',
-                                                   scene, sze);
+  var filename = '/m/' + mlid +'/background-' + sze + '.jpg';
+  var cacheEntry = ModelCache.getEntry(filename)
+  if ( cacheEntry != undefined ) { filename = cacheEntry; }
+
+  var txt = new BABYLON.EquiRectangularCubeTexture(filename, scene, sze);
   var mat = new BABYLON.StandardMaterial("skyBox"+sze, scene);
 
   mat.reflectionTexture = txt
@@ -97,55 +98,63 @@ function clearScene(scene, skyboxMesh, alltextures) {
 }
 
 var cameraInitialised = false;
-function initCamera(scene) {
-  if ( cameraInitialised ) return;
+function initCamera(scene, model) {
 
-  scene.createDefaultCameraOrLight(true, true, true);
+  if ( !cameraInitialised ) {
+    scene.createDefaultCameraOrLight(true, true, true);
+    scene.activeCamera.alpha += Math.PI;
 
-  scene.activeCamera.alpha += Math.PI;
+    var camera = scene.activeCamera;
+    camera.useFramingBehavior = true;
 
-  var camera = scene.activeCamera;
+    var framingBehavior = camera.getBehaviorByName("Framing");
+    framingBehavior.framingTime = 0;
+    framingBehavior.elevationReturnTime = -1;
 
-  camera.useFramingBehavior = true;
+    camera.lowerRadiusLimit = null;
 
-  var framingBehavior = camera.getBehaviorByName("Framing");
-  framingBehavior.framingTime = 0;
-  framingBehavior.elevationReturnTime = -1;
+    var worldExtends = scene.getWorldExtends(function (mesh) {
+      return mesh.isVisible && mesh.isEnabled();
+    });
+    framingBehavior.zoomOnBoundingInfo(worldExtends.min, worldExtends.max);
 
-  camera.lowerRadiusLimit = null;
+    camera.pinchPrecision = 200 / camera.radius;
+    camera.upperRadiusLimit = 5 * camera.radius;
 
-  var worldExtends = scene.getWorldExtends(function (mesh) {
-    return mesh.isVisible && mesh.isEnabled();
-  });
-  framingBehavior.zoomOnBoundingInfo(worldExtends.min, worldExtends.max);
+    camera.wheelDeltaPercentage = 0.01;
+    camera.pinchDeltaPercentage = 0.01;
+    // camera.zoomToMouseLocation = true;
+    // camera.checkCollisions = false;
+    camera.minZ = 0.001;
+    camera.attachControl(true);
 
-  camera.pinchPrecision = 200 / camera.radius;
-  camera.upperRadiusLimit = 5 * camera.radius;
+    camera.onViewMatrixChangedObservable.add(() => {
+      // console.log(camera.getViewMatrix())
+    })
 
-  camera.wheelDeltaPercentage = 0.01;
-  camera.pinchDeltaPercentage = 0.01;
-  // camera.zoomToMouseLocation = true;
-  // camera.checkCollisions = false;
-  camera.minZ = 0.001;
-  camera.attachControl(true);
+    initScene(scene)
+    // try {
+    //   new BABYLON.AsciiArtPostProcess("myAscii", camera, { font: '5px Monospace'});
+    // } catch(e) {
+    //   console.log(e)
+    // }
+    // try {
+    //   new BABYLON.SharpenPostProcess("myAscii", 1.7, camera);
+    // } catch(e) {
+    //   console.log(e)
+    // }
+    cameraInitialised = true;
+  }
 
-
-  camera.onViewMatrixChangedObservable.add(() => {
-    // console.log(camera.getViewMatrix())
-  })
-
-  initScene(scene)
-  // try {
-  //   new BABYLON.AsciiArtPostProcess("myAscii", camera, { font: '5px Monospace'});
-  // } catch(e) {
-  //   console.log(e)
-  // }
-  // try {
-  //   new BABYLON.SharpenPostProcess("myAscii", 1.7, camera);
-  // } catch(e) {
-  //   console.log(e)
-  // }
-  cameraInitialised = true;
+  if ( model.camera != undefined ) {
+    var camera = scene.activeCamera;
+    camera.position = new BABYLON.Vector3(model.camera.x,
+                                          model.camera.y,
+                                          model.camera.z)
+    camera.alpha = model.camera.alpha;
+    camera.beta = model.camera.beta;
+    camera.radius = model.camera.radius;
+  }
 }
 
 function createSkyBox(scene) {
@@ -159,10 +168,22 @@ function createSkyBox(scene) {
 }
 
 var prevLODIdx = 0;
-function loadModel(mlid, rotateFactor, scene, skyboxMesh, multimat, sizes) {
-  BABYLON.SceneLoader.Append("/m/"+mlid+"/", "model-512.glb", scene, function (scene) {
+function loadModel(model, scene, skyboxMesh, multimat, sizes) {
+  var mlid = model.mlid;
+  var rotateFactor = model.rotate;
+  var rootUrl = "/m/"+mlid+"/"
+  var modelName = "model-512.glb"
 
-    initCamera(scene)
+  var cacheEntry = ModelCache.getEntry(rootUrl + modelName)
+  if ( cacheEntry != undefined ) {
+    rootUrl   = ""
+    modelName = cacheEntry
+  }
+
+  BABYLON.SceneLoader.Append(rootUrl, modelName, scene, function (scene) {
+    if (ppFadeLevel < 0) stop_transition = false;
+
+    initCamera(scene, model)
     modelMesh = scene.meshes[2];
     modelMesh.rotate(new BABYLON.Vector3(0,1,0),
                      Math.PI * rotateFactor,
@@ -203,6 +224,7 @@ function loadModel(mlid, rotateFactor, scene, skyboxMesh, multimat, sizes) {
               for ( var idx = 1; idx < sizes.length; idx++ ) {
                 loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
               }
+              ModelCache.cachePrevAndNext(mlid)
             })
           })
       })
