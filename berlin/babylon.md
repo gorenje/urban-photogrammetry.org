@@ -4,7 +4,6 @@ permalink: /berlin/babylon
 layout: 3dtour
 ---
 
-
 <script src="/f/bjs/jquery.js"></script>
 <script src="/f/bjs/jquery.qrcode.min.js"></script>
 <script src="/f/bjs/ammo.js"></script>
@@ -22,9 +21,11 @@ layout: 3dtour
 <script src="/f/bjs/babylon.inspector.bundle.js"></script>
 <script src="/f/bjs/babylon.nodeEditor.js"></script>
 <script src="/f/bjs/babylon.guiEditor.js"></script>
+<script src="/f/bowser.js"></script>
 <script src="/f/babylonhelpers.js"></script>
 <script src="/f/models.js"></script>
 <script src="/f/modelcache.js"></script>
+<script src="/f/buttonhelpers.js"></script>
 
 <script>
   BABYLON.Effect.RegisterShader("fade", "precision highp float;" +
@@ -51,7 +52,6 @@ layout: 3dtour
     if (ppFadeLevel < 0) stop_transition = false;
   }
 
-
   var canvas = document.getElementById("3dcanvas");
   var alltextures = []
   var engine = null;
@@ -63,6 +63,7 @@ layout: 3dtour
   var baseMaterialSizes = [64, 256, 512, 1024]
   var textBlock = null;
   var cameraPath = []
+  var browser = bowser.getParser(window.navigator.userAgent);
 
   var createDefaultEngine = function() {
     return new BABYLON.Engine(canvas, true, {
@@ -86,201 +87,42 @@ layout: 3dtour
 
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-    textBlock = new BABYLON.GUI.TextBlock()
-    textBlock.text = currModel.text;
-    textBlock.isVisible = false;
-    textBlock.width = "300px";
-    textBlock.height = "300px";
-    textBlock.color = "white";
-    textBlock.left = "45%";
-    textBlock.top = "-40%";
-    textBlock.background = "red";
-    textBlock.cornerRadius = 20;
-    textBlock.fontSize = "10px"
+    textBlock = ButtonHelpers.createTextBlock()
     advancedTexture.addControl(textBlock);
 
-    var button = createButton("butPrev", "<<<", "-45%", "45%");
-    button.onPointerClickObservable.add(function(b){
-      prepareFadeOut(function() {
-        // destruction
-        clearScene(scene, skyboxMesh, alltextures)
-
-        // restruction
-        currModel      = UPModels.previous(currModel)
-        var r          = createSkyBox(scene)
-        skyboxMesh     = r[0]
-        multimat       = r[1]
-        startTimeStamp = Date.now();
-        textBlock.text = currModel.text;
-
-        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                           alltextures, multimat,scene)
-        addKeyboardObserver(scene, skyboxMesh);
-        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
-      })
-    })
+    var button = ButtonHelpers.create("butPrev", "<<<", "-45%", "45%");
+    button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
     advancedTexture.addControl(button);
 
-    var button = createButton("butNext", ">>>", "45%", "45%")
-    button.onPointerClickObservable.add(function(b){
-      prepareFadeOut(function() {
-	      // destruction
-        clearScene(scene, skyboxMesh, alltextures)
+    var button = ButtonHelpers.create("butNext", ">>>", "45%", "45%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.next)
+    advancedTexture.addControl(button);
 
-        // restruction
-        currModel      = UPModels.next(currModel)
-        var r          = createSkyBox(scene)
-        skyboxMesh     = r[0]
-        multimat       = r[1]
-        startTimeStamp = Date.now();
-        textBlock.text = currModel.text;
+    var button = ButtonHelpers.create("butInfo", "&#128712;", "0%", "45%");
+    button.onPointerClickObservable.add(ButtonHelpers.CB.info)
+    advancedTexture.addControl(button);
 
-        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                           alltextures, multimat, scene)
-        addKeyboardObserver(scene, skyboxMesh);
-        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
-      })
-    })
+    var button = ButtonHelpers.create("butPlay", "fly>", "45%", "-10%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
+    advancedTexture.addControl(button);
+
+    var button = ButtonHelpers.create("butFTPlay", "playKFs", "45%", "0%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.playKeyframes)
     advancedTexture.addControl(button);
 
 
-    var button = createButton("butInfo", "&#128712;", "0%", "45%");
-    button.onPointerClickObservable.add(function(b){
-      textBlock.isVisible = !textBlock.isVisible;
-    })
-    advancedTexture.addControl(button);
-
-    var button = createButton("butPlay", "fly>", "45%", "-10%")
-    button.onPointerClickObservable.add(function(b){
-      var frameRate = 40;
-      var anims = prepareAnimations(frameRate)
-      var startFrame = currModel.flythrough[0].frame;
-      var lastFrame = 0;
-      var attrs = [ [], [], [], [], [] ];
-
-      attrs[0].push({ frame: 0, value: vector3FromHash(currModel.camera) })
-      attrs[1].push({ frame: 0, value: currModel.camera.alpha })
-      attrs[2].push({ frame: 0, value: currModel.camera.beta })
-      attrs[3].push({ frame: 0, value: currModel.camera.radius })
-      attrs[4].push({ frame: 0, value: vector3FromHash(currModel.camera.target) })
-
-      $.each( currModel.flythrough, function(idx,keyframe) {
-        var frame = keyframe.frame - startFrame + frameRate;
-
-        attrs[0].push({ frame: frame, value: vector3FromHash(keyframe.position)})
-        attrs[1].push({ frame: frame, value: keyframe.alpha })
-        attrs[2].push({ frame: frame, value: keyframe.beta })
-        attrs[3].push({ frame: frame, value: keyframe.radius })
-        attrs[4].push({ frame: frame, value: vector3FromHash(keyframe.target)})
-        lastFrame = frame;
-      })
-
-      $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
-
-      var anim = scene.beginDirectAnimation(scene.activeCamera, anims, 0,
-                                            lastFrame + frameRate, false);
-
-      scene.onPointerDown = function(e) {
-        anim.stop()
-        scene.onPointerDown = null;
-      }
-      anim.onAnimationEndObservable.add(function() {
-        scene.onPointerDown = null
-      })
-    })
-    advancedTexture.addControl(button);
-
-    var button = createButton("butFTPrint", "play", "45%", "0%")
-    button.onPointerClickObservable.add(function(b){
-      console.log( "play button pressed" )
-      try {
-        var camera = scene.activeCamera;
-        var frameRate = 30;
-        var pathDump = [];
-
-        var anims = prepareAnimations(frameRate)
-        var attrs = [ [], [], [], [], [] ];
-
-        var startFrame = cameraPath[0].frame;
-        var lastFrame = 0;
-
-        for ( var idx = 0; idx < cameraPath.length; idx++ ) {
-          var dp = cameraPath[idx]
-          var frame = (dp.frame - startFrame)
-          attrs[0].push({ frame: frame, value: dp.position })
-          attrs[1].push({ frame: frame, value: dp.rotation.alpha })
-          attrs[2].push({ frame: frame, value: dp.rotation.beta })
-          attrs[3].push({ frame: frame, value: dp.rotation.radius })
-          attrs[4].push({ frame: frame, value: dp.target })
-
-          pathDump.push( "{ frame: " + frame +
-                         ", alpha: " + dp.rotation.alpha +
-                         ", beta: " + dp.rotation.beta +
-                         ", radius: " + dp.rotation.radius +
-                         ", position: { X:" + dp.position.x +
-                                     ", Y: " + dp.position.y +
-                                     ", Z: " + dp.position.z +
-                         "}, target: { X:" + dp.target.x +
-                                   ", Y: " + dp.target.y +
-                                   ", Z: " + dp.target.z
-                         +"}},")
-          lastFrame = frame;
-        }
-
-        $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
-
-        console.log( pathDump.join("\n") )
-        scene.beginDirectAnimation(camera, anims, 0, lastFrame, false);
-      } catch(e) {
-        console.log(e)
-      }
-    })
+    var button = ButtonHelpers.create("butAddKeyFrame", "addKF", "45%", "10%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.addKeyframe)
     advancedTexture.addControl(button);
 
 
-    var button = createButton("butKeyFrame", "keyF", "45%", "10%")
-    button.onPointerClickObservable.add(function(b){
-      var camera = scene.activeCamera;
-
-      cameraPath.push({
-        frame: frameCounter,
-        rotation: {
-          alpha: camera.alpha,
-          beta: camera.beta,
-          radius: camera.radius
-        },
-        position: camera.position.clone(),
-        target: camera.target.clone()
-      })
-    })
+    var button = ButtonHelpers.create("butClear", "clearKF", "45%", "20%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.clearKeyframes)
     advancedTexture.addControl(button);
 
-
-    var button = createButton("butClear", "clear", "45%", "20%")
-    button.onPointerClickObservable.add(function(b){
-      cameraPath.length = 0;
-      scene.stopAllAnimations()
-    })
+    var button = ButtonHelpers.create("butKFInfo", "info", "45%", "30%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.showCameraDetails)
     advancedTexture.addControl(button);
-
-    var button = createButton("butKFInfo", "info", "45%", "30%")
-    button.onPointerClickObservable.add(function(b){
-      var camera = scene.activeCamera;
-
-      console.log({
-        frame: frameCounter,
-        rotation: {
-          alpha: camera.alpha,
-          beta: camera.beta,
-          radius: camera.radius
-        },
-        position: camera.position.clone(),
-        target: camera.target.clone()
-      })
-    })
-    advancedTexture.addControl(button);
-
-
 
     // Finally load the model.
     loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
@@ -317,4 +159,6 @@ layout: 3dtour
   window.addEventListener("resize", function () {
     engine.resize();
   });
+
+  window.browser = browser
 </script>
