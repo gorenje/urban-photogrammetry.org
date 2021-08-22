@@ -224,6 +224,11 @@ function createSkyBox(scene) {
   return [skyboxMesh, multimat]
 }
 
+function isTextureReady(texture) {
+  if ( texture == undefined || texture == null ) return false;
+  return texture.isReady()
+}
+
 var prevLODIdx = 0;
 function loadModel(model, scene, skyboxMesh, multimat, sizes) {
   var mlid = model.mlid;
@@ -267,9 +272,9 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
       if ( typeof(alltextures) == 'undefined' ||  alltextures.length < 2 ) return;
 
       if ( num < 3 ) { idx = 0 }
-      if ( num >= 3 && num < 6 && alltextures[1].isReady() ) { idx = 1 }
-      if ( num >= 6 && num < 8 && alltextures[2].isReady() ) { idx = 2 }
-      if ( num >= 8            && alltextures[3].isReady() ) { idx = 3 }
+      if ( num >= 3 && num < 6 && isTextureReady(alltextures[1]) ) { idx = 1 }
+      if ( num >= 6 && num < 8 && isTextureReady(alltextures[2]) ) { idx = 2 }
+      if ( num >= 8            && isTextureReady(alltextures[3]) ) { idx = 3 }
 
       if ( prevLODIdx != idx ) {
         new BABYLON.SubMesh(idx, 0, skyboxMesh.getTotalVertices(),
@@ -279,23 +284,47 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
       }
     }
 
-    // Load the various LODs for the model and once they are all loaded,
-    // loaed all the materials for the skybox.
-    BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-2k.glb",scene).then(
-      function(mesh) {
-        modelMesh.addLODLevel(20,modelMesh.clone())
-        modelMesh.addLODLevel(6,mesh.meshes[1])
-        BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-4k.glb",scene).then(
+    try {
+      if ( window.browser.getPlatformType() == "desktop" ) {
+        // Load the various LODs for the model and once they are all loaded,
+        // loaed all the materials for the skybox.
+        BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-2k.glb",scene).then(
           function(mesh) {
-            modelMesh.addLODLevel(3,mesh.meshes[1])
-            BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-8k.glb",scene).then(function(mesh) {
-              modelMesh.addLODLevel(0,mesh.meshes[1])
-              for ( var idx = 1; idx < sizes.length; idx++ ) {
-                loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
-              }
-              ModelCache.cachePrevAndNext(mlid)
-            })
+            modelMesh.addLODLevel(20,modelMesh.clone())
+            modelMesh.addLODLevel(6,mesh.meshes[1])
+            BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-4k.glb",scene).then(
+              function(mesh) {
+                modelMesh.addLODLevel(3,mesh.meshes[1])
+                BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-8k.glb",scene).then(function(mesh) {
+                  modelMesh.addLODLevel(0,mesh.meshes[1])
+                  for ( var idx = 1; idx < sizes.length; idx++ ) {
+                    loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
+                  }
+                  ModelCache.cachePrevAndNext(mlid)
+                })
+              })
           })
-      })
+      }
+    } catch ( e ) {
+      console.log(e)
+    }
+
+    try {
+      if ( window.browser.getPlatformType() == "mobile" ) {
+        // Load the various LODs for the model and once they are all loaded,
+        // loaed all the materials for the skybox.
+        BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-1k.glb",scene).then(
+          function(mesh) {
+            modelMesh.addLODLevel(20,modelMesh.clone())
+            modelMesh.addLODLevel(6,mesh.meshes[1])
+            for ( var idx = 1; idx < 2; idx++ ) {
+              loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
+            }
+            ModelCache.cachePrevAndNext(mlid)
+          })
+      }
+    } catch ( e ) {
+      console.log(e)
+    }
   });
 }
