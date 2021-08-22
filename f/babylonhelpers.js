@@ -4,30 +4,54 @@ function addKeyboardObserver(scene, skyboxMesh) {
 
   keybrdObserver = scene.onKeyboardObservable.add((kbInfo) => {
 		switch (kbInfo.type) {
-		case BABYLON.KeyboardEventTypes.KEYDOWN:
-			switch (kbInfo.event.key) {
-      case "1":
-        new BABYLON.SubMesh(0, 0, skyboxMesh.getTotalVertices(),
-                            0, skyboxMesh.getTotalIndices(),
-                            skyboxMesh);
-        break
-      case "2":
-        new BABYLON.SubMesh(1, 0, skyboxMesh.getTotalVertices(),
-                            0, skyboxMesh.getTotalIndices(),
-                            skyboxMesh);
-        break
-      case "3":
-        new BABYLON.SubMesh(2, 0, skyboxMesh.getTotalVertices(),
-                            0, skyboxMesh.getTotalIndices(),
-                            skyboxMesh);
-        break
-      case "4":
-        new BABYLON.SubMesh(3, 0, skyboxMesh.getTotalVertices(),
-                            0, skyboxMesh.getTotalIndices(),
-                            skyboxMesh);
-        break
-      }
-			break;
+		  case BABYLON.KeyboardEventTypes.KEYDOWN:
+			  switch (kbInfo.event.key) {
+          case "1":
+            new BABYLON.SubMesh(0, 0, skyboxMesh.getTotalVertices(),
+                                0, skyboxMesh.getTotalIndices(),
+                                skyboxMesh);
+            break
+          case "2":
+            new BABYLON.SubMesh(1, 0, skyboxMesh.getTotalVertices(),
+                                0, skyboxMesh.getTotalIndices(),
+                                skyboxMesh);
+            break
+          case "3":
+            new BABYLON.SubMesh(2, 0, skyboxMesh.getTotalVertices(),
+                                0, skyboxMesh.getTotalIndices(),
+                                skyboxMesh);
+            break
+          case "4":
+            new BABYLON.SubMesh(3, 0, skyboxMesh.getTotalVertices(),
+                                0, skyboxMesh.getTotalIndices(),
+                                skyboxMesh);
+            break
+          case "5":
+            var camera = scene.activeCamera;
+            camera.position = new BABYLON.Vector3(0,2*Math.PI,0)
+            camera.target   = new BABYLON.Vector3(0,0,0)
+            camera.alpha    = 0
+            camera.beta     = 0
+            camera.radius   = 2 * Math.PI
+            break
+          case "6":
+            var camera = scene.activeCamera;
+            camera.position = new BABYLON.Vector3(0,-2*Math.PI,0)
+            camera.target   = new BABYLON.Vector3(0,0,0)
+            camera.alpha    = 0
+            camera.beta     = Math.PI
+            camera.radius   = 2 * Math.PI
+            break
+          case "7":
+            var camera = scene.activeCamera;
+            camera.position = new BABYLON.Vector3(0,0,0)
+            camera.target   = new BABYLON.Vector3(0,0,0)
+            camera.alpha    = 0
+            camera.beta     = Math.PI / 2
+            camera.radius   = 0
+            break
+        }
+			  break;
 		}})
 }
 
@@ -116,18 +140,6 @@ function configMaterial(material) {
   material.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
   material.microSurface = 1.0;
   material.disableLighting = true;
-}
-
-function createButton(name, text, left, top) {
-  button = BABYLON.GUI.Button.CreateSimpleButton(name, text);
-  button.width = "100px";
-  button.height = "30px";
-  button.color = "white";
-  button.left = left;
-  button.top = top;
-  button.background = "#22222255";
-  button.cornerRadius = 20;
-  return button;
 }
 
 function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
@@ -234,7 +246,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
 
     if ( model.camera != undefined ) {
       var camera = scene.activeCamera;
-      camera.position = vector3FromHash(model.camera)
+      camera.position = vector3FromHash(model.camera.position)
       camera.target   = vector3FromHash(model.camera.target)
       camera.alpha    = model.camera.alpha;
       camera.beta     = model.camera.beta;
