@@ -26,6 +26,7 @@ layout: 3dtour
 <script src="/f/models.js"></script>
 <script src="/f/modelcache.js"></script>
 <script src="/f/buttonhelpers.js"></script>
+<script src="/f/tdhelpers.js"></script>
 
 <script>
   BABYLON.Effect.RegisterShader("fade", "precision highp float;" +
@@ -69,7 +70,7 @@ layout: 3dtour
     return new BABYLON.Engine(canvas, true, {
       preserveDrawingBuffer: true,
       stencil: true,
-      disableWebGL2Support: false});
+      disableWebGL2Support: TDHelpers.disableWebGL2(browser)});
   };
 
   var delayCreateScene = function () {

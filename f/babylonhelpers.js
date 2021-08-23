@@ -285,7 +285,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
     }
 
     try {
-      if ( window.browser.getPlatformType() == "desktop" ) {
+      if ( window.browser.getPlatformType() !== "desktop" ) {
         // Load the various LODs for the model and once they are all loaded,
         // loaed all the materials for the skybox.
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-2k.glb",scene).then(
@@ -295,7 +295,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
             BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-4k.glb",scene).then(
               function(mesh) {
                 modelMesh.addLODLevel(3,mesh.meshes[1])
-                BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-8k.glb",scene).then(function(mesh) {
+                BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-6k.glb",scene).then(function(mesh) {
                   modelMesh.addLODLevel(0,mesh.meshes[1])
                   for ( var idx = 1; idx < sizes.length; idx++ ) {
                     loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
