@@ -84,46 +84,6 @@ function initScene(scene) {
   })
 }
 
-function prepareAnimations(frameRate) {
-  return [
-    new BABYLON.Animation(
-      "movein",
-      "position",
-      frameRate,
-      BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
-      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-    ),
-    new BABYLON.Animation(
-      "alpha",
-      "alpha",
-      frameRate,
-      BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-    ),
-    new BABYLON.Animation(
-      "beta",
-      "beta",
-      frameRate,
-      BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-    ),
-    new BABYLON.Animation(
-      "radius",
-      "radius",
-      frameRate,
-      BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-    ),
-    new BABYLON.Animation(
-      "targetting",
-      "target",
-      frameRate,
-      BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
-      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
-    ),
-  ]
-}
-
 function vector3FromHash(hsh) {
   return new BABYLON.Vector3(hsh.x || hsh.X, hsh.y || hsh.Y, hsh.z || hsh.Z)
 }
@@ -284,10 +244,46 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
       }
     }
 
+    // if this mdoel comes with a shareCamera, then animate the camera to that
+    // position. This is one time operation.
     try {
-      if ( window.browser.getPlatformType() !== "desktop" ) {
-        // Load the various LODs for the model and once they are all loaded,
-        // loaed all the materials for the skybox.
+      if ( model.sharecamera ) {
+        var frameRate = 30;
+        var anims = TDHelpers.prepareAnimations(frameRate)
+        var attrs = [ [], [], [], [], [] ]
+
+        var camera = scene.activeCamera;
+
+        attrs[0].push({ frame: 0, value: camera.position.clone() })
+        attrs[1].push({ frame: 0, value: camera.alpha })
+        attrs[2].push({ frame: 0, value: camera.beta })
+        attrs[3].push({ frame: 0, value: camera.radius })
+        attrs[4].push({ frame: 0, value: camera.target.clone() })
+
+        attrs[0].push({ frame: frameRate*2,
+                        value: model.sharecamera.position.clone() })
+        attrs[1].push({ frame: frameRate*2, value: model.sharecamera.alpha })
+        attrs[2].push({ frame: frameRate*2, value: model.sharecamera.beta })
+        attrs[3].push({ frame: frameRate*2, value: model.sharecamera.radius })
+        attrs[4].push({ frame: frameRate*2,
+                        value: model.sharecamera.target.clone() })
+
+        $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
+
+        scene.beginDirectAnimation(camera, anims, 0, 2*frameRate, false);
+
+        delete model.sharecamera
+      }
+    } catch (e ) {
+      console.log(e)
+    }
+
+
+    // Load the various LODs for the model and once they are all loaded,
+    // loaed all the materials for the skybox.
+    try {
+      if ( window.browser.getPlatformType() == "desktop" ) {
+        // desktop devics get complete resolution and details.
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-2k.glb",scene).then(
           function(mesh) {
             modelMesh.addLODLevel(20,modelMesh.clone())
@@ -304,15 +300,8 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                 })
               })
           })
-      }
-    } catch ( e ) {
-      console.log(e)
-    }
-
-    try {
-      if ( window.browser.getPlatformType() == "mobile" ) {
-        // Load the various LODs for the model and once they are all loaded,
-        // loaed all the materials for the skybox.
+      } else {
+        // non-desktop devices - only 2 levels of details.
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-1k.glb",scene).then(
           function(mesh) {
             modelMesh.addLODLevel(20,modelMesh.clone())

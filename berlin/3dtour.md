@@ -60,7 +60,7 @@ layout: 3dtour
   var multimat = null
   var sceneToRender = null;
   var skyboxMesh = null;
-  var currModel = UPModels.init();
+  var currModel = TDHelpers.checkForShareData(window.location)
   var baseMaterialSizes = [64, 256, 512, 1024]
   var textBlock = null;
   var cameraPath = []
