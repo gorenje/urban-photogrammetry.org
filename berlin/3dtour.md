@@ -53,6 +53,8 @@ layout: 3dtour
     if (ppFadeLevel < 0) stop_transition = false;
   }
 
+  window.browser = bowser.getParser(window.navigator.userAgent);
+
   var canvas = document.getElementById("3dcanvas");
   var alltextures = []
   var engine = null;
@@ -64,13 +66,12 @@ layout: 3dtour
   var baseMaterialSizes = [64, 256, 512, 1024]
   var textBlock = null;
   var cameraPath = []
-  var browser = bowser.getParser(window.navigator.userAgent);
 
   var createDefaultEngine = function() {
     return new BABYLON.Engine(canvas, true, {
       preserveDrawingBuffer: true,
       stencil: true,
-      disableWebGL2Support: TDHelpers.disableWebGL2(browser)});
+      disableWebGL2Support: TDHelpers.disableWebGL2()});
   };
 
   var delayCreateScene = function () {
@@ -91,17 +92,51 @@ layout: 3dtour
     textBlock = ButtonHelpers.createTextBlock()
     advancedTexture.addControl(textBlock);
 
-    var button = ButtonHelpers.create("butPrev", "<<<", "-45%", "45%");
-    button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
-    advancedTexture.addControl(button);
+    if ( TDHelpers.isMobile() ) {
+      var button = ButtonHelpers.create("butPrev", "<<<", "-40%", "40%");
+      button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
+      advancedTexture.addControl(button);
 
-    var button = ButtonHelpers.create("butNext", ">>>", "45%", "45%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.next)
-    advancedTexture.addControl(button);
+      var button = ButtonHelpers.create("butNext", ">>>", "40%", "40%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.next)
+      advancedTexture.addControl(button);
 
-    var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
-    advancedTexture.addControl(button);
+      var button = ButtonHelpers.create("butPlay", "play", "0%", "40%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
+      advancedTexture.addControl(button);
+
+      if ( ButtonHelpers.showShare() ) {
+        var button = ButtonHelpers.create("butShare", "share", "-40%", "-40%")
+        button.onPointerClickObservable.add(ButtonHelpers.CB.share)
+        advancedTexture.addControl(button);
+      }
+
+      var button = ButtonHelpers.create("butFS", "fulls", "40%", "-40%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
+      advancedTexture.addControl(button);
+    } else {
+      var button = ButtonHelpers.create("butPrev", "<<<", "-45%", "45%");
+      button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
+      advancedTexture.addControl(button);
+
+      var button = ButtonHelpers.create("butNext", ">>>", "45%", "45%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.next)
+      advancedTexture.addControl(button);
+
+      var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
+      advancedTexture.addControl(button);
+
+      if ( ButtonHelpers.showShare() ) {
+        var button = ButtonHelpers.create("butShare", "share", "-45%", "-45%")
+        button.onPointerClickObservable.add(ButtonHelpers.CB.share)
+        advancedTexture.addControl(button);
+      }
+
+      var button = ButtonHelpers.create("butFS", "fulls", "45%", "-45%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
+      advancedTexture.addControl(button);
+    }
 
     // Finally load the model.
     loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
@@ -138,6 +173,4 @@ layout: 3dtour
   window.addEventListener("resize", function () {
     engine.resize();
   });
-
-  window.browser = browser
 </script>

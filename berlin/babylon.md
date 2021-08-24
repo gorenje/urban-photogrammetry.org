@@ -103,7 +103,11 @@ layout: 3dtour
     button.onPointerClickObservable.add(ButtonHelpers.CB.info)
     advancedTexture.addControl(button);
 
-    var button = ButtonHelpers.create("butPlay", "share", "45%", "-20%")
+    var button = ButtonHelpers.create("butFS", "fulls", "45%", "-30%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
+    advancedTexture.addControl(button);
+
+    var button = ButtonHelpers.create("butShare", "share", "45%", "-20%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.share)
     advancedTexture.addControl(button);
 

@@ -1,16 +1,58 @@
 var ButtonHelpers = {
 
+  AllButtons: {
+  },
+
+  imageButton: function(filename) {
+    var width = "32px";
+    var height = "32px";
+    if ( !TDHelpers.isMobile() ) {
+      width = "62px"
+      height = "62px"
+    }
+
+    button = BABYLON.GUI.Button.CreateImageOnlyButton(name, filename);
+    button.width = width;
+    button.height = height;
+    button.color = "#ffffff33";
+    button.cornerRadius = 10;
+    button.background = "#00000000";
+
+    return button
+  },
+
   create: function(name, text, left, top) {
     var button = BABYLON.GUI.Button.CreateSimpleButton(name, text);
 
-    button.width        = "100px";
     button.height       = "30px";
+    button.width        = "100px";
     button.color        = "white";
-    button.left         = left;
-    button.top          = top;
     button.background   = "#22222255";
     button.cornerRadius = 20;
 
+    if ( name == "butFS" ) {
+      button = ButtonHelpers.imageButton("/f/images/fullscreen.png");
+    }
+
+    if ( name == "butShare" ) {
+      button = ButtonHelpers.imageButton("/f/images/share.png");
+    }
+
+    if ( name == "butPlay" ) {
+      button = ButtonHelpers.imageButton("/f/images/play.png");
+    }
+
+    if ( name == "butPrev" ) {
+      button = ButtonHelpers.imageButton("/f/images/prev.png");
+    }
+
+    if ( name == "butNext" ) {
+      button = ButtonHelpers.imageButton("/f/images/next.png");
+    }
+
+    button.left         = left;
+    button.top          = top;
+    ButtonHelpers.AllButtons[name] = button
     return button;
   },
 
@@ -29,6 +71,15 @@ var ButtonHelpers = {
     textBlock.fontSize     = "10px"
 
     return textBlock;
+  },
+
+  showShare: function() {
+    return browser.satisfies( { mobile: {
+      safari: ">=12.1",
+      chrome: ">=92",
+      firefox: ">=90"
+    }}
+    )
   },
 
   // Callbacks for the button clicks.
@@ -53,6 +104,14 @@ var ButtonHelpers = {
       })
     },
 
+    fullscreen: function(evt) {
+      if ( engine.isFullscreen ) {
+        engine.exitFullscreen(false)
+      } else {
+        engine.enterFullscreen(false)
+      }
+    },
+
     share: function(evt) {
       var camera = scene.activeCamera;
 
@@ -70,8 +129,15 @@ var ButtonHelpers = {
       }
 
       var url = new URL(window.location)
-      console.log( url.origin + url.pathname + "#" + window.btoa(
-        JSON.stringify(data)))
+      var shareUrl = url.origin + url.pathname + "#" + window.btoa(
+        JSON.stringify(data));
+
+      try {
+        navigator.share({ title: "Link to Model", url: shareUrl })
+      } catch ( e ) {
+        console.log(e)
+      }
+      console.log( shareUrl)
     },
 
     next: function(evt) {
