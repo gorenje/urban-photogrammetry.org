@@ -53,6 +53,27 @@ var ButtonHelpers = {
       })
     },
 
+    share: function(evt) {
+      var camera = scene.activeCamera;
+
+      var data = {
+        px: camera.position.x,
+        py: camera.position.y,
+        pz: camera.position.z,
+        tx: camera.target.x,
+        ty: camera.target.y,
+        tz: camera.target.z,
+        a: camera.alpha,
+        b: camera.beta,
+        r: camera.radius,
+        o: currModel.mlid
+      }
+
+      var url = new URL(window.location)
+      console.log( url.origin + url.pathname + "#" + window.btoa(
+        JSON.stringify(data)))
+    },
+
     next: function(evt) {
       prepareFadeOut(function() {
 	      // destruction
@@ -79,7 +100,7 @@ var ButtonHelpers = {
 
     flythrough: function(evt) {
       var frameRate = 40;
-      var anims = prepareAnimations(frameRate)
+      var anims = TDHelpers.prepareAnimations(frameRate)
       var startFrame = currModel.flythrough[0].frame;
       var lastFrame = 0;
       var attrs = [ [], [], [], [], [] ];
@@ -126,7 +147,7 @@ var ButtonHelpers = {
         var frameRate = 30;
         var pathDump = [];
 
-        var anims = prepareAnimations(frameRate)
+        var anims = TDHelpers.prepareAnimations(frameRate)
         var attrs = [ [], [], [], [], [] ];
 
         var startFrame = cameraPath[0].frame;

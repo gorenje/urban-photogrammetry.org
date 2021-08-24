@@ -60,7 +60,7 @@ layout: 3dtour
   var multimat = null
   var sceneToRender = null;
   var skyboxMesh = null;
-  var currModel = UPModels.init();
+  var currModel = TDHelpers.checkForShareData(window.location)
   var baseMaterialSizes = [64, 256, 512, 1024]
   var textBlock = null;
   var cameraPath = []
@@ -101,6 +101,10 @@ layout: 3dtour
 
     var button = ButtonHelpers.create("butInfo", "&#128712;", "0%", "45%");
     button.onPointerClickObservable.add(ButtonHelpers.CB.info)
+    advancedTexture.addControl(button);
+
+    var button = ButtonHelpers.create("butPlay", "share", "45%", "-20%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.share)
     advancedTexture.addControl(button);
 
     var button = ButtonHelpers.create("butPlay", "fly>", "45%", "-10%")
