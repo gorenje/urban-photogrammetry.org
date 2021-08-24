@@ -1,7 +1,16 @@
 // Three-D Helpers
 var TDHelpers = {
-  disableWebGL2: function(browser) {
-    return browser.satisfies( { mobile: { safari: "=13.1.1" } } ) || false;
+  disableWebGL2: function() {
+    return window.browser.satisfies( {
+      mobile: {
+        safari: "=13.1.1"
+      }
+    } ) || false;
+  },
+
+  isMobile: function() {
+    console.log(window.browser.getPlatformType())
+    return window.browser.getPlatformType() == "mobile"
   },
 
   checkForShareData(url) {

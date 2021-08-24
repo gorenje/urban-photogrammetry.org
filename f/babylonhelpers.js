@@ -278,11 +278,21 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
       console.log(e)
     }
 
-
     // Load the various LODs for the model and once they are all loaded,
     // loaed all the materials for the skybox.
     try {
-      if ( window.browser.getPlatformType() == "desktop" ) {
+      if ( TDHelpers.isMobile() ) {
+        // non-desktop devices - only 2 levels of details.
+        BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-1k.glb",scene).then(
+          function(mesh) {
+            modelMesh.addLODLevel(20,modelMesh.clone())
+            modelMesh.addLODLevel(6,mesh.meshes[1])
+            for ( var idx = 1; idx < 2; idx++ ) {
+              loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
+            }
+            ModelCache.cachePrevAndNext(mlid)
+          })
+      } else {
         // desktop devics get complete resolution and details.
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-2k.glb",scene).then(
           function(mesh) {
@@ -299,17 +309,6 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                   ModelCache.cachePrevAndNext(mlid)
                 })
               })
-          })
-      } else {
-        // non-desktop devices - only 2 levels of details.
-        BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-1k.glb",scene).then(
-          function(mesh) {
-            modelMesh.addLODLevel(20,modelMesh.clone())
-            modelMesh.addLODLevel(6,mesh.meshes[1])
-            for ( var idx = 1; idx < 2; idx++ ) {
-              loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
-            }
-            ModelCache.cachePrevAndNext(mlid)
           })
       }
     } catch ( e ) {
