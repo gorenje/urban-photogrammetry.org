@@ -1,3 +1,5 @@
+var currFlythrough = null;
+
 var ButtonHelpers = {
 
   AllButtons: {
@@ -80,6 +82,10 @@ var ButtonHelpers = {
       firefox: ">=90"
     }}
     )
+  },
+
+  isSafari: function() {
+    return browser.satisfies( { safari: ">0" } )
   },
 
   // Callbacks for the button clicks.
@@ -165,7 +171,13 @@ var ButtonHelpers = {
     },
 
     flythrough: function(evt) {
-      var frameRate = 40;
+      if ( currFlythrough !== null ) return;
+
+      var frameRate = Math.ceil(
+        TDHelpers.average(
+          currModel.flythrough.map( a => a.avgfps )
+        )
+      )
       var anims = TDHelpers.prepareAnimations(frameRate)
       var startFrame = currModel.flythrough[0].frame;
       var lastFrame = 0;
@@ -192,25 +204,34 @@ var ButtonHelpers = {
 
       $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
 
-      var anim = scene.beginDirectAnimation(camera,
-                                            anims,
-                                            0,
-                                            lastFrame + frameRate,
-                                            false);
+      currFlythrough = scene.beginDirectAnimation(camera,
+                                                  anims,
+                                                  0,
+                                                  lastFrame + frameRate,
+                                                  false);
 
+      ButtonHelpers.AllButtons["butPlay"].background = "#aa000077"
       scene.onPointerDown = function(e) {
-        anim.stop()
+        currFlythrough.stop()
+        currFlythrough = null
         scene.onPointerDown = null;
+        ButtonHelpers.AllButtons["butPlay"].background = "#00000000"
       }
-      anim.onAnimationEndObservable.addOnce(function() {
+      currFlythrough.onAnimationEndObservable.addOnce(function() {
         scene.onPointerDown = null
+        currFlythrough = null
+        ButtonHelpers.AllButtons["butPlay"].background = "#00000000"
       })
     },
 
     playKeyframes: function(evt) {
       try {
         var camera = scene.activeCamera;
-        var frameRate = 30;
+        var frameRate = Math.ceil(
+          TDHelpers.average(
+            cameraPath.map( a => a.avgfps )
+          )
+        )
         var pathDump = [];
 
         var anims = TDHelpers.prepareAnimations(frameRate)
@@ -229,6 +250,7 @@ var ButtonHelpers = {
           attrs[4].push({ frame: frame, value: dp.target })
 
           pathDump.push( "{ frame: " + frame +
+                         ", avgfps: " + dp.avgfps +
                          ", alpha: " + dp.rotation.alpha +
                          ", beta: " + dp.rotation.beta +
                          ", radius: " + dp.rotation.radius +
@@ -256,6 +278,7 @@ var ButtonHelpers = {
 
       cameraPath.push({
         frame: frameCounter,
+        avgfps: Math.ceil(TDHelpers.average(lastTenFps)),
         rotation: {
           alpha: camera.alpha,
           beta: camera.beta,

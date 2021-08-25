@@ -8,6 +8,10 @@ var TDHelpers = {
     } ) || false;
   },
 
+  average: function(ary) {
+    return ary.reduce( (a,b) => a + b ) / ary.length
+  },
+
   isMobile: function() {
     return window.browser.getPlatformType() == "mobile"
   },

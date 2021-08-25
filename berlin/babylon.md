@@ -53,6 +53,8 @@ layout: 3dtour
     if (ppFadeLevel < 0) stop_transition = false;
   }
 
+  window.browser = bowser.getParser(window.navigator.userAgent);
+
   var canvas = document.getElementById("3dcanvas");
   var alltextures = []
   var engine = null;
@@ -64,13 +66,12 @@ layout: 3dtour
   var baseMaterialSizes = [64, 256, 512, 1024]
   var textBlock = null;
   var cameraPath = []
-  var browser = bowser.getParser(window.navigator.userAgent);
 
   var createDefaultEngine = function() {
     return new BABYLON.Engine(canvas, true, {
       preserveDrawingBuffer: true,
       stencil: true,
-      disableWebGL2Support: TDHelpers.disableWebGL2(browser)});
+      disableWebGL2Support: TDHelpers.disableWebGL2()});
   };
 
   var delayCreateScene = function () {
@@ -82,7 +83,8 @@ layout: 3dtour
     skyboxMesh = r[0]
     multimat = r[1]
 
-    loadSkyBoxMaterial(currModel.mlid,baseMaterialSizes[0],alltextures,multimat,scene)
+    loadSkyBoxMaterial(currModel.mlid,baseMaterialSizes[0],alltextures,
+                       multimat,scene)
 
     addKeyboardObserver(scene, skyboxMesh);
 
@@ -168,6 +170,4 @@ layout: 3dtour
   window.addEventListener("resize", function () {
     engine.resize();
   });
-
-  window.browser = browser
 </script>
