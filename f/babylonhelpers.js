@@ -274,7 +274,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
 
         delete model.sharecamera
       }
-    } catch (e ) {
+    } catch (e) {
       console.log(e)
     }
 
@@ -296,18 +296,25 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
         // desktop devics get complete resolution and details.
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-2k.glb",scene).then(
           function(mesh) {
+            var cMlid = mlid;
+            console.log(cMlid == currModel.mlid)
             modelMesh.addLODLevel(20,modelMesh.clone())
             modelMesh.addLODLevel(6,mesh.meshes[1])
             BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-4k.glb",scene).then(
               function(mesh) {
+                var cMlid = mlid;
+                console.log(cMlid == currModel.mlid)
                 modelMesh.addLODLevel(3,mesh.meshes[1])
-                BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-6k.glb",scene).then(function(mesh) {
-                  modelMesh.addLODLevel(0,mesh.meshes[1])
-                  for ( var idx = 1; idx < sizes.length; idx++ ) {
-                    loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
-                  }
-                  ModelCache.cachePrevAndNext(mlid)
-                })
+                BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-6k.glb",scene).then(
+                  function(mesh) {
+                    var cMlid = mlid;
+                    console.log(cMlid == currModel.mlid)
+                    modelMesh.addLODLevel(0,mesh.meshes[1])
+                    for ( var idx = 1; idx < sizes.length; idx++ ) {
+                      loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
+                    }
+                    ModelCache.cachePrevAndNext(mlid)
+                  })
               })
           })
       }
