@@ -9,7 +9,6 @@ var TDHelpers = {
   },
 
   isMobile: function() {
-    console.log(window.browser.getPlatformType())
     return window.browser.getPlatformType() == "mobile"
   },
 
