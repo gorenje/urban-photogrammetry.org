@@ -26,6 +26,7 @@ layout: 3dtour
 <script src="/f/models.js"></script>
 <script src="/f/modelcache.js"></script>
 <script src="/f/buttonhelpers.js"></script>
+<script src="/f/soundshelper.js"></script>
 <script src="/f/tdhelpers.js"></script>
 
 <script>
@@ -109,6 +110,16 @@ layout: 3dtour
     button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
     advancedTexture.addControl(button);
 
+    var button = ButtonHelpers.create("butVol", "fulls", "45%", "-40%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
+    advancedTexture.addControl(button);
+
+    var button = ButtonHelpers.create("butMute", "fulls", "45%", "-40%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
+    button.isEnabled = false
+    button.notRenderable = true
+    advancedTexture.addControl(button);
+
     var button = ButtonHelpers.create("butShare", "share", "45%", "-20%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.share)
     advancedTexture.addControl(button);
@@ -138,6 +149,7 @@ layout: 3dtour
     // Finally load the model.
     loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
 
+    SoundsHelper.load(scene)
     return scene;
   };
 
@@ -166,6 +178,8 @@ layout: 3dtour
       }
     });
   });
+
+
 
   window.addEventListener("resize", function () {
     engine.resize();
