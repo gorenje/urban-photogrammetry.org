@@ -61,6 +61,7 @@ var ppFadeLevel = 1.0;
 var fadeOutCb = function(){};
 var stop_transition = true;
 var frameCounter = 0;
+var lastTenFps = new Array(10)
 
 function initScene(scene) {
 	var postProcess = new BABYLON.PostProcess("Fade", "fade", ["fadeLevel"],
@@ -70,6 +71,10 @@ function initScene(scene) {
   };
   scene.registerBeforeRender(function () {
     frameCounter++;
+    lastTenFps[frameCounter % lastTenFps.length] = Math.ceil(
+      scene.getEngine().getFps()
+    )
+
     if ( !stop_transition ) {
 		  ppFadeLevel += ppFactor;
       if ( ppFadeLevel > 1 ) {
@@ -149,28 +154,16 @@ function initCamera(scene) {
   camera.pinchPrecision = 200 / camera.radius;
   camera.upperRadiusLimit = 5 * camera.radius;
 
-  camera.wheelDeltaPercentage = 0.01;
-  camera.pinchDeltaPercentage = 0.01;
+  /* camera.wheelDeltaPercentage = 0.01;
+   * camera.pinchDeltaPercentage = 0.01;*/
+  camera.wheelPrecision = 130;
+  camera.pinchPrecision = 130;
   // camera.zoomToMouseLocation = true;
-  // camera.checkCollisions = false;
+  camera.checkCollisions = false;
   camera.minZ = 0.001;
   camera.attachControl(true);
 
-  camera.onViewMatrixChangedObservable.add(() => {
-    // console.log(camera.getViewMatrix())
-  })
-
   initScene(scene)
-  // try {
-  //   new BABYLON.AsciiArtPostProcess("myAscii", camera, { font: '5px Monospace'});
-  // } catch(e) {
-  //   console.log(e)
-  // }
-  // try {
-  //   new BABYLON.SharpenPostProcess("myAscii", 1.7, camera);
-  // } catch(e) {
-  //   console.log(e)
-  // }
   cameraInitialised = true;
 }
 
@@ -203,6 +196,8 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
   }
 
   scene.stopAllAnimations()
+  currFlythrough = null;
+  ButtonHelpers.AllButtons["butPlay"].background = "#00000000"
 
   BABYLON.SceneLoader.Append(rootUrl, modelName, scene, function (scene) {
     if (ppFadeLevel < 0) stop_transition = false;
@@ -286,11 +281,8 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-1k.glb",scene).then(
           function(mesh) {
             var cMlid = mlid;
-            // ensure mesh matches currently displayed mesh
-            if ( cMlid == currModel.mlid ) {
-              modelMesh.addLODLevel(20,modelMesh.clone())
-              modelMesh.addLODLevel(6,mesh.meshes[1])
-            }
+            modelMesh.addLODLevel(20,modelMesh.clone())
+            modelMesh.addLODLevel(6,mesh.meshes[1])
             for ( var idx = 1; idx < 2; idx++ ) {
               loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
             }
@@ -301,23 +293,31 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-2k.glb",scene).then(
           function(mesh) {
             var cMlid = mlid;
-            // ensure mesh matches currently displayed mesh
-            if ( cMlid == currModel.mlid ) {
+            mesh.meshes[1].setEnabled(false)
+
+            if (cMlid == currModel.mlid) {
               modelMesh.addLODLevel(20,modelMesh.clone())
+              mesh.meshes[1].setEnabled(true)
               modelMesh.addLODLevel(6,mesh.meshes[1])
             }
+
             BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-4k.glb",scene).then(
               function(mesh) {
                 var cMlid = mlid;
-                // ensure mesh matches currently displayed mesh
+                mesh.meshes[1].setEnabled(false)
+
                 if (cMlid == currModel.mlid) {
+                  mesh.meshes[1].setEnabled(true)
                   modelMesh.addLODLevel(3,mesh.meshes[1])
                 }
                 BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-6k.glb",scene).then(
                   function(mesh) {
                     var cMlid = mlid;
+                    mesh.meshes[1].setEnabled(false)
+
                     // ensure mesh matches currently displayed mesh
                     if (cMlid == currModel.mlid) {
+                      mesh.meshes[1].setEnabled(true)
                       modelMesh.addLODLevel(0,mesh.meshes[1])
                     }
                     for ( var idx = 1; idx < sizes.length; idx++ ) {

@@ -83,7 +83,8 @@ layout: 3dtour
     skyboxMesh = r[0]
     multimat = r[1]
 
-    loadSkyBoxMaterial(currModel.mlid,baseMaterialSizes[0],alltextures,multimat,scene)
+    loadSkyBoxMaterial(currModel.mlid,baseMaterialSizes[0],alltextures,
+                       multimat,scene)
 
     addKeyboardObserver(scene, skyboxMesh);
 
@@ -111,9 +112,12 @@ layout: 3dtour
         advancedTexture.addControl(button);
       }
 
-      var button = ButtonHelpers.create("butFS", "fulls", "40%", "-40%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
-      advancedTexture.addControl(button);
+      if ( !ButtonHelpers.isSafari() ) {
+        var button = ButtonHelpers.create("butFS", "fulls", "40%", "-40%")
+        button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
+        advancedTexture.addControl(button);
+      }
+
     } else {
       var button = ButtonHelpers.create("butPrev", "<<<", "-45%", "45%");
       button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
@@ -133,9 +137,11 @@ layout: 3dtour
         advancedTexture.addControl(button);
       }
 
-      var button = ButtonHelpers.create("butFS", "fulls", "45%", "-45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
-      advancedTexture.addControl(button);
+      if ( !ButtonHelpers.isSafari() ) {
+        var button = ButtonHelpers.create("butFS", "fulls", "45%", "-45%")
+        button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
+        advancedTexture.addControl(button);
+      }
     }
 
     // Finally load the model.
