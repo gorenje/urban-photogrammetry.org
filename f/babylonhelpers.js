@@ -285,8 +285,12 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
         // non-desktop devices - only 2 levels of details.
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-1k.glb",scene).then(
           function(mesh) {
-            modelMesh.addLODLevel(20,modelMesh.clone())
-            modelMesh.addLODLevel(6,mesh.meshes[1])
+            var cMlid = mlid;
+            // ensure mesh matches currently displayed mesh
+            if ( cMlid == currModel.mlid ) {
+              modelMesh.addLODLevel(20,modelMesh.clone())
+              modelMesh.addLODLevel(6,mesh.meshes[1])
+            }
             for ( var idx = 1; idx < 2; idx++ ) {
               loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
             }
@@ -297,19 +301,25 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-2k.glb",scene).then(
           function(mesh) {
             var cMlid = mlid;
-            console.log(cMlid == currModel.mlid)
-            modelMesh.addLODLevel(20,modelMesh.clone())
-            modelMesh.addLODLevel(6,mesh.meshes[1])
+            // ensure mesh matches currently displayed mesh
+            if ( cMlid == currModel.mlid ) {
+              modelMesh.addLODLevel(20,modelMesh.clone())
+              modelMesh.addLODLevel(6,mesh.meshes[1])
+            }
             BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-4k.glb",scene).then(
               function(mesh) {
                 var cMlid = mlid;
-                console.log(cMlid == currModel.mlid)
-                modelMesh.addLODLevel(3,mesh.meshes[1])
+                // ensure mesh matches currently displayed mesh
+                if (cMlid == currModel.mlid) {
+                  modelMesh.addLODLevel(3,mesh.meshes[1])
+                }
                 BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-6k.glb",scene).then(
                   function(mesh) {
                     var cMlid = mlid;
-                    console.log(cMlid == currModel.mlid)
-                    modelMesh.addLODLevel(0,mesh.meshes[1])
+                    // ensure mesh matches currently displayed mesh
+                    if (cMlid == currModel.mlid) {
+                      modelMesh.addLODLevel(0,mesh.meshes[1])
+                    }
                     for ( var idx = 1; idx < sizes.length; idx++ ) {
                       loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
                     }
