@@ -26,6 +26,7 @@ layout: 3dtour
 <script src="/f/models.js"></script>
 <script src="/f/modelcache.js"></script>
 <script src="/f/buttonhelpers.js"></script>
+<script src="/f/soundshelper.js"></script>
 <script src="/f/tdhelpers.js"></script>
 
 <script>
@@ -102,6 +103,15 @@ layout: 3dtour
       button.onPointerClickObservable.add(ButtonHelpers.CB.next)
       advancedTexture.addControl(button);
 
+      var button = ButtonHelpers.create("butVol", "vol", "0%", "-40%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
+      advancedTexture.addControl(button);
+      var button = ButtonHelpers.create("butMute", "mute", "0%", "-40%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
+      button.isEnabled = false
+      button.notRenderable = true
+      advancedTexture.addControl(button);
+
       var button = ButtonHelpers.create("butPlay", "play", "0%", "40%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
       advancedTexture.addControl(button);
@@ -127,6 +137,15 @@ layout: 3dtour
       button.onPointerClickObservable.add(ButtonHelpers.CB.next)
       advancedTexture.addControl(button);
 
+      var button = ButtonHelpers.create("butVol", "vol", "0%", "-45%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
+      advancedTexture.addControl(button);
+      var button = ButtonHelpers.create("butMute", "mute", "0%", "-45%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
+      button.isEnabled = false
+      button.notRenderable = true
+      advancedTexture.addControl(button);
+
       var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
       advancedTexture.addControl(button);
@@ -147,6 +166,7 @@ layout: 3dtour
     // Finally load the model.
     loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
 
+    SoundsHelper.load(scene)
     return scene;
   };
 

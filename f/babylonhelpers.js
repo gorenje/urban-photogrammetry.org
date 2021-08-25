@@ -331,5 +331,10 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
     } catch ( e ) {
       console.log(e)
     }
+    try {
+      SoundsHelper.playModel(mlid)
+    } catch ( e ) {
+      console.log(e)
+    }
   });
 }

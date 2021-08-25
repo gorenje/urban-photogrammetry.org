@@ -52,6 +52,14 @@ var ButtonHelpers = {
       button = ButtonHelpers.imageButton("/f/images/next.png");
     }
 
+    if ( name == "butVol" ) {
+      button = ButtonHelpers.imageButton("/f/images/volume-on.png");
+    }
+
+    if ( name == "butMute" ) {
+      button = ButtonHelpers.imageButton("/f/images/volume-off.png");
+    }
+
     button.left         = left;
     button.top          = top;
     ButtonHelpers.AllButtons[name] = button
@@ -90,6 +98,22 @@ var ButtonHelpers = {
 
   // Callbacks for the button clicks.
   CB: {
+    mute: function(evt) {
+      BABYLON.Engine.audioEngine.setGlobalVolume(1)
+      ButtonHelpers.AllButtons["butMute"].isEnabled = false
+      ButtonHelpers.AllButtons["butMute"].notRenderable = true
+      ButtonHelpers.AllButtons["butVol"].isEnabled = true
+      ButtonHelpers.AllButtons["butVol"].notRenderable = false
+    },
+
+    volume: function(evt) {
+      BABYLON.Engine.audioEngine.setGlobalVolume(0)
+      ButtonHelpers.AllButtons["butMute"].isEnabled = true
+      ButtonHelpers.AllButtons["butMute"].notRenderable = false
+      ButtonHelpers.AllButtons["butVol"].isEnabled = false
+      ButtonHelpers.AllButtons["butVol"].notRenderable = true
+    },
+
     previous: function(evt) {
       prepareFadeOut(function() {
         // destruction
