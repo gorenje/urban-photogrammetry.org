@@ -224,12 +224,17 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
     modelMesh.onLODLevelSelection = function(num,mesh,selectedMesh) {
       var idx = 0
 
-      if ( typeof(alltextures) == 'undefined' ||  alltextures.length < 2 ) return;
+      if (typeof(alltextures) == 'undefined' ||  alltextures.length < 2) return;
 
-      if ( num < 3 ) { idx = 0 }
-      if ( num >= 3 && num < 6 && isTextureReady(alltextures[1]) ) { idx = 1 }
-      if ( num >= 6 && num < 8 && isTextureReady(alltextures[2]) ) { idx = 2 }
-      if ( num >= 8            && isTextureReady(alltextures[3]) ) { idx = 3 }
+      if ( TDHelpers.isMobile() ) {
+        if ( num < 3 ) { idx = 0 }
+        if ( num >= 3 && isTextureReady(alltextures[1]) ) { idx = 1 }
+      } else {
+        if ( num < 3 ) { idx = 0 }
+        if ( num >= 3 && num < 6 && isTextureReady(alltextures[1]) ) { idx = 1 }
+        if ( num >= 6 && num < 8 && isTextureReady(alltextures[2]) ) { idx = 2 }
+        if ( num >= 8            && isTextureReady(alltextures[3]) ) { idx = 3 }
+      }
 
       if ( prevLODIdx != idx ) {
         new BABYLON.SubMesh(idx, 0, skyboxMesh.getTotalVertices(),
@@ -240,10 +245,12 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
     }
 
     // if this mdoel comes with a shareCamera, then animate the camera to that
-    // position. This is one time operation.
+    // position. This is one time operation. a share camera is a camera location
+    // that was attached to a share link i.e. viewer starts and then moves to
+    // the location set with the shared link.
     try {
       if ( model.sharecamera ) {
-        var frameRate = 30;
+        var frameRate = Math.ceil(TDHelpers.average(lastTenFps));
         var anims = TDHelpers.prepareAnimations(frameRate)
         var attrs = [ [], [], [], [], [] ]
 

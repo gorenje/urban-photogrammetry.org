@@ -3,23 +3,25 @@ var SoundsHelper = {
 
   load: function(scene) {
     var assetsManager = new BABYLON.AssetsManager(scene);
-
-    var soundReady = function() {}
+    var autoplay_first = true;
 
     $.each( UPModels.AvailableModels, function(idx,model) {
       var binaryTask = assetsManager.addBinaryFileTask(
         model.mlid,
         "/f/sounds/" + model.sound
       );
+
       binaryTask.onSuccess = function(task) {
         SoundsHelper.AllSounds[task.name] = new BABYLON.Sound(
-          task.name, task.data, scene, soundReady,
+          task.name, task.data, scene, function() {},
           {
             loop: true,
             spatialSound: true,
             distanceModel: "exponential",
-            rolloffFactor: 1
+            rolloffFactor: 1,
+            autoplay: autoplay_first,
           });
+        autoplay_first = false;
       };
     })
 

@@ -54,6 +54,7 @@ layout: 3dtour
     if (ppFadeLevel < 0) stop_transition = false;
   }
 
+  BABYLON.SceneLoader.ShowLoadingScreen = true;
   window.browser = bowser.getParser(window.navigator.userAgent);
 
   var canvas = document.getElementById("3dcanvas");
@@ -78,7 +79,6 @@ layout: 3dtour
   var delayCreateScene = function () {
     var scene = new BABYLON.Scene(engine);
     document.getElementById("loadingScreen").style.display = "none";
-    BABYLON.SceneLoader.ShowLoadingScreen = false;
 
     var r = createSkyBox(scene)
     skyboxMesh = r[0]
@@ -110,14 +110,18 @@ layout: 3dtour
     button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
     advancedTexture.addControl(button);
 
+    var button = ButtonHelpers.create("butFSexit", "fulls", "45%", "-30%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen_exit)
+    ButtonHelpers.hide(button)
+    advancedTexture.addControl(button);
+
     var button = ButtonHelpers.create("butVol", "fulls", "45%", "-40%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
     advancedTexture.addControl(button);
 
     var button = ButtonHelpers.create("butMute", "fulls", "45%", "-40%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
-    button.isEnabled = false
-    button.notRenderable = true
+    ButtonHelpers.hide(button)
     advancedTexture.addControl(button);
 
     var button = ButtonHelpers.create("butShare", "share", "45%", "-20%")
