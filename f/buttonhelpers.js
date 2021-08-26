@@ -5,6 +5,17 @@ var ButtonHelpers = {
   AllButtons: {
   },
 
+  ImageMap: {
+    butFS:     "fullscreen.svg",
+    butFSexit: "fullscreen-exit.svg",
+    butShare:  "share.svg",
+    butPlay:   "play.svg",
+    butPrev:   "prev.svg",
+    butNext:   "next.svg",
+    butVol:    "volume-on.svg",
+    butMute:   "volume-off.svg",
+  },
+
   imageButton: function(filename) {
     var width = "32px";
     var height = "32px";
@@ -23,6 +34,21 @@ var ButtonHelpers = {
     return button
   },
 
+  hide: function(button) {
+    button.isEnabled = false
+    button.notRenderable = true
+  },
+
+  show: function(button) {
+    button.isEnabled = true
+    button.notRenderable = false
+  },
+
+  toggle: function(showButName, hideButName) {
+    ButtonHelpers.show(ButtonHelpers.AllButtons[showButName])
+    ButtonHelpers.hide(ButtonHelpers.AllButtons[hideButName])
+  },
+
   create: function(name, text, left, top) {
     var button = BABYLON.GUI.Button.CreateSimpleButton(name, text);
 
@@ -32,36 +58,14 @@ var ButtonHelpers = {
     button.background   = "#22222255";
     button.cornerRadius = 20;
 
-    if ( name == "butFS" ) {
-      button = ButtonHelpers.imageButton("/f/images/fullscreen.png");
+    var imageName = ButtonHelpers.ImageMap[name]
+    if ( imageName ) {
+      button = ButtonHelpers.imageButton("/f/images/" + imageName);
     }
 
-    if ( name == "butShare" ) {
-      button = ButtonHelpers.imageButton("/f/images/share.png");
-    }
+    button.left = left;
+    button.top  = top;
 
-    if ( name == "butPlay" ) {
-      button = ButtonHelpers.imageButton("/f/images/play.png");
-    }
-
-    if ( name == "butPrev" ) {
-      button = ButtonHelpers.imageButton("/f/images/prev.png");
-    }
-
-    if ( name == "butNext" ) {
-      button = ButtonHelpers.imageButton("/f/images/next.png");
-    }
-
-    if ( name == "butVol" ) {
-      button = ButtonHelpers.imageButton("/f/images/volume-on.png");
-    }
-
-    if ( name == "butMute" ) {
-      button = ButtonHelpers.imageButton("/f/images/volume-off.png");
-    }
-
-    button.left         = left;
-    button.top          = top;
     ButtonHelpers.AllButtons[name] = button
     return button;
   },
@@ -100,18 +104,12 @@ var ButtonHelpers = {
   CB: {
     mute: function(evt) {
       BABYLON.Engine.audioEngine.setGlobalVolume(1)
-      ButtonHelpers.AllButtons["butMute"].isEnabled = false
-      ButtonHelpers.AllButtons["butMute"].notRenderable = true
-      ButtonHelpers.AllButtons["butVol"].isEnabled = true
-      ButtonHelpers.AllButtons["butVol"].notRenderable = false
+      ButtonHelpers.toggle("butVol", "butMute")
     },
 
     volume: function(evt) {
       BABYLON.Engine.audioEngine.setGlobalVolume(0)
-      ButtonHelpers.AllButtons["butMute"].isEnabled = true
-      ButtonHelpers.AllButtons["butMute"].notRenderable = false
-      ButtonHelpers.AllButtons["butVol"].isEnabled = false
-      ButtonHelpers.AllButtons["butVol"].notRenderable = true
+      ButtonHelpers.toggle("butMute", "butVol")
     },
 
     previous: function(evt) {
@@ -135,11 +133,17 @@ var ButtonHelpers = {
     },
 
     fullscreen: function(evt) {
-      if ( engine.isFullscreen ) {
-        engine.exitFullscreen(false)
-      } else {
+      if ( !engine.isFullscreen ) {
         engine.enterFullscreen(false)
       }
+      ButtonHelpers.toggle("butFSexit", "butFS")
+    },
+
+    fullscreen_exit: function(evt) {
+      if ( engine.isFullscreen ) {
+        engine.exitFullscreen(false)
+      }
+      ButtonHelpers.toggle("butFS", "butFSexit")
     },
 
     share: function(evt) {
@@ -304,12 +308,12 @@ var ButtonHelpers = {
         frame: frameCounter,
         avgfps: Math.ceil(TDHelpers.average(lastTenFps)),
         rotation: {
-          alpha: camera.alpha,
-          beta: camera.beta,
+          alpha:  camera.alpha,
+          beta:   camera.beta,
           radius: camera.radius
         },
         position: camera.position.clone(),
-        target: camera.target.clone()
+        target:   camera.target.clone()
       })
     },
 

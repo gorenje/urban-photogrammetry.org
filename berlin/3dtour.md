@@ -95,40 +95,46 @@ layout: 3dtour
     advancedTexture.addControl(textBlock);
 
     if ( TDHelpers.isMobile() ) {
-      var button = ButtonHelpers.create("butPrev", "<<<", "-40%", "40%");
+      var button = ButtonHelpers.create("butPrev", "<<<", "-40%", "45%");
       button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
       advancedTexture.addControl(button);
 
-      var button = ButtonHelpers.create("butNext", ">>>", "40%", "40%")
+      var button = ButtonHelpers.create("butNext", ">>>", "40%", "45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.next)
       advancedTexture.addControl(button);
 
-      var button = ButtonHelpers.create("butVol", "vol", "0%", "-40%")
+      var button = ButtonHelpers.create("butVol", "vol", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
       advancedTexture.addControl(button);
-      var button = ButtonHelpers.create("butMute", "mute", "0%", "-40%")
+
+      var button = ButtonHelpers.create("butMute", "mute", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
-      button.isEnabled = false
-      button.notRenderable = true
+      ButtonHelpers.hide(button)
       advancedTexture.addControl(button);
 
-      var button = ButtonHelpers.create("butPlay", "play", "0%", "40%")
+      var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
       advancedTexture.addControl(button);
 
       if ( ButtonHelpers.showShare() ) {
-        var button = ButtonHelpers.create("butShare", "share", "-40%", "-40%")
+        var button = ButtonHelpers.create("butShare", "share", "-40%", "-45%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.share)
         advancedTexture.addControl(button);
       }
 
       if ( !ButtonHelpers.isSafari() ) {
-        var button = ButtonHelpers.create("butFS", "fulls", "40%", "-40%")
+        var button = ButtonHelpers.create("butFS", "fulls", "40%", "-45%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
+        advancedTexture.addControl(button);
+
+        var button = ButtonHelpers.create("butFSexit", "fulls", "45%", "-45%")
+        button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen_exit)
+        ButtonHelpers.hide(button)
         advancedTexture.addControl(button);
       }
 
     } else {
+      // --- this is the desktop interface
       var button = ButtonHelpers.create("butPrev", "<<<", "-45%", "45%");
       button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
       advancedTexture.addControl(button);
@@ -140,10 +146,10 @@ layout: 3dtour
       var button = ButtonHelpers.create("butVol", "vol", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
       advancedTexture.addControl(button);
+
       var button = ButtonHelpers.create("butMute", "mute", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
-      button.isEnabled = false
-      button.notRenderable = true
+      ButtonHelpers.hide(button)
       advancedTexture.addControl(button);
 
       var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
@@ -159,6 +165,11 @@ layout: 3dtour
       if ( !ButtonHelpers.isSafari() ) {
         var button = ButtonHelpers.create("butFS", "fulls", "45%", "-45%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
+        advancedTexture.addControl(button);
+
+        var button = ButtonHelpers.create("butFSexit", "fulls", "45%", "-45%")
+        button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen_exit)
+        ButtonHelpers.hide(button)
         advancedTexture.addControl(button);
       }
     }
