@@ -22,16 +22,19 @@ var TDHelpers = {
       try {
         var data = JSON.parse(atob(urlhash.substring(1)))
 
-        var sharecamera = {
-          target:   new BABYLON.Vector3(data.tx, data.ty, data.tz),
-          position: new BABYLON.Vector3(data.px, data.py, data.pz),
-          alpha:    data.a,
-          beta:     data.b,
-          radius:   data.r
+        var model = UPModels.modelForMlid(data.o)
+
+        if ( data.tx !== undefined && data.px !== undefined ) {
+          var sharecamera = {
+            target:   new BABYLON.Vector3(data.tx, data.ty, data.tz),
+            position: new BABYLON.Vector3(data.px, data.py, data.pz),
+            alpha:    data.a,
+            beta:     data.b,
+            radius:   data.r
+          }
+          model.sharecamera = sharecamera
         }
 
-        var model = UPModels.modelForMlid(data.o)
-        model.sharecamera = sharecamera
         return model
       } catch ( e ) {
         return UPModels.init()
