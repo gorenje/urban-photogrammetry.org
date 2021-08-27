@@ -25,7 +25,7 @@ layout: none
 
   })
 
-  map.addMapTiles('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+  map.addMapTiles('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
   if ( browser.getPlatformType() !== "mobile" ) {
     map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
@@ -68,10 +68,7 @@ layout: none
     map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`, { latitude: obj.loc[0], longitude: obj.loc[1] }, { scale: 25, altitude: 10, color: 'red', id: 'up-' + obj.mlid, rotation: obj.rotation });
   })
 
-
-
   map.on('pointerup', e => {
-    console.log( e )
     $.each( e.features || [], function(idx,obj) {
       if ( obj.id.substring(0,3) === "up-" ) {
         var data = { o: obj.id.substring(3) }
