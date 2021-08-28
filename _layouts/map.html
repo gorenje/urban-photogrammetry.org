@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ page.title }}</title>
+
+    <meta name="generator" content="Jekyll v3.9.0" />
+    <meta property="og:title" content="Urban Photogrammetry" />
+    <meta property="og:locale" content="en_AU" />
+    <link rel="canonical" href="https://urban-photogrammetry.org/" />
+    <meta property="og:url" content="https://urban-photogrammetry.org/" />
+    <meta property="og:site_name" content="urban-photogrammetry.org" />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="{{ page.title }}" />
+
+    <link rel="stylesheet" href="/f/iA Writer Quattro/Webfonts/index.css">
+    <link rel="stylesheet" href="/f/style.css?cb=1234">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/f/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/f/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/f/favicon-16x16.png">
+    <link rel="manifest" href="/f/site.webmanifest">
+    <link href="/f/OSMBuildings.css" rel="stylesheet">
+    <script src="/f/OSMBuildings.js"></script>
+    <script src="/f/bowser.js"></script>
+    <script src="/f/bjs/jquery.js"></script>
+
+      <style type='text/css'>
+        #3dcanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        .break {
+          flex-basis: 100%;
+          height: 0;
+        }
+
+        #infoScreen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            color: white;
+            text-align: center;
+            z-index: 9999;
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+
+            min-height: 50px;
+            padding: 0px;
+            background-color: #000000ff;
+            color: white;
+            font-size: 30px;
+        }
+        #map {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+        }
+      </style>
+    </head>
+
+  <body>
+      <script>
+        $(function() {
+          $('#infoScreen').on('click', function() {
+            $(window).trigger('infoscreen:close')
+            $('#infoScreen').fadeOut(1000)
+          })
+        })
+      </script>
+
+    <div id="loadingScreen"></div>
+    <div id="map"></div>
+    <div class="quattro" id="infoScreen">
+      <div style="margin-top: 60px;">Virtual 3D Tours</div>
+      <div style="height: 100px; margin-top: 60px;" class="break">Berlin</div>
+
+      <div class='break'>
+        Available objects are colored red. Click to explore them more closely.
+      </div>
+      <div class='break' style="padding-top: 30px; color: #888888;">
+        Click to continue
+      </div>
+    </div>
+    <canvas id="3dcanvas" style="touch-action: none; width: 100%; height: 100vh; "></canvas>
+
+    <div id="root">
+      <div class="quattro">
+
+        {{ content }}
+
+        <div class="footer-div">
+          <a href="mailto:contact@website.urban-photogrammetry.org">Contact</a>
+          <a href="/">Home</a>
+          <div style="float: right;">
+          <a href="https://www.instagram.com/urban.photogrammetry/">Instagram</a>
+          <a href="https://www.youtube.com/channel/UC3hzKyjUcDIuqP8iR5K8dmQ">YouTube</a>
+          <a href="https://sketchfab.com/urban.photogrammetry">Sketchfab</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

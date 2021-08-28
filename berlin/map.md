@@ -64,6 +64,7 @@ layout: none
       rotation: 60,
     },
   ]
+
   $.each( haveObjs, function(idx, obj) {
     map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`, { latitude: obj.loc[0], longitude: obj.loc[1] }, { scale: 25, altitude: 10, color: 'red', id: 'up-' + obj.mlid, rotation: obj.rotation });
   })

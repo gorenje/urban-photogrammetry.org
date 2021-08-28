@@ -14,6 +14,7 @@ var ButtonHelpers = {
     butNext:   "next.svg",
     butVol:    "volume-on.svg",
     butMute:   "volume-off.svg",
+    butExit:   "exit.svg",
   },
 
   imageButton: function(filename) {
@@ -102,6 +103,13 @@ var ButtonHelpers = {
 
   // Callbacks for the button clicks.
   CB: {
+    exit: function(evt) {
+      scene.stopAllAnimations()
+      SoundsHelper.stopAll()
+      $('#3dcanvas').fadeOut(500);
+      $('#map').fadeIn(500);
+    },
+
     mute: function(evt) {
       BABYLON.Engine.audioEngine.setGlobalVolume(1)
       ButtonHelpers.toggle("butVol", "butMute")
@@ -122,7 +130,6 @@ var ButtonHelpers = {
         var r          = createSkyBox(scene)
         skyboxMesh     = r[0]
         multimat       = r[1]
-        startTimeStamp = Date.now();
         textBlock.text = currModel.text;
 
         loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
@@ -184,7 +191,6 @@ var ButtonHelpers = {
         var r          = createSkyBox(scene)
         skyboxMesh     = r[0]
         multimat       = r[1]
-        startTimeStamp = Date.now();
         textBlock.text = currModel.text;
 
         loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
