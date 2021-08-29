@@ -68,6 +68,8 @@ var baseMaterialSizes = [64, 256, 512, 1024]
 var textBlock = null;
 var cameraPath = []
 
+var map = null;
+
 function displayModel(mlid) {
   window.browser = bowser.getParser(window.navigator.userAgent);
 
@@ -169,6 +171,7 @@ function displayModel(mlid) {
       var button = ButtonHelpers.create("butExit", "fulls", "-45%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.exit)
       advancedTexture.addControl(button);
+
       if ( ButtonHelpers.showShare() ) {
         var button = ButtonHelpers.create("butShare", "share", "-45%", "-42%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.share)
@@ -232,18 +235,18 @@ function createStreetMap() {
   $('#loadingScreen').hide()
   $('#3dcanvas').hide()
 
-  var map = new OSMBuildings({
+  map = new OSMBuildings({
     container: 'map',
-    position: { latitude: 52.51836, longitude: 13.40438 },
-    zoom: 16,
-    minZoom: 15,
+    position: { latitude: 52.52636, longitude: 13.42896 },
+    zoom: 19,
+    minZoom: 1,
     maxZoom: 30,
     tilt: 30,
     attribution: '© Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a> © Map <a href="https://mapbox.com/">Mapbox</a> © 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
-
   })
 
-  map.addMapTiles('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png');
+  // map.addMapTiles('https://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v8/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidXJiYW4tcGhvdG9ncmFtbWV0cnkiLCJhIjoiY2tzd3lrM3M4MDdqajJ1cDJobXlqY2Z1YiJ9.xgtMCLrDbaQn8Kyb1zqAwA&style=cksx0f5e04xkn18o7zt5sincf');
+  map.addMapTiles('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
   if ( browser.getPlatformType() !== "mobile" ) {
     map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
@@ -251,39 +254,58 @@ function createStreetMap() {
 
   var haveObjs = [
     {
-      mlid: "0ec35096975442188f5278665013bfae",
-      loc: [52.56928,13.44615],
-      rotation: 60,
-    },
-    {
-      mlid: "3d0f151bf808494a9eb1b2a81665e832",
-      loc: [52.52605,13.42966],
-      rotation: 60,
-    },
-    {
       mlid: "70fcd5892cb346429c04c1d852b96169",
       loc: [52.53858,13.42697],
-      rotation: 60,
+      rotation: 30,
+      scale: 50
     },
     {
       mlid: "924b850d72bd46478ab650cfa353d94d-1",
       loc: [52.52830,13.39892],
-      rotation: 60,
+      rotation: 0,
+      scale: 20
     },
     {
       mlid: "924b850d72bd46478ab650cfa353d94d-2",
       loc: [52.52802,13.39907],
       rotation: 60,
+      scale: 30
     },
     {
       mlid: "924b850d72bd46478ab650cfa353d94d-3",
       loc: [52.52819,13.39915],
+      rotation: 120,
+      scale: 30
+    },
+    {
+      mlid: "0ec35096975442188f5278665013bfae",
+      loc: [52.56928,13.44615],
+      rotation: -95,
+      scale: 30
+    },
+    {
+      mlid: "3d0f151bf808494a9eb1b2a81665e832",
+      loc: [52.52571,13.42987],
       rotation: 60,
+      scale: 30
+    },
+    {
+      mlid: "3867f03ae07b43d29630e70b86f7abc9",
+      loc: [52.52636,13.42896],
+      rotation: 210,
+      scale: 30
     },
   ]
 
   $.each( haveObjs, function(idx, obj) {
-    map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`, { latitude: obj.loc[0], longitude: obj.loc[1] }, { scale: 25, altitude: 10, color: 'red', id: 'up-' + obj.mlid, rotation: obj.rotation });
+    map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`,
+                { latitude: obj.loc[0], longitude: obj.loc[1] },
+                { scale: obj.scale,
+                  altitude: 15,
+                  color: 'purple',
+                  id: 'up-' + obj.mlid,
+                  rotation: obj.rotation
+                });
   })
 
   map.on('pointerup', e => {
