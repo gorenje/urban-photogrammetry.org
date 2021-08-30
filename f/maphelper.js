@@ -27,10 +27,17 @@ var MapHelper = {
 
     var haveObjs = [
       {
+        mlid: "e1199bf674984c5092cb46f04660297e",
+        loc: [52.53856,13.37818],
+        rotation: -110,
+        scale: 20,
+      },
+      {
         mlid: "7c6471d3946d4dc0bbe99a1b492a3f01",
-        loc: [52.53907,13.37857],
-        rotation: 90,
+        loc: [52.53895,13.37879],
+        rotation: 95,
         scale: 40,
+        altitude: 10,
       },
       {
         mlid: "7770af0084454d0ba0c98e5eca1661cc",
@@ -76,19 +83,22 @@ var MapHelper = {
         mlid: "0ec35096975442188f5278665013bfae",
         loc: [52.56928,13.44615],
         rotation: -95,
-        scale: 30,
+        scale: 40,
+        altitude: 10,
       },
       {
         mlid: "3d0f151bf808494a9eb1b2a81665e832",
-        loc: [52.52571,13.42987],
+        loc: [52.52596,13.43132],
         rotation: 60,
-        scale: 30,
+        scale: 50,
+        altitude: 10,
       },
       {
         mlid: "3867f03ae07b43d29630e70b86f7abc9",
         loc: [52.52636,13.42896],
         rotation: 210,
-        scale: 30,
+        scale: 50,
+        altitude: 10,
       },
     ]
 
