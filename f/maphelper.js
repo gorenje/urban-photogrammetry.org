@@ -8,7 +8,7 @@ var MapHelper = {
 
     map = new OSMBuildings({
       container: 'map',
-      position: { longitude: 13.398496729891198, latitude: 52.52535612426755 },
+      position: { longitude: 13.378434948911154, latitude: 52.543387899263294 },
       zoom: 17,
       minZoom: 1,
       maxZoom: 30,
@@ -26,6 +26,19 @@ var MapHelper = {
     }
 
     var haveObjs = [
+      {
+        mlid: "e1199bf674984c5092cb46f04660297e",
+        loc: [52.53856,13.37818],
+        rotation: -110,
+        scale: 20,
+      },
+      {
+        mlid: "7c6471d3946d4dc0bbe99a1b492a3f01",
+        loc: [52.53895,13.37879],
+        rotation: 95,
+        scale: 40,
+        altitude: 10,
+      },
       {
         mlid: "7770af0084454d0ba0c98e5eca1661cc",
         loc: [52.52041,13.39808],
@@ -70,23 +83,27 @@ var MapHelper = {
         mlid: "0ec35096975442188f5278665013bfae",
         loc: [52.56928,13.44615],
         rotation: -95,
-        scale: 30,
+        scale: 40,
+        altitude: 10,
       },
       {
         mlid: "3d0f151bf808494a9eb1b2a81665e832",
-        loc: [52.52571,13.42987],
+        loc: [52.52596,13.43132],
         rotation: 60,
-        scale: 30,
+        scale: 50,
+        altitude: 10,
       },
       {
         mlid: "3867f03ae07b43d29630e70b86f7abc9",
         loc: [52.52636,13.42896],
         rotation: 210,
-        scale: 30,
+        scale: 50,
+        altitude: 10,
       },
     ]
 
     $.each( haveObjs, function(idx, obj) {
+      setTimeout( function() {
       map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`,
                   { latitude: obj.loc[0], longitude: obj.loc[1] },
                   { scale: obj.scale,
@@ -95,6 +112,7 @@ var MapHelper = {
                     id: 'up-' + obj.mlid,
                     rotation: obj.rotation
                   });
+      }, 1000 * Math.random() )
     })
 
     map.on('pointerup', e => {
