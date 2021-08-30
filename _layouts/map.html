@@ -54,7 +54,7 @@
 
           min-height: 50px;
           padding: 0px;
-          background-color: #000000ff;
+          background-color: #00000055;
           color: white;
           font-size: 30px;
       }
@@ -69,9 +69,9 @@
   <body>
       <script>
         $(function() {
+          $(window).trigger('infoscreen:close')
           $('#infoScreen').on('click', function() {
-            $(window).trigger('infoscreen:close')
-            $('#infoScreen').fadeOut(1000)
+            $('#infoScreen').fadeOut(300)
           })
         })
       </script>
