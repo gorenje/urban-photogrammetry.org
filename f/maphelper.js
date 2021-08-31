@@ -8,11 +8,12 @@ var MapHelper = {
 
     map = new OSMBuildings({
       container: 'map',
-      position: { longitude: 13.378434948911154, latitude: 52.543387899263294 },
+      position: { longitude: 13.402637132184573, latitude: 52.51795169799803 },
       zoom: 17,
       minZoom: 1,
+      rotation: 39,
       maxZoom: 30,
-      tilt: 39.495,
+      tilt: 38.355,
       attribution: '© Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a> © Map <a href="https://mapbox.com/">Mapbox</a> © 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
     })
 
@@ -21,11 +22,29 @@ var MapHelper = {
     //map.addMapTiles('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png');
     //map.addMapTiles('https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png');
 
-    if ( browser.getPlatformType() !== "mobile" ) {
+    if ( browser.getPlatformType() !== "{ longitude: 13.40309, latitude: 52.51868 }mobile" ) {
       map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
     }
 
     var haveObjs = [
+      {
+        mlid: "849f0331d956447db09dd03460716ce7",
+        loc: [52.51438,13.36843],
+        rotation: 0,
+        scale: 40,
+      },
+      {
+        mlid: "04684a56cce44825b5912e57cd721121",
+        loc: [52.51868,13.40336],
+        rotation: 240,
+        scale: 200,
+      },
+      {
+        mlid: "f23cafa7b2bf44aa831a460ddfeaac72",
+        loc: [52.53813,13.43378],
+        rotation: -55,
+        scale: 50,
+      },
       {
         mlid: "e1199bf674984c5092cb46f04660297e",
         loc: [52.53856,13.37818],
