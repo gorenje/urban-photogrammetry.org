@@ -8,7 +8,7 @@ var MapHelper = {
 
     map = new OSMBuildings({
       container: 'map',
-      position: { longitude: 13.43378, latitude: 52.53813 },
+      position: { longitude: 13.40309, latitude: 52.51868 },
       zoom: 17,
       minZoom: 1,
       maxZoom: 30,
@@ -26,6 +26,12 @@ var MapHelper = {
     }
 
     var haveObjs = [
+      {
+        mlid: "04684a56cce44825b5912e57cd721121",
+        loc: [52.51868,13.40336],
+        rotation: 240,
+        scale: 200,
+      },
       {
         mlid: "f23cafa7b2bf44aa831a460ddfeaac72",
         loc: [52.53813,13.43378],
