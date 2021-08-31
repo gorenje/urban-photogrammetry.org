@@ -8,11 +8,11 @@ var MapHelper = {
 
     map = new OSMBuildings({
       container: 'map',
-      position: { longitude: 13.378434948911154, latitude: 52.543387899263294 },
+      position: { longitude: 13.43378, latitude: 52.53813 },
       zoom: 17,
       minZoom: 1,
       maxZoom: 30,
-      tilt: 39.495,
+      tilt: 31,
       attribution: '© Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a> © Map <a href="https://mapbox.com/">Mapbox</a> © 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
     })
 
@@ -26,6 +26,12 @@ var MapHelper = {
     }
 
     var haveObjs = [
+      {
+        mlid: "f23cafa7b2bf44aa831a460ddfeaac72",
+        loc: [52.53813,13.43378],
+        rotation: -55,
+        scale: 50,
+      },
       {
         mlid: "e1199bf674984c5092cb46f04660297e",
         loc: [52.53856,13.37818],
