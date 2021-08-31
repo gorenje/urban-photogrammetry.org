@@ -129,7 +129,7 @@ function displayModel(mlid) {
       button.onPointerClickObservable.add(ButtonHelpers.CB.exit)
       advancedTexture.addControl(button);
 
-      if ( ButtonHelpers.showShare() ) {
+      if ( ButtonHelpers.showShare() || false ) {
         var button = ButtonHelpers.create("butShare", "share", "-40%", "-40%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.share)
         advancedTexture.addControl(button);
@@ -173,7 +173,7 @@ function displayModel(mlid) {
       button.onPointerClickObservable.add(ButtonHelpers.CB.exit)
       advancedTexture.addControl(button);
 
-      if ( ButtonHelpers.showShare() ) {
+      if ( ButtonHelpers.showShare() || false ) {
         var button = ButtonHelpers.create("butShare", "share", "-45%", "-42%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.share)
         advancedTexture.addControl(button);

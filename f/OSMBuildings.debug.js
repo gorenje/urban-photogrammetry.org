@@ -294,7 +294,7 @@ Qolor.prototype = {
     if (!this.isValid) {
       return;
     }
-    
+
     return [this.r, this.g, this.b];
   },
 
@@ -1394,17 +1394,17 @@ GLX.Framebuffer = class {
 
     this.width  = width;
     this.height = height;
-    
+
     if (this.depthRenderBuffer) {
       GL.deleteRenderbuffer(this.depthRenderBuffer);
       this.depthRenderBuffer = null;
-    } 
-    
+    }
+
     if (this.depthTexture) {
       this.depthTexture.destroy();
       this.depthTexture = null;
     }
-    
+
     if (this.useDepthTexture) {
       this.depthTexture = new GLX.texture.Image(); // GL.createTexture();
       this.depthTexture.enable(0);
@@ -1475,7 +1475,7 @@ GLX.Framebuffer = class {
     if (this.renderTexture) {
       this.renderTexture.destroy();
     }
-    
+
     if (this.depthTexture) {
       this.depthTexture.destroy();
     }
@@ -1955,7 +1955,7 @@ GLX.texture.Image = class {
 
   load (url, callback) {
     const image = new Image();
-    image.crossOrigin = '*';
+    image.crossOrigin = 'anonymous';
     image.onload = e => {
       this.set(image);
       if (callback) {
@@ -1967,6 +1967,7 @@ GLX.texture.Image = class {
         callback();
       }
     };
+
     image.src = url;
   }
 
@@ -3137,7 +3138,16 @@ class Events {
       }
       resizeTimer = setTimeout(() => {
         resizeTimer = null;
-        APP.setSize(APP.container.offsetWidth, APP.container.offsetHeight);
+        if ( APP.container.offsetWidth == 0 && APP.container.offsetHeight == 0 ) {
+          if ( window.fullScreen || (window.innerWidth == screen.width &&
+                                     window.innerHeight == screen.height)) {
+            APP.setSize(screen.width, screen.height)
+          } else {
+            APP.setSize(window.innerWidth, window.innerHeight)
+          }
+        } else {
+          APP.setSize(APP.container.offsetWidth, APP.container.offsetHeight);
+        }
       }, 250);
     });
   }
@@ -3354,7 +3364,7 @@ class Events {
         dy = t1.clientY-this.prevY;
       this.isClick = (dx*dx+dy*dy < 15);
     }
-    
+
     if (e.touches.length > 1) {
       APP.setTilt(this.prevTilt + (this.prevY - t1.clientY) * (360 / window.innerHeight));
       this.prevTilt = APP.tilt;
@@ -3364,7 +3374,7 @@ class Events {
     } else {
       this.moveMap(t1);
     }
-    
+
     this.prevX = t1.clientX;
     this.prevY = t1.clientY;
   }
@@ -4298,27 +4308,27 @@ function getDistancePointLine2( line1, line2, p) {
 } */
 
 /*  given a pixel's (integer) position through which the line 'segmentStart' ->
- *  'segmentEnd' passes, this method returns the one neighboring pixel of 
- *  'currentPixel' that would be traversed next if the line is followed in 
+ *  'segmentEnd' passes, this method returns the one neighboring pixel of
+ *  'currentPixel' that would be traversed next if the line is followed in
  *  the direction from 'segmentStart' to 'segmentEnd' (even if the next point
  *  would lie beyond 'segmentEnd'. )
  */
 function getNextPixel(segmentStart, segmentEnd, currentPixel) {
   const vInc = [segmentStart[0] < segmentEnd[0] ? 1 : -1,
               segmentStart[1] < segmentEnd[1] ? 1 : -1];
-         
+
   const nextX = currentPixel[0] + (segmentStart[0] < segmentEnd[0] ?  +1 : 0);
   const nextY = currentPixel[1] + (segmentStart[1] < segmentEnd[1] ?  +1 : 0);
-  
+
   // position of the edge to the next pixel on the line 'segmentStart'->'segmentEnd'
   const alphaX = (nextX - segmentStart[0])/ (segmentEnd[0] - segmentStart[0]);
   const alphaY = (nextY - segmentStart[1])/ (segmentEnd[1] - segmentStart[1]);
-  
+
   // neither value is valid
   if ((alphaX <= 0.0 || alphaX > 1.0) && (alphaY <= 0.0 || alphaY > 1.0)) {
     return [undefined, undefined];
   }
-    
+
   if (alphaX <= 0.0 || alphaX > 1.0) { // only alphaY is valid
     return [currentPixel[0], currentPixel[1] + vInc[1]];
   }
@@ -4326,14 +4336,14 @@ function getNextPixel(segmentStart, segmentEnd, currentPixel) {
   if (alphaY <= 0.0 || alphaY > 1.0) { // only alphaX is valid
     return [currentPixel[0] + vInc[0], currentPixel[1]];
   }
-    
+
   return alphaX < alphaY ? [currentPixel[0]+vInc[0], currentPixel[1]] :
                            [currentPixel[0],         currentPixel[1] + vInc[1]];
 }
 
 /* returns all pixels that are at least partially covered by the triangle
- * p1-p2-p3. 
- * Note: the returned array of pixels *will* contain duplicates that may need 
+ * p1-p2-p3.
+ * Note: the returned array of pixels *will* contain duplicates that may need
  * to be removed.
  */
 function rasterTriangle(p1, p2, p3) {
@@ -4344,17 +4354,17 @@ function rasterTriangle(p1, p2, p3) {
   p1 = points[0];
   p2 = points[1];
   p3 = points[2];
-  
+
   if (p1[1] == p2[1])
     return rasterFlatTriangle( p1, p2, p3);
-    
+
   if (p2[1] == p3[1])
     return rasterFlatTriangle( p2, p3, p1);
 
   const alpha = (p2[1] - p1[1]) / (p3[1] - p1[1]);
   //point on the line p1->p3 with the same y-value as p2
   const p4 = [p1[0] + alpha*(p3[0]-p1[0]), p2[1]];
-  
+
   /*  P3
    *   |\
    *   | \
@@ -4377,7 +4387,7 @@ function rasterTriangle(p1, p2, p3) {
  *  | \_
  *  |   \_
  *  |     \_
- * f0/f1--f1/f0  
+ * f0/f1--f1/f0
  */
 function rasterFlatTriangle( flat0, flat1, other ) {
 
@@ -4410,19 +4420,19 @@ function rasterFlatTriangle( flat0, flat1, other ) {
       leftRasterPos = getNextPixel(other, flat0, leftRasterPos);
     } while (leftRasterPos[1]*yDir <= y*yDir);
     leftRasterPos = prevLeftRasterPos;
-    
+
     do {
       points.push( rightRasterPos.slice(0));
       prevRightRasterPos = rightRasterPos;
       rightRasterPos = getNextPixel(other, flat1, rightRasterPos);
     } while (rightRasterPos[1]*yDir <= y*yDir);
     rightRasterPos = prevRightRasterPos;
-    
+
     for (let x = leftRasterPos[0]; x <= rightRasterPos[0]; x++) {
       points.push([x, y]);
     }
   }
-  
+
   return points;
 }
 
@@ -4454,7 +4464,7 @@ function normal(a, b, c) {
  * screen. The quad is returned in tile coordinates for tile zoom level
  * 'tileZoomLevel', and thus can directly be used to determine which basemap
  * and geometry tiles need to be loaded.
- * Note: if the horizon is level (as should usually be the case for 
+ * Note: if the horizon is level (as should usually be the case for
  * OSMBuildings) then said quad is also a trapezoid.
  */
 function getViewQuad(viewProjectionMatrix, maxFarEdgeDistance, viewDirOnMap) {
@@ -4492,7 +4502,7 @@ function getViewQuad(viewProjectionMatrix, maxFarEdgeDistance, viewDirOnMap) {
     vLeftDir = norm2(sub2(vLeftPoint, vBottomLeft));
     f = dot2(vLeftDir, viewDirOnMap);
     vTopLeft = add2( vBottomLeft, mul2scalar(vLeftDir, maxFarEdgeDistance/f));
-    
+
     vRightPoint = getIntersectionWithXYPlane( 1, -0.9, inverseViewMatrix);
     vRightDir = norm2(sub2(vRightPoint, vBottomRight));
     f = dot2(vRightDir, viewDirOnMap);
@@ -4512,7 +4522,7 @@ function getViewQuad(viewProjectionMatrix, maxFarEdgeDistance, viewDirOnMap) {
     f = dot2(vRightDir, viewDirOnMap);
     vTopRight = add2(vBottomRight, mul2scalar(vRightDir, maxFarEdgeDistance/f));
   }
- 
+
   return [vBottomLeft, vBottomRight, vTopRight, vTopLeft];
 }
 
@@ -4520,8 +4530,8 @@ function getViewQuad(viewProjectionMatrix, maxFarEdgeDistance, viewDirOnMap) {
 /* Returns an orthographic projection matrix whose view rectangle contains all
  * points of 'points' when watched from the position given by targetViewMatrix.
  * The depth range of the returned matrix is [near, far].
- * The 'points' are given as euclidean coordinates in [m] distance to the 
- * current reference point (APP.position). 
+ * The 'points' are given as euclidean coordinates in [m] distance to the
+ * current reference point (APP.position).
  */
 function getCoveringOrthoProjection(points, targetViewMatrix, near, far, height) {
   const p = transformVec3(targetViewMatrix.data, points[0]);
@@ -4579,21 +4589,21 @@ function getIntersectionWithXYPlane(screenNdcX, screenNdcY, inverseTransform) {
   const lambda = -v1[2]/vDir[2];
   const pos = add3( v1, mul3scalar(vDir, lambda));
 
-  return [pos[0], pos[1]];  // z==0 
+  return [pos[0], pos[1]];  // z==0
 }
 
-/* Returns: the number of screen pixels that would be covered by the tile 
+/* Returns: the number of screen pixels that would be covered by the tile
  *          tileZoom/tileX/tileY *if* the screen would not end at the viewport
- *          edges. The intended use of this method is to return a measure of 
+ *          edges. The intended use of this method is to return a measure of
  *          how detailed the tile should be rendered.
  * Note: This method does not clip the tile to the viewport. So the number
  *       returned will be larger than the number of screen pixels covered iff.
- *       the tile intersects with a viewport edge. 
+ *       the tile intersects with a viewport edge.
  */
 function getTileSizeOnScreen(tileX, tileY, tileZoom, viewProjMatrix) {
   const tileLon = tile2lon(tileX, tileZoom);
   const tileLat = tile2lat(tileY, tileZoom);
-  
+
   const modelMatrix = new GLX.Matrix();
   modelMatrix.translateBy(
     (tileLon - APP.position.longitude) * METERS_PER_DEGREE_LONGITUDE,
@@ -4602,7 +4612,7 @@ function getTileSizeOnScreen(tileX, tileY, tileZoom, viewProjMatrix) {
   );
 
   const size = getTileSizeInMeters( APP.position.latitude, tileZoom);
-  
+
   const mvpMatrix = GLX.Matrix.multiply(modelMatrix, viewProjMatrix);
   const tl = transformVec3(mvpMatrix, [0   , 0   , 0]);
   const tr = transformVec3(mvpMatrix, [size, 0   , 0]);
@@ -4614,7 +4624,7 @@ function getTileSizeOnScreen(tileX, tileY, tileZoom, viewProjMatrix) {
     vert[1] = (vert[1] + 1.0) / 2.0 * APP.height;
     return vert;
   });
-  
+
   return getConvexQuadArea(res);
 }
 
@@ -4623,19 +4633,19 @@ function getTriangleArea(p1, p2, p3) {
   const a = len2(sub2( p1, p2));
   const b = len2(sub2( p1, p3));
   const c = len2(sub2( p2, p3));
-  
+
   //Heron's formula
   const s = 0.5 * (a+b+c);
   return Math.sqrt( s * (s-a) * (s-b) * (s-c));
 }
 
 function getConvexQuadArea(quad) {
-  return getTriangleArea( quad[0], quad[1], quad[2]) + 
+  return getTriangleArea( quad[0], quad[1], quad[2]) +
          getTriangleArea( quad[0], quad[2], quad[3]);
 }
 
 function getTileSizeInMeters( latitude, zoom) {
-  return EARTH_CIRCUMFERENCE_IN_METERS * Math.cos(latitude / 180 * Math.PI) / 
+  return EARTH_CIRCUMFERENCE_IN_METERS * Math.cos(latitude / 180 * Math.PI) /
          Math.pow(2, zoom);
 }
 
@@ -4833,6 +4843,7 @@ class View {
       refVFOV = 45;
 
     GL.viewport(0, 0, width, height);
+
 
     this.viewMatrix = new GLX.Matrix()
       .rotateZ(APP.rotation)
@@ -5134,7 +5145,7 @@ View.Sun = class {
       .translateTo(0, 0, -5000)
       .scale(1, -1, 1); // flip Y
   }
-  
+
   static updateView (coveredGroundVertices) {
     // TODO: could parts be pre-calculated?
     this.projMatrix = getCoveringOrthoProjection(
@@ -5396,13 +5407,13 @@ View.MapShadows = class {
         'uLowerEdgePoint',
         'uFogDistance',
         'uFogBlurDistance',
-        'uShadowTexDimensions', 
+        'uShadowTexDimensions',
         'uShadowStrength',
         'uShadowTexIndex',
         'uSunMatrix',
       ]
     });
-    
+
     this.mapPlane = new MapPlane();
   }
 
@@ -5568,7 +5579,7 @@ View.HudRect = class {
     vertices.push(0, 0, 1E-5,
                   1, 0, 1E-5,
                   1, 1, 1E-5);
-    
+
     vertices.push(0, 0, 1E-5,
                   1, 1, 1E-5,
                   0, 1, 1E-5);
@@ -5588,7 +5599,7 @@ View.HudRect = class {
     const shader = this.shader;
 
     shader.enable();
-    
+
     GL.uniformMatrix4fv(shader.uniforms.uMatrix, false, GLX.Matrix.identity().data);
     this.vertexBuffer.enable();
 
@@ -5706,7 +5717,7 @@ View.AmbientMap = class {
     });
 
     this.framebuffer = new GLX.Framebuffer(128, 128); // size will be set dynamically
-    
+
     this.vertexBuffer = new GLX.Buffer(3, new Float32Array([
       -1, -1, 1E-5,
        1, -1, 1E-5,
@@ -5715,7 +5726,7 @@ View.AmbientMap = class {
        1,  1, 1E-5,
       -1,  1, 1E-5
     ]));
-       
+
     this.texCoordBuffer = new GLX.Buffer(2, new Float32Array([
       0,0,
       1,0,
@@ -5799,7 +5810,7 @@ View.Overlay = class {
     vertices.push(-1,-1, 1E-5,
                    1,-1, 1E-5,
                    1, 1, 1E-5);
-    
+
     vertices.push(-1,-1, 1E-5,
                    1, 1, 1E-5,
                   -1, 1, 1E-5);
@@ -5824,7 +5835,7 @@ View.Overlay = class {
     // we are rendering an *overlay*, which is supposed to be rendered on top of the
     // scene no matter what its actual depth is.
     GL.disable(GL.DEPTH_TEST);
-    
+
     shader.setMatrix('uMatrix', '4fv', GLX.Matrix.identity().data);
 
     shader.setBuffer('aPosition', this.vertexBuffer);
@@ -5921,10 +5932,10 @@ View.Horizon = class {
     skyShader.setBuffer('aPosition', this.skyVertexBuffer);
 
     GL.drawArrays(GL.TRIANGLES, 0, this.skyVertexBuffer.numItems);
-    
+
     skyShader.disable();
 
-    
+
     floorShader.enable();
 
     floorShader.setParam('uColor', '4fv', [...fogColor, 1.0]);
