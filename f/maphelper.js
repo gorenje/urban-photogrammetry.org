@@ -28,6 +28,12 @@ var MapHelper = {
 
     var haveObjs = [
       {
+        mlid: "2bae9bf38b8b4a8aa27921405db96e7f",
+        loc: [52.54235,13.43003],
+        rotation: 0,
+        scale: 20,
+      },
+      {
         mlid: "849f0331d956447db09dd03460716ce7",
         loc: [52.51438,13.36843],
         rotation: 0,
