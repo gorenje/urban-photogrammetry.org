@@ -1,4 +1,122 @@
 var MapHelper = {
+  AvailableModels: [
+    {
+      mlid: "5d7de3d158cf48a2bb1852f6a6b231ac",
+      loc: [52.49958,13.39201],
+      rotation: 85,
+      scale: 50,
+    },
+    {
+      mlid: "46af2175f9ee432989d7a0d485ea8302",
+      loc: [52.53769,13.37787],
+      rotation: 110,
+      scale: 30,
+    },
+    {
+      mlid: "4aa3f73788464b299ef755cac03f0ca6",
+      loc: [52.49724,13.41643],
+      rotation: 110,
+      scale: 90,
+    },
+    {
+      mlid: "2bae9bf38b8b4a8aa27921405db96e7f",
+      loc: [52.54235,13.43003],
+      rotation: 0,
+      scale: 20,
+    },
+    {
+      mlid: "849f0331d956447db09dd03460716ce7",
+      loc: [52.51438,13.36843],
+      rotation: 0,
+      scale: 40,
+    },
+    {
+      mlid: "04684a56cce44825b5912e57cd721121",
+      loc: [52.51868,13.40336],
+      rotation: 240,
+      scale: 200,
+    },
+    {
+      mlid: "f23cafa7b2bf44aa831a460ddfeaac72",
+      loc: [52.53813,13.43378],
+      rotation: -55,
+      scale: 50,
+    },
+    {
+      mlid: "e1199bf674984c5092cb46f04660297e",
+      loc: [52.53856,13.37818],
+      rotation: -110,
+      scale: 20,
+    },
+    {
+      mlid: "7c6471d3946d4dc0bbe99a1b492a3f01",
+      loc: [52.53895,13.37879],
+      rotation: 95,
+      scale: 40,
+      altitude: 10,
+    },
+    {
+      mlid: "7770af0084454d0ba0c98e5eca1661cc",
+      loc: [52.52041,13.39808],
+      rotation: -10,
+      scale: 20,
+    },
+    {
+      mlid: "2c37ef0e1b9043809514e10c59f82661",
+      loc: [52.53190,13.41270],
+      rotation: 30,
+      scale: 20,
+      altitude: 30,
+    },
+    {
+      mlid: "70fcd5892cb346429c04c1d852b96169",
+      loc: [52.53858,13.42697],
+      rotation: 30,
+      scale: 50,
+    },
+    {
+      mlid: "924b850d72bd46478ab650cfa353d94d-1",
+      loc: [52.52830,13.39892],
+      rotation: 0,
+      scale: 20,
+      altitude: 40,
+    },
+    {
+      mlid: "924b850d72bd46478ab650cfa353d94d-2",
+      loc: [52.52802,13.39907],
+      rotation: 60,
+      scale: 30,
+      altitude: 40,
+    },
+    {
+      mlid: "924b850d72bd46478ab650cfa353d94d-3",
+      loc: [52.52819,13.39915],
+      rotation: 120,
+      scale: 30,
+      altitude: 40,
+    },
+    {
+      mlid: "0ec35096975442188f5278665013bfae",
+      loc: [52.56928,13.44615],
+      rotation: -95,
+      scale: 40,
+      altitude: 10,
+    },
+    {
+      mlid: "3d0f151bf808494a9eb1b2a81665e832",
+      loc: [52.52596,13.43132],
+      rotation: 60,
+      scale: 50,
+      altitude: 10,
+    },
+    {
+      mlid: "3867f03ae07b43d29630e70b86f7abc9",
+      loc: [52.52636,13.42896],
+      rotation: 210,
+      scale: 50,
+      altitude: 10,
+    },
+  ],
 
   createStreetMap: function() {
     var browser = bowser.getParser(window.navigator.userAgent);
@@ -6,9 +124,13 @@ var MapHelper = {
     $('#loadingScreen').hide()
     $('#3dcanvas').hide()
 
+    var loc = { longitude: MapHelper.AvailableModels[0].loc[1],
+                latitude: MapHelper.AvailableModels[0].loc[0] }
+
     map = new OSMBuildings({
       container: 'map',
-      position: { longitude: 13.402637132184573, latitude: 52.51795169799803 },
+      // position: { longitude: 13.402637132184573, latitude: 52.51795169799803 },
+      position: loc,
       zoom: 17,
       minZoom: 1,
       rotation: 39,
@@ -26,129 +148,16 @@ var MapHelper = {
       map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
     }
 
-    var haveObjs = [
-      {
-        mlid: "46af2175f9ee432989d7a0d485ea8302",
-        loc: [52.53769,13.37787],
-        rotation: 110,
-        scale: 30,
-      },
-      {
-        mlid: "4aa3f73788464b299ef755cac03f0ca6",
-        loc: [52.49724,13.41643],
-        rotation: 110,
-        scale: 80,
-      },
-      {
-        mlid: "2bae9bf38b8b4a8aa27921405db96e7f",
-        loc: [52.54235,13.43003],
-        rotation: 0,
-        scale: 20,
-      },
-      {
-        mlid: "849f0331d956447db09dd03460716ce7",
-        loc: [52.51438,13.36843],
-        rotation: 0,
-        scale: 40,
-      },
-      {
-        mlid: "04684a56cce44825b5912e57cd721121",
-        loc: [52.51868,13.40336],
-        rotation: 240,
-        scale: 200,
-      },
-      {
-        mlid: "f23cafa7b2bf44aa831a460ddfeaac72",
-        loc: [52.53813,13.43378],
-        rotation: -55,
-        scale: 50,
-      },
-      {
-        mlid: "e1199bf674984c5092cb46f04660297e",
-        loc: [52.53856,13.37818],
-        rotation: -110,
-        scale: 20,
-      },
-      {
-        mlid: "7c6471d3946d4dc0bbe99a1b492a3f01",
-        loc: [52.53895,13.37879],
-        rotation: 95,
-        scale: 40,
-        altitude: 10,
-      },
-      {
-        mlid: "7770af0084454d0ba0c98e5eca1661cc",
-        loc: [52.52041,13.39808],
-        rotation: -10,
-        scale: 20,
-      },
-      {
-        mlid: "2c37ef0e1b9043809514e10c59f82661",
-        loc: [52.53190,13.41270],
-        rotation: 30,
-        scale: 20,
-        altitude: 30,
-      },
-      {
-        mlid: "70fcd5892cb346429c04c1d852b96169",
-        loc: [52.53858,13.42697],
-        rotation: 30,
-        scale: 50,
-      },
-      {
-        mlid: "924b850d72bd46478ab650cfa353d94d-1",
-        loc: [52.52830,13.39892],
-        rotation: 0,
-        scale: 20,
-        altitude: 40,
-      },
-      {
-        mlid: "924b850d72bd46478ab650cfa353d94d-2",
-        loc: [52.52802,13.39907],
-        rotation: 60,
-        scale: 30,
-        altitude: 40,
-      },
-      {
-        mlid: "924b850d72bd46478ab650cfa353d94d-3",
-        loc: [52.52819,13.39915],
-        rotation: 120,
-        scale: 30,
-        altitude: 40,
-      },
-      {
-        mlid: "0ec35096975442188f5278665013bfae",
-        loc: [52.56928,13.44615],
-        rotation: -95,
-        scale: 40,
-        altitude: 10,
-      },
-      {
-        mlid: "3d0f151bf808494a9eb1b2a81665e832",
-        loc: [52.52596,13.43132],
-        rotation: 60,
-        scale: 50,
-        altitude: 10,
-      },
-      {
-        mlid: "3867f03ae07b43d29630e70b86f7abc9",
-        loc: [52.52636,13.42896],
-        rotation: 210,
-        scale: 50,
-        altitude: 10,
-      },
-    ]
-
-    $.each( haveObjs, function(idx, obj) {
+    $.each( MapHelper.AvailableModels, function(idx, obj) {
       setTimeout( function() {
-      map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`,
-                  { latitude: obj.loc[0], longitude: obj.loc[1] },
-                  { scale: obj.scale,
-                    altitude: obj.altitude || 0,
-                    color: 'purple',
-                    id: 'up-' + obj.mlid,
-                    rotation: obj.rotation
-                  });
+        map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`,
+                    { latitude: obj.loc[0], longitude: obj.loc[1] },
+                    { scale: obj.scale,
+                      altitude: obj.altitude || 0,
+                      color: 'purple',
+                      id: 'up-' + obj.mlid,
+                      rotation: obj.rotation
+                    });
       }, 1000 * Math.random() )
     })
 
