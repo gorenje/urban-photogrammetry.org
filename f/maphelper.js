@@ -192,7 +192,7 @@ var MapHelper = {
     //map.addMapTiles('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png');
     //map.addMapTiles('https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png');
 
-    if ( browser.getPlatformType() !== "{ longitude: 13.40309, latitude: 52.51868 }mobile" ) {
+    if ( browser.getPlatformType() !== "mobile" ) {
       map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
     }
 
