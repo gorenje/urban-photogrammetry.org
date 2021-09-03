@@ -1,6 +1,24 @@
 var MapHelper = {
   AvailableModels: [
     {
+      mlid: "b582f8af0b934f4dbbf055c63d4e882e",
+      loc: [52.51913,13.36894],
+      rotation: 0,
+      scale: 17,
+    },
+    {
+      mlid: "1db1215c7d7d4d7b91b30ed3f8d47b40",
+      loc: [52.52708,13.41407],
+      rotation: 40,
+      scale: 13,
+    },
+    {
+      mlid: "8b6a3c122a0d455691436494cc3928aa",
+      loc: [52.51683,13.35704],
+      rotation: 180,
+      scale: 15,
+    },
+    {
       mlid: "ee048169659a49dcbb410bf1e9ff84b8",
       loc: [52.53145,13.40613],
       rotation: 110,
