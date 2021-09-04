@@ -21,11 +21,12 @@ layout: 3dtour
 <script src="/f/bjs/babylon.inspector.bundle.js"></script>
 <script src="/f/bjs/babylon.nodeEditor.js"></script>
 <script src="/f/bjs/babylon.guiEditor.js"></script>
+<script src="/f/buttonimages.js"></script>
 <script src="/f/bowser.js"></script>
 <script src="/f/babylonhelpers.js"></script>
 <script src="/f/models.js"></script>
 <script src="/f/modelcache.js"></script>
-<script src="/f/buttonhelpers.js"></script>
+<script src='/f/buttonhelpers.js'></script>
 <script src="/f/soundshelper.js"></script>
 <script src="/f/tdhelpers.js"></script>
 

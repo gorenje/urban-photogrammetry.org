@@ -56,7 +56,7 @@ function addKeyboardObserver(scene, skyboxMesh) {
 }
 
 // register the fader for transistions between models.
-var ppFactor = -0.01;
+var ppFactor = -0.02;
 var ppFadeLevel = 1.0;
 var fadeOutCb = function(){};
 var stop_transition = true;
@@ -83,7 +83,7 @@ function initScene(scene) {
       if ( ppFadeLevel < 0 ) {
         stop_transition = true;
         fadeOutCb()
-        ppFactor = 0.01
+        ppFactor = 0.02
       }
     }
   })

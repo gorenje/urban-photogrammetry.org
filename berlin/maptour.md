@@ -21,9 +21,10 @@ layout: map
 <script src="/f/bjs/babylon.inspector.bundle.js"></script>
 <script src="/f/bjs/babylon.nodeEditor.js"></script>
 <script src="/f/bjs/babylon.guiEditor.js"></script>
+<script src="/f/buttonimages.js"></script>
 <script src="/f/bowser.js"></script>
-<script src="/f/babylonhelpers.js"></script>
 <script src="/f/models.js"></script>
+<script src="/f/babylonhelpers.js"></script>
 <script src="/f/modelcache.js"></script>
 <script src="/f/buttonhelpers.js"></script>
 <script src="/f/soundshelper.js"></script>
@@ -114,11 +115,12 @@ function displayModel(mlid) {
 
       var button = ButtonHelpers.create("butVol", "vol", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
+      ButtonHelpers.hide(button)
+      BABYLON.Engine.audioEngine.setGlobalVolume(0)
       advancedTexture.addControl(button);
 
       var button = ButtonHelpers.create("butMute", "mute", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
-      ButtonHelpers.hide(button)
       advancedTexture.addControl(button);
 
       var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
@@ -158,11 +160,12 @@ function displayModel(mlid) {
 
       var button = ButtonHelpers.create("butVol", "vol", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
+      BABYLON.Engine.audioEngine.setGlobalVolume(0)
+      ButtonHelpers.hide(button)
       advancedTexture.addControl(button);
 
       var button = ButtonHelpers.create("butMute", "mute", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
-      ButtonHelpers.hide(button)
       advancedTexture.addControl(button);
 
       var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")

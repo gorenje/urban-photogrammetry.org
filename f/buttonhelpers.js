@@ -6,15 +6,15 @@ var ButtonHelpers = {
   },
 
   ImageMap: {
-    butFS:     "fullscreen.svg",
-    butFSexit: "fullscreen-exit.svg",
-    butShare:  "share.svg",
-    butPlay:   "play.svg",
-    butPrev:   "prev.svg",
-    butNext:   "next.svg",
-    butVol:    "volume-on.svg",
-    butMute:   "volume-off.svg",
-    butExit:   "exit.svg",
+    butFS:     ButtonImages.butFS,
+    butFSexit: ButtonImages.butFSexit,
+    butShare:  ButtonImages.butShare,
+    butPlay:   ButtonImages.butPlay,
+    butPrev:   ButtonImages.butPrev,
+    butNext:   ButtonImages.butNext,
+    butVol:    ButtonImages.butVol,
+    butMute:   ButtonImages.butMute,
+    butExit:   ButtonImages.butExit,
   },
 
   imageButton: function(filename) {
@@ -61,7 +61,7 @@ var ButtonHelpers = {
 
     var imageName = ButtonHelpers.ImageMap[name]
     if ( imageName ) {
-      button = ButtonHelpers.imageButton("/f/images/" + imageName);
+      button = ButtonHelpers.imageButton(imageName);
     }
 
     button.left = left;
