@@ -198,7 +198,8 @@ var MapHelper = {
 
     $.each( MapHelper.AvailableModels, function(idx, obj) {
       setTimeout( function() {
-        map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`,
+        try {
+          map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`,
                     { latitude: obj.loc[0], longitude: obj.loc[1] },
                     { scale: obj.scale,
                       altitude: obj.altitude || 0,
@@ -206,7 +207,8 @@ var MapHelper = {
                       id: 'up-' + obj.mlid,
                       rotation: obj.rotation
                     });
-      }, 1000 * Math.random() )
+        } catch (e ) { console.log(e) }
+      }, Math.ceil(1000 * Math.random()) + 10);
     })
 
     map.on('pointerup', e => {
