@@ -19,8 +19,8 @@ var ButtonHelpers = {
   },
 
   imageButton: function(filename) {
-    var width = "32px";
-    var height = "32px";
+    var width = "70px";
+    var height = "70px";
     if ( !TDHelpers.isMobile() ) {
       width = "62px"
       height = "62px"
@@ -211,9 +211,8 @@ var ButtonHelpers = {
     },
 
     stopflythrough: function(evt) {
-      currFlythrough.stop()
+      try { currFlythrough.stop() } catch (e) {}
       currFlythrough = null
-      ButtonHelpers.toggle("butPlay", "butPause")
     },
 
     flythrough: function(evt) {
@@ -258,9 +257,8 @@ var ButtonHelpers = {
                                                   false);
 
       scene.onPointerDown = function(e) {
-        currFlythrough.stop()
+        try { currFlythrough.stop() } catch (e) {}
         currFlythrough = null
-        ButtonHelpers.toggle("butPlay", "butPause")
         scene.onPointerDown = null;
       }
       currFlythrough.onAnimationEndObservable.addOnce(function() {

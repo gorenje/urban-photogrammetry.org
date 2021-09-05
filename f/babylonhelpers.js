@@ -197,7 +197,6 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
 
   scene.stopAllAnimations()
   currFlythrough = null;
-  ButtonHelpers.toggle("butPlay", "butPause")
 
   BABYLON.SceneLoader.Append(rootUrl, modelName, scene, function (scene) {
     if (ppFadeLevel < 0) stop_transition = false;
@@ -223,6 +222,9 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
     // details in the skybox.
     modelMesh.onLODLevelSelection = function(num,mesh,selectedMesh) {
       var idx = 0
+
+      // don't update the LODlevel if we're doing a flythrough
+      if ( currFlythrough !== null ) {return;}
 
       if (typeof(alltextures) == 'undefined' ||  alltextures.length < 2) return;
 

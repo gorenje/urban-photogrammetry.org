@@ -80,9 +80,11 @@ function displayModel(mlid) {
 
   var createDefaultEngine = function() {
     return new BABYLON.Engine(canvas, true, {
+      alpha: false,
       preserveDrawingBuffer: true,
       stencil: true,
-      disableWebGL2Support: TDHelpers.disableWebGL2()});
+      disableWebGL2Support: TDHelpers.disableWebGL2(),
+    }, false);
   };
 
   var delayCreateScene = function () {

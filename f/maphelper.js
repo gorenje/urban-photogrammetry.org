@@ -183,7 +183,6 @@ var MapHelper = {
 
     map = new OSMBuildings({
       container: 'map',
-      // position: { longitude: 13.402637132184573, latitude: 52.51795169799803 },
       position: loc,
       zoom: 17,
       minZoom: 1,
@@ -193,10 +192,7 @@ var MapHelper = {
       attribution: '© Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a> © Map <a href="https://mapbox.com/">Mapbox</a> © 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
     })
 
-    // map.addMapTiles('https://{s}.tiles.mapbox.com/v4/mapbox.mapbox-streets-v8/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidXJiYW4tcGhvdG9ncmFtbWV0cnkiLCJhIjoiY2tzd3lrM3M4MDdqajJ1cDJobXlqY2Z1YiJ9.xgtMCLrDbaQn8Kyb1zqAwA&style=cksx0f5e04xkn18o7zt5sincf');
     map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
-    //map.addMapTiles('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png');
-    //map.addMapTiles('https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png');
 
     if ( browser.getPlatformType() !== "mobile" ) {
       map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
