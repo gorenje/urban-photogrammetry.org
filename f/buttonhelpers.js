@@ -10,6 +10,7 @@ var ButtonHelpers = {
     butFSexit: ButtonImages.butFSexit,
     butShare:  ButtonImages.butShare,
     butPlay:   ButtonImages.butPlay,
+    butPause:  ButtonImages.butPause,
     butPrev:   ButtonImages.butPrev,
     butNext:   ButtonImages.butNext,
     butVol:    ButtonImages.butVol,
@@ -106,37 +107,23 @@ var ButtonHelpers = {
     exit: function(evt) {
       scene.stopAllAnimations()
       SoundsHelper.stopAll()
+      ButtonHelpers.toggle("butPlay", "butPause")
       $('#3dcanvas').fadeOut(500);
       $('#map').fadeIn(500);
     },
 
     mute: function(evt) {
+      muteOn = false;
       BABYLON.Engine.audioEngine.setGlobalVolume(1)
+      SoundsHelper.playModel(currModel.mlid)
       ButtonHelpers.toggle("butVol", "butMute")
     },
 
     volume: function(evt) {
+      muteOn = true;
       BABYLON.Engine.audioEngine.setGlobalVolume(0)
+      SoundsHelper.stopAll()
       ButtonHelpers.toggle("butMute", "butVol")
-    },
-
-    previous: function(evt) {
-      prepareFadeOut(function() {
-        // destruction
-        clearScene(scene, skyboxMesh, alltextures)
-
-        // restruction
-        currModel      = UPModels.previous(currModel)
-        var r          = createSkyBox(scene)
-        skyboxMesh     = r[0]
-        multimat       = r[1]
-        textBlock.text = currModel.text;
-
-        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                           alltextures, multimat,scene)
-        addKeyboardObserver(scene, skyboxMesh);
-        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
-      })
     },
 
     fullscreen: function(evt) {
@@ -181,6 +168,25 @@ var ButtonHelpers = {
       console.log( shareUrl)
     },
 
+    previous: function(evt) {
+      prepareFadeOut(function() {
+        // destruction
+        clearScene(scene, skyboxMesh, alltextures)
+
+        // restruction
+        currModel      = UPModels.previous(currModel)
+        var r          = createSkyBox(scene)
+        skyboxMesh     = r[0]
+        multimat       = r[1]
+        textBlock.text = currModel.text;
+
+        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
+                           alltextures, multimat,scene)
+        addKeyboardObserver(scene, skyboxMesh);
+        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
+      })
+    },
+
     next: function(evt) {
       prepareFadeOut(function() {
 	      // destruction
@@ -204,9 +210,16 @@ var ButtonHelpers = {
       textBlock.isVisible = !textBlock.isVisible;
     },
 
+    stopflythrough: function(evt) {
+      currFlythrough.stop()
+      currFlythrough = null
+      ButtonHelpers.toggle("butPlay", "butPause")
+    },
+
     flythrough: function(evt) {
       if ( currFlythrough !== null ) return;
 
+      ButtonHelpers.toggle("butPause", "butPlay")
       var frameRate = Math.ceil(
         TDHelpers.average(
           currModel.flythrough.map( a => a.avgfps )
@@ -244,17 +257,16 @@ var ButtonHelpers = {
                                                   lastFrame + frameRate,
                                                   false);
 
-      ButtonHelpers.AllButtons["butPlay"].background = "#aa000077"
       scene.onPointerDown = function(e) {
         currFlythrough.stop()
         currFlythrough = null
+        ButtonHelpers.toggle("butPlay", "butPause")
         scene.onPointerDown = null;
-        ButtonHelpers.AllButtons["butPlay"].background = "#00000000"
       }
       currFlythrough.onAnimationEndObservable.addOnce(function() {
         scene.onPointerDown = null
         currFlythrough = null
-        ButtonHelpers.AllButtons["butPlay"].background = "#00000000"
+        ButtonHelpers.toggle("butPlay", "butPause")
       })
     },
 

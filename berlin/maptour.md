@@ -116,7 +116,6 @@ function displayModel(mlid) {
       var button = ButtonHelpers.create("butVol", "vol", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
       ButtonHelpers.hide(button)
-      BABYLON.Engine.audioEngine.setGlobalVolume(0)
       advancedTexture.addControl(button);
 
       var button = ButtonHelpers.create("butMute", "mute", "0%", "-45%")
@@ -126,12 +125,16 @@ function displayModel(mlid) {
       var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
       advancedTexture.addControl(button);
+      var button = ButtonHelpers.create("butPause", "fly>", "0%", "45%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.stopflythrough)
+      ButtonHelpers.hide(button)
+      advancedTexture.addControl(button);
 
       var button = ButtonHelpers.create("butExit", "fulls", "-40%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.exit)
       advancedTexture.addControl(button);
 
-      if ( ButtonHelpers.showShare() || false ) {
+      if ( ButtonHelpers.showShare() && false ) {
         var button = ButtonHelpers.create("butShare", "share", "-40%", "-40%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.share)
         advancedTexture.addControl(button);
@@ -160,7 +163,6 @@ function displayModel(mlid) {
 
       var button = ButtonHelpers.create("butVol", "vol", "0%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
-      BABYLON.Engine.audioEngine.setGlobalVolume(0)
       ButtonHelpers.hide(button)
       advancedTexture.addControl(button);
 
@@ -171,12 +173,16 @@ function displayModel(mlid) {
       var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
       advancedTexture.addControl(button);
+      var button = ButtonHelpers.create("butPause", "fly>", "0%", "45%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.stopflythrough)
+      ButtonHelpers.hide(button)
+      advancedTexture.addControl(button);
 
       var button = ButtonHelpers.create("butExit", "fulls", "-45%", "-45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.exit)
       advancedTexture.addControl(button);
 
-      if ( ButtonHelpers.showShare() || false ) {
+      if ( ButtonHelpers.showShare() && false ) {
         var button = ButtonHelpers.create("butShare", "share", "-45%", "-42%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.share)
         advancedTexture.addControl(button);

@@ -1,9 +1,10 @@
+var muteOn = true;
+
 var SoundsHelper = {
   AllSounds: {},
 
   load: function(scene) {
     var assetsManager = new BABYLON.AssetsManager(scene);
-    var autoplay_first = true;
 
     $.each( UPModels.AvailableModels, function(idx,model) {
       var binaryTask = assetsManager.addBinaryFileTask(
@@ -19,9 +20,8 @@ var SoundsHelper = {
             spatialSound: true,
             distanceModel: "exponential",
             rolloffFactor: 1,
-            autoplay: autoplay_first,
+            autoplay: false,
           });
-        autoplay_first = false;
       };
     })
 
@@ -34,7 +34,9 @@ var SoundsHelper = {
 
   playModel: function(mlid) {
     SoundsHelper.stopAll()
-    if (SoundsHelper.AllSounds[mlid] && SoundsHelper.AllSounds[mlid].isReady()){
+
+    if (muteOn == false && SoundsHelper.AllSounds[mlid] &&
+        SoundsHelper.AllSounds[mlid].isReady()){
       SoundsHelper.AllSounds[mlid].play()
     }
   }

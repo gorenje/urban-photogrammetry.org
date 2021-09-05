@@ -118,11 +118,11 @@ layout: 3dtour
 
     var button = ButtonHelpers.create("butVol", "fulls", "45%", "-40%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
+    ButtonHelpers.hide(button)
     advancedTexture.addControl(button);
 
     var button = ButtonHelpers.create("butMute", "fulls", "45%", "-40%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
-    ButtonHelpers.hide(button)
     advancedTexture.addControl(button);
 
     var button = ButtonHelpers.create("butShare", "share", "45%", "-20%")
@@ -131,6 +131,11 @@ layout: 3dtour
 
     var button = ButtonHelpers.create("butPlay", "fly>", "45%", "-10%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
+    advancedTexture.addControl(button);
+
+    var button = ButtonHelpers.create("butPause", "fly>", "45%", "-10%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.stopflythrough)
+    ButtonHelpers.hide(button)
     advancedTexture.addControl(button);
 
     var button = ButtonHelpers.create("butFTPlay", "playKFs", "45%", "0%")

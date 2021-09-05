@@ -197,7 +197,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
 
   scene.stopAllAnimations()
   currFlythrough = null;
-  ButtonHelpers.AllButtons["butPlay"].background = "#00000000"
+  ButtonHelpers.toggle("butPlay", "butPause")
 
   BABYLON.SceneLoader.Append(rootUrl, modelName, scene, function (scene) {
     if (ppFadeLevel < 0) stop_transition = false;
@@ -338,10 +338,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
     } catch ( e ) {
       console.log(e)
     }
-    try {
-      SoundsHelper.playModel(mlid)
-    } catch ( e ) {
-      console.log(e)
-    }
+
+    try { SoundsHelper.playModel(mlid) } catch ( e ) { console.log(e) }
   });
 }
