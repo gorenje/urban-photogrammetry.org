@@ -1,6 +1,12 @@
 var MapHelper = {
   AvailableModels: [
     {
+      mlid: "17ebfbf933e345dba395a4169dcbc7d5",
+      loc: [52.52642,13.41144],
+      rotation: 20,
+      scale: 35,
+    },
+    {
       mlid: "dc42a16b3a7e4a7398ac9af1254d1d96",
       loc: [52.51845,13.36810],
       rotation: -90,
@@ -189,15 +195,16 @@ var MapHelper = {
       rotation: 39,
       maxZoom: 30,
       tilt: 38.355,
-      attribution: '© Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a> © Map <a href="https://mapbox.com/">Mapbox</a> © 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
+      attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
     })
 
     map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-    if ( browser.getPlatformType() !== "mobile" ) {
-      map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
-    }
-
+    /* No 3d Buildings - make things too confusing.
+     * if ( browser.getPlatformType() !== "mobile" ) {
+     *   map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
+     * }
+     */
     $.each( MapHelper.AvailableModels, function(idx, obj) {
       setTimeout( function() {
         try {
@@ -205,7 +212,7 @@ var MapHelper = {
                     { latitude: obj.loc[0], longitude: obj.loc[1] },
                     { scale: obj.scale,
                       altitude: obj.altitude || 0,
-                      color: 'purple',
+                      color: 'white',
                       id: 'up-' + obj.mlid,
                       rotation: obj.rotation
                     });
