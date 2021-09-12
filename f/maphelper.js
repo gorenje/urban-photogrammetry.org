@@ -1,6 +1,12 @@
 var MapHelper = {
   AvailableModels: [
     {
+      mlid: "5c0681f61c9b45a9a0358ac0a2d2dd58",
+      loc: [52.52137,13.40470],
+      rotation: -45,
+      scale: 25,
+    },
+    {
       mlid: "398e1d82cf6c41369951b15ccfb39df2",
       loc: [52.52680,13.41170],
       rotation: 20,
@@ -218,7 +224,7 @@ var MapHelper = {
                     { latitude: obj.loc[0], longitude: obj.loc[1] },
                     { scale: obj.scale,
                       altitude: obj.altitude || 0,
-                      color: 'white',
+                      color: 'green',
                       id: 'up-' + obj.mlid,
                       rotation: obj.rotation
                     });
