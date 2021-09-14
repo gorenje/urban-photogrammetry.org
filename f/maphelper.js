@@ -226,11 +226,10 @@ var MapHelper = {
     //map.addMapTiles('http://localhost:6789/openstreetmap-carto/tile/{z}/{x}/{y}.png');
     map.addMapTiles('/f/images/tiles/{z}/{x}/{y}.png');
 
-    /* No 3d Buildings - make things too confusing.
-     * if ( browser.getPlatformType() !== "mobile" ) {
-     *   map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
-     * }
-     */
+    if ( browser.getPlatformType() !== "mobile" ) {
+      map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
+    }
+
     $.each( MapHelper.AvailableModels, function(idx, obj) {
       setTimeout( function() {
         try {
