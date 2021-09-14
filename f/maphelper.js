@@ -215,14 +215,16 @@ var MapHelper = {
       container: 'map',
       position: loc,
       zoom: 17,
-      minZoom: 1,
+      minZoom: 15,
       rotation: 39,
-      maxZoom: 30,
+      maxZoom: 18,
       tilt: 38.355,
       attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
     })
 
-    map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    // map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    //map.addMapTiles('http://localhost:6789/openstreetmap-carto/tile/{z}/{x}/{y}.png');
+    map.addMapTiles('/f/images/tiles/{z}/{x}/{y}.png');
 
     /* No 3d Buildings - make things too confusing.
      * if ( browser.getPlatformType() !== "mobile" ) {
@@ -236,7 +238,7 @@ var MapHelper = {
                     { latitude: obj.loc[0], longitude: obj.loc[1] },
                     { scale: obj.scale,
                       altitude: obj.altitude || 0,
-                      color: 'green',
+                      color: 'red',
                       id: 'up-' + obj.mlid,
                       rotation: obj.rotation
                     });
