@@ -75,17 +75,7 @@ var MapAnimation = {
       console.log( MapAnimation.keyFrames[MapAnimation.currKeyFrame] )
     }
 
-    MapAnimation.currAnim = anime({
-      targets:  MapAnimation.animState,
-      easing:   'easeInCubic',
-      duration: 3000,
-      update:   MapAnimation.animUpdateCallback,
-      complete: function (anim) {
-        setTimeout(function() {
-          MapAnimation.nextKeyFrame()
-        }, 2000 );
-      }, ...MapAnimation.keyFrames[MapAnimation.currKeyFrame]
-    })
+    MapAnimation.nextFrame(MapAnimation.currKeyFrame)
   },
 
   stop: function() {

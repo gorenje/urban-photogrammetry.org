@@ -284,6 +284,7 @@ var MapHelper = {
     });
 
     map.on('pointerup', e => {
+      console.log( "Features: " + (e.features || []).length)
       $.each( e.features || [], function(idx,obj) {
         if ( obj.id.substring(0,3) === "up-" ) {
           $('#3dcanvas').fadeIn(500, function() {
