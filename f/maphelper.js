@@ -256,10 +256,19 @@ var MapHelper = {
 
     //map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
     //map.addMapTiles('http://localhost:6789/openstreetmap-carto/tile/{z}/{x}/{y}.png');
-    map.addMapTiles(window.origin + '/f/images/tiles/{z}/{x}/{y}.png');
+    if ( window.location.hostname == "localhost" ) {
+      map.addMapTiles('http://localhost:4001/f/images/tiles/{z}/{x}/{y}.png');
+    } else {
+      map.addMapTiles('https://t.urban-photogrammetry.org/f/images/tiles/{z}/{x}/{y}.png');
+    }
 
     if ( browser.getPlatformType() !== "mobile" ) {
-      map.addGeoJSONTiles(window.origin + '/f/images/geotiles/{z}/{x}/{y}.json');
+      if ( window.location.hostname == "localhost" ) {
+        map.addGeoJSONTiles('http://localhost:4002/f/images/geotiles/{z}/{x}/{y}.json');
+
+      } else {
+        map.addGeoJSONTiles('https://g.urban-photogrammetry.org/f/images/geotiles/{z}/{x}/{y}.json');
+      }
     }
 
     $.each( MapHelper.AvailableModels, function(idx, obj) {
