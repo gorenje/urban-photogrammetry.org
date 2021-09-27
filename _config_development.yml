@@ -1,4 +1,4 @@
-exclude: ["f/images/tiles"]
+exclude: ["f/images/tiles", "f/images/geotiles"]
 defaults:
   -
     scope:

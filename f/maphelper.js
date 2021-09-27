@@ -203,7 +203,7 @@ var MapHelper = {
       loc: [52.52596,13.43132],
       rotation: 60,
       scale: 50,
-      altitude: 10,
+      altitude: 42,
     },
     {
       mlid: "3867f03ae07b43d29630e70b86f7abc9",
@@ -230,22 +230,42 @@ var MapHelper = {
       minZoom: 15,
       rotation: 39,
       maxZoom: 18,
-      tilt: 38.355,
+      tilt: 45,
       attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
     })
 
-    // map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
+    map.on('resize', function(event) {
+    });
+    map.on('change', function(event) {
+    });
+    map.on('rotate', function(event) {
+    });
+    map.on('tilt', function(event) {
+    });
+
+    map.on('keyframe', function() {
+      data = {
+        zoom: map.getZoom(),
+        position_latitude: map.getPosition().latitude,
+        position_longitude: map.getPosition().longitude,
+        tilt: map.getTilt(),
+        rotation: map.getRotation()
+      }
+      console.log( data )
+    });
+
+    //map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
     //map.addMapTiles('http://localhost:6789/openstreetmap-carto/tile/{z}/{x}/{y}.png');
-    map.addMapTiles('/f/images/tiles/{z}/{x}/{y}.png');
+    map.addMapTiles(window.origin + '/f/images/tiles/{z}/{x}/{y}.png');
 
     if ( browser.getPlatformType() !== "mobile" ) {
-      map.addGeoJSONTiles('https://{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json');
+      map.addGeoJSONTiles(window.origin + '/f/images/geotiles/{z}/{x}/{y}.json');
     }
 
     $.each( MapHelper.AvailableModels, function(idx, obj) {
       setTimeout( function() {
         try {
-          map.addOBJ( `${location.protocol}//${location.hostname}:${location.port}/m/${obj.mlid}/lods.obj`,
+          map.addOBJ( `${location.origin}/m/${obj.mlid}/lods.obj`,
                     { latitude: obj.loc[0], longitude: obj.loc[1] },
                     { scale: obj.scale,
                       altitude: obj.altitude || 0,
@@ -257,10 +277,17 @@ var MapHelper = {
       }, Math.ceil(1000 * Math.random()) + 10);
     })
 
+    setTimeout(MapAnimation.start, 2000)
+
+    map.on('pointerdown', e => {
+      // MapAnimation.stop()
+    });
+
     map.on('pointerup', e => {
       $.each( e.features || [], function(idx,obj) {
         if ( obj.id.substring(0,3) === "up-" ) {
           $('#3dcanvas').fadeIn(500, function() {
+            MapAnimation.pause()
             if ( engine == null ) {
               displayModel(obj.id.substring(3))
             } else {

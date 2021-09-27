@@ -4,8 +4,9 @@ permalink: /berlin/maptour
 layout: map
 ---
 
-<script src="/f/bjs/jquery.js"></script>
-<script src="/f/bjs/jquery.qrcode.min.js"></script>
+<link href="/f/bs/bootstrap.min.css" rel="stylesheet"/>
+<script src="/f/bs/bootstrap.bundle.min.js"></script>
+<script src="/f/jq/jquery.3.5.1.js"></script>
 <script src="/f/bjs/ammo.js"></script>
 <script src="/f/bjs/recast.js"></script>
 <script src="/f/bjs/cannon.js"></script>
@@ -30,6 +31,8 @@ layout: map
 <script src="/f/soundshelper.js"></script>
 <script src="/f/tdhelpers.js"></script>
 <script src="/f/maphelper.js"></script>
+<script src="/f/map_animation.js"></script>
+<script src="/f/anime.3.2.1.min.js"></script>
 
 
 <script>
