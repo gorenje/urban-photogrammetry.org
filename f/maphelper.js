@@ -274,7 +274,7 @@ var MapHelper = {
     $.each( MapHelper.AvailableModels, function(idx, obj) {
       setTimeout( function() {
         try {
-          map.addOBJ( `${location.origin}/m/${obj.mlid}/lods.obj`,
+          map.addOBJ( `${TDHelpers.modelHost()}/m/${obj.mlid}/lods.obj`,
                     { latitude: obj.loc[0], longitude: obj.loc[1] },
                     { scale: obj.scale,
                       altitude: obj.altitude || 0,
@@ -289,7 +289,7 @@ var MapHelper = {
     setTimeout(MapAnimation.start, 2000)
 
     map.on('pointerdown', e => {
-      // MapAnimation.stop()
+      MapAnimation.stop()
     });
 
     map.on('pointerup', e => {

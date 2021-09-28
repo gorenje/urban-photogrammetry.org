@@ -1,7 +1,0 @@
-exclude: ["f/images/tiles", "f/images/geotiles"]
-defaults:
-  -
-    scope:
-      path: "" # an empty string here means all files in the project
-    values:
-      layout: "default"

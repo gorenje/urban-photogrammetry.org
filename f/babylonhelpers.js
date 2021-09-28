@@ -252,7 +252,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
     // the location set with the shared link.
     try {
       if ( model.sharecamera ) {
-        var frameRate = Math.ceil(TDHelpers.average(lastTenFps));
+        var frameRate = Math.ceil(TDHelpers.average(lastTenFps)) || 30;
         var anims = TDHelpers.prepareAnimations(frameRate)
         var attrs = [ [], [], [], [], [] ]
 

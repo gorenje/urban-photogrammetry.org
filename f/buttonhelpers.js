@@ -250,7 +250,6 @@ var ButtonHelpers = {
       })
 
       $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
-
       currFlythrough = scene.beginDirectAnimation(camera,
                                                   anims,
                                                   0,

@@ -9,10 +9,20 @@ var TDHelpers = {
   },
 
   average: function(ary) {
-    return ary.reduce( (a,b) => a + b ) / ary.length
+    return ary.reduce( (a,b) => a + b, 0 ) / ary.length
   },
 
   isMobile: function() {
+    return window.browser.getPlatformType() == "mobile"
+  },
+
+  modelHost: function() {
+    if ( window.location.hostname == "localhost" ) {
+      return "http://localhost:4003"
+    } else {
+      return "https://m.urban-photogrammetry.org"
+    }
+
     return window.browser.getPlatformType() == "mobile"
   },
 
@@ -45,7 +55,7 @@ var TDHelpers = {
   },
 
   prepareAnimations: function(frameRate) {
-    return [
+    var anims = [
       new BABYLON.Animation(
         "movein",
         "position",
@@ -82,5 +92,12 @@ var TDHelpers = {
         BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
       ),
     ]
+
+    $.each( anims, function(idx, anim) {
+      // see https://cubic-bezier.com/#.51,.18,.49,.79
+      anim.setEasingFunction(new BABYLON.BezierCurveEase(.51,.18,.49,.79))
+    });
+
+    return anims;
   }
 }
