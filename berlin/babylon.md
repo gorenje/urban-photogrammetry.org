@@ -81,6 +81,8 @@ layout: 3dtour
     var scene = new BABYLON.Scene(engine);
     document.getElementById("loadingScreen").style.display = "none";
 
+    TDHelpers.resize();
+    engine.resize()
     var r = createSkyBox(scene)
     skyboxMesh = r[0]
     multimat = r[1]
@@ -127,6 +129,11 @@ layout: 3dtour
 
     var button = ButtonHelpers.create("butShare", "share", "45%", "-20%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.share)
+    advancedTexture.addControl(button);
+
+    var button = ButtonHelpers.create("butCopied", "copied", "45%", "-20%")
+    button.onPointerClickObservable.add(ButtonHelpers.CB.share)
+    ButtonHelpers.hide(button)
     advancedTexture.addControl(button);
 
     var button = ButtonHelpers.create("butPlay", "fly>", "45%", "-10%")
@@ -189,9 +196,8 @@ layout: 3dtour
     });
   });
 
-
-
   window.addEventListener("resize", function () {
-    engine.resize();
+    TDHelpers.resize();
+    engine.resize()
   });
 </script>

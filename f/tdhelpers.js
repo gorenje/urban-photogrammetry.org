@@ -26,6 +26,34 @@ var TDHelpers = {
     return window.browser.getPlatformType() == "mobile"
   },
 
+  resize: function() {
+    let winWidth = window.innerWidth;
+    let winHeight = window.innerHeight;
+
+    let aspectRatio = 0.5837122778007441;
+    let canvas = engine.getRenderingCanvas()
+
+    let heightBased = {
+      width: Math.round(winHeight * aspectRatio),
+      height: winHeight,
+    }
+    let widthBased = {
+      width: winWidth,
+      height: Math.round(winWidth / aspectRatio)
+    }
+    let whatToUse = undefined;
+
+    if ( winWidth > winHeight ) {
+      whatToUse = heightBased
+      if ( whatToUse.width > winWidth ) { whatToUse = widthBased }
+    } else {
+      whatToUse = widthBased
+      if ( whatToUse.height > winHeight ) { whatToUse = heightBased }
+    }
+    canvas.width = whatToUse.width
+    canvas.height = whatToUse.height
+  },
+
   checkForShareData(url) {
     var urlhash = new URL(url).hash
     if ( urlhash !== "" ) {
@@ -95,6 +123,7 @@ var TDHelpers = {
 
     $.each( anims, function(idx, anim) {
       // see https://cubic-bezier.com/#.51,.18,.49,.79
+      // .51,.18,.49,.79
       anim.setEasingFunction(new BABYLON.BezierCurveEase(.51,.18,.49,.79))
     });
 

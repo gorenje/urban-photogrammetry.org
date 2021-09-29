@@ -95,6 +95,9 @@ function displayModel(mlid) {
     document.getElementById("loadingScreen").style.display = "none";
     BABYLON.SceneLoader.ShowLoadingScreen = false;
 
+    TDHelpers.resize();
+    engine.resize()
+
     var r = createSkyBox(scene)
     skyboxMesh = r[0]
     multimat = r[1]
@@ -239,7 +242,10 @@ function displayModel(mlid) {
   });
 
   window.addEventListener("resize", function () {
-    if ( engine ) engine.resize();
+    if ( engine ) {
+      TDHelpers.resize();
+      engine.resize()
+    }
   });
 }
 

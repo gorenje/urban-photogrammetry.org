@@ -9,6 +9,7 @@ var ButtonHelpers = {
     butFS:     ButtonImages.butFS,
     butFSexit: ButtonImages.butFSexit,
     butShare:  ButtonImages.butShare,
+    butCopied: ButtonImages.butCopied,
     butPlay:   ButtonImages.butPlay,
     butPause:  ButtonImages.butPause,
     butPrev:   ButtonImages.butPrev,
@@ -31,7 +32,7 @@ var ButtonHelpers = {
     button.height = height;
     button.color = "#ffffff33";
     button.cornerRadius = 10;
-    button.background = "#00000000";
+    button.background = "#00000033";
 
     return button
   },
@@ -160,6 +161,23 @@ var ButtonHelpers = {
       var url = new URL(window.location)
       var shareUrl = url.origin + url.pathname + "#" + window.btoa(
         JSON.stringify(data));
+
+      try {
+        var tempInput = document.createElement("input");
+        tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+        tempInput.value = shareUrl;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        ButtonHelpers.toggle("butCopied", "butShare")
+        setTimeout( function() {
+          ButtonHelpers.toggle("butShare", "butCopied")
+        }, 2500)
+      } catch ( e ) {
+        console.log(e)
+      }
+
 
       try {
         navigator.share({ title: "Link to Model", url: shareUrl })

@@ -231,17 +231,9 @@ var MapHelper = {
       rotation: 39,
       maxZoom: 18,
       tilt: 45,
-      attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
+      attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>',
+      aspectRatio: 0.5837122778007441,
     })
-
-    map.on('resize', function(event) {
-    });
-    map.on('change', function(event) {
-    });
-    map.on('rotate', function(event) {
-    });
-    map.on('tilt', function(event) {
-    });
 
     map.on('keyframe', function() {
       data = {
@@ -253,6 +245,9 @@ var MapHelper = {
       }
       console.log( data )
     });
+
+    let sze = map.computeSize( map.canvas.width, map.canvas.height )
+    map.setSize( sze.width, sze.height )
 
     //map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
     //map.addMapTiles('http://localhost:6789/openstreetmap-carto/tile/{z}/{x}/{y}.png');

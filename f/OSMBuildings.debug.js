@@ -2390,6 +2390,7 @@ class OSMBuildings {
     const blob = new Blob([workers.feature], { type: 'application/javascript' });
     this.workers = new WorkerPool(URL.createObjectURL(blob), numProc * 4);
 
+    this.aspectRatio = options.aspectRatio;
     //*** create container ********************************
 
     this.domNode = options.container;
@@ -2446,6 +2447,29 @@ class OSMBuildings {
     this.view.start();
 
     this.emit('load', this);
+  }
+
+  computeSize(width, height) {
+    var return_this = { width: width, height: height }
+
+    if ( this.aspectRatio ) {
+      var asp_height = Math.round(width / this.aspectRatio);
+      var asp_width = Math.round(height * this.aspectRatio);
+
+      if ( width > height ) {
+        return_this.width = asp_width
+        if ( return_this.width > width ) {
+          return_this = { width: width, height: asp_height }
+        }
+      } else {
+        return_this.height = Math.round(width / this.aspectRatio);
+        if ( return_this.height > height ) {
+          return_this = { width: asp_width, height: height }
+        }
+      }
+    }
+
+    return return_this;
   }
 
   /**
@@ -3138,16 +3162,20 @@ class Events {
       }
       resizeTimer = setTimeout(() => {
         resizeTimer = null;
+        var sze = null;
+
         if ( APP.container.offsetWidth == 0 && APP.container.offsetHeight == 0 ) {
           if ( window.fullScreen || (window.innerWidth == screen.width &&
                                      window.innerHeight == screen.height)) {
-            APP.setSize(screen.width, screen.height)
+            sze = APP.computeSize(screen.width, screen.height)
           } else {
-            APP.setSize(window.innerWidth, window.innerHeight)
+            sze = APP.computeSize(window.innerWidth, window.innerHeight)
           }
         } else {
-          APP.setSize(APP.container.offsetWidth, APP.container.offsetHeight);
+          sze = APP.computeSize(APP.container.offsetWidth,
+                                    APP.container.offsetHeight);
         }
+        APP.setSize(sze.width, sze.height)
       }, 250);
     });
   }
