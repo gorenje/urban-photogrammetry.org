@@ -91,12 +91,13 @@ var ButtonHelpers = {
   },
 
   showShare: function() {
-    return browser.satisfies( { mobile: {
-      safari: ">=12.1",
-      chrome: ">=92",
-      firefox: ">=90"
-    }}
-    )
+    return true;
+    /* return browser.satisfies( { mobile: {
+     *   safari: ">=12.1",
+     *   chrome: ">=92",
+     *   firefox: ">=90"
+     * }}
+     * )*/
   },
 
   isSafari: function() {
@@ -163,13 +164,7 @@ var ButtonHelpers = {
         JSON.stringify(data));
 
       try {
-        var tempInput = document.createElement("input");
-        tempInput.style = "position: absolute; left: -1000px; top: -1000px";
-        tempInput.value = shareUrl;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
+        TDHelpers.copyToClipboard( shareUrl )
         ButtonHelpers.toggle("butCopied", "butShare")
         setTimeout( function() {
           ButtonHelpers.toggle("butShare", "butCopied")
@@ -177,7 +172,6 @@ var ButtonHelpers = {
       } catch ( e ) {
         console.log(e)
       }
-
 
       try {
         navigator.share({ title: "Link to Model", url: shareUrl })
@@ -329,6 +323,7 @@ var ButtonHelpers = {
         $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
 
         console.log( pathDump.join("\n") )
+        TDHelpers.copyToClipboard( pathDump.join("\n") )
         scene.beginDirectAnimation(camera, anims, 0, lastFrame, false);
       } catch(e) {
         console.log(e)
@@ -358,18 +353,20 @@ var ButtonHelpers = {
 
     showCameraDetails: function(evt) {
       var camera = scene.activeCamera;
-      console.log( "{ alpha: " + camera.alpha +
-                   ", beta: " + camera.beta +
-                   ", radius: " + camera.radius +
-                   ", position: {" +
-                   "  x: " + camera.position.x +
-                   ", y: " + camera.position.y +
-                   ", z: " + camera.position.z +
-                   "}, target: { "+
-                   "  x: " + camera.target.x +
-                   ", y: " + camera.target.y +
-                   ", z: " + camera.target.z +
-                   "}},")
+      var jsonStr = "{ alpha: " + camera.alpha +
+                    ", beta: " + camera.beta +
+                    ", radius: " + camera.radius +
+                    ", position: {" +
+                    "  x: " + camera.position.x +
+                    ", y: " + camera.position.y +
+                    ", z: " + camera.position.z +
+                    "}, target: { "+
+                    "  x: " + camera.target.x +
+                    ", y: " + camera.target.y +
+                    ", z: " + camera.target.z +
+                    "}},";
+      console.log( jsonStr )
+      TDHelpers.copyToClipboard( jsonStr )
     },
   }
 }

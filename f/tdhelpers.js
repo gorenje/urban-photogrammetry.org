@@ -26,6 +26,16 @@ var TDHelpers = {
     return window.browser.getPlatformType() == "mobile"
   },
 
+  copyToClipboard: function(content) {
+    var tempInput = document.createElement("input");
+    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = content;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+  },
+
   resize: function() {
     let winWidth = window.innerWidth;
     let winHeight = window.innerHeight;

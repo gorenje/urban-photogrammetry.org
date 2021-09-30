@@ -214,6 +214,16 @@ var MapHelper = {
     },
   ],
 
+  addButton: function(name, left, top, callback) {
+    var img = document.createElement('img')
+
+    img.style = `position: absolute; top: ${top}%; left: ${left}%; width: 70px; background-color: #00000033; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 5px;`
+    img.src = ButtonHelpers.ImageMap[name]
+    img.onclick = callback;
+
+    map.container.appendChild( img )
+  },
+
   createStreetMap: function() {
     var browser = bowser.getParser(window.navigator.userAgent);
 
@@ -243,11 +253,10 @@ var MapHelper = {
         tilt: map.getTilt(),
         rotation: map.getRotation()
       }
-      console.log( data )
+      TDHelpers.copyToClipboard(JSON.stringify(data)+",")
+      console.log(JSON.stringify(data)+",")
     });
 
-    let sze = map.computeSize( map.canvas.width, map.canvas.height )
-    map.setSize( sze.width, sze.height )
 
     //map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
     //map.addMapTiles('http://localhost:6789/openstreetmap-carto/tile/{z}/{x}/{y}.png');
@@ -266,10 +275,34 @@ var MapHelper = {
       }
     }
 
+    const lodUrlRg = /m\/([^/]+)\/lods.obj#([0-9]+)/i;
+
+    window.addEventListener('message', (event) => {
+      if ( event.data && event.data.type && event.data.type == "error-lod" &&
+           event.data.url.match(lodUrlRg) ) {
+
+        var obj = MapHelper.AvailableModels[parseInt(
+          event.data.url.match(lodUrlRg)[2])]
+
+        setTimeout( function() {
+          try {
+            map.addOBJ( `${TDHelpers.modelHost()}/m/${obj.mlid}/smaller-lods.obj`,
+                        { latitude: obj.loc[0], longitude: obj.loc[1] },
+                        { scale: obj.scale,
+                          altitude: obj.altitude || 0,
+                          color: 'red',
+                          id: 'up-' + obj.mlid,
+                          rotation: obj.rotation
+                        });
+          } catch (e ) { console.log(e) }
+        }, Math.ceil(1000 * Math.random()) + 10);
+      }
+    })
+
     $.each( MapHelper.AvailableModels, function(idx, obj) {
       setTimeout( function() {
         try {
-          map.addOBJ( `${TDHelpers.modelHost()}/m/${obj.mlid}/lods.obj`,
+          map.addOBJ( `${TDHelpers.modelHost()}/m/${obj.mlid}/lods.obj#${idx}`,
                     { latitude: obj.loc[0], longitude: obj.loc[1] },
                     { scale: obj.scale,
                       altitude: obj.altitude || 0,
@@ -282,6 +315,13 @@ var MapHelper = {
     })
 
     setTimeout(MapAnimation.start, 2000)
+
+    let sze = map.computeSize( map.container.offsetWidth,
+                               map.container.offsetHeight )
+    map.setSize( sze.width, sze.height )
+    map.events.emit( 'resize', sze )
+
+    // MapHelper.addButton( "butShare", 45, 40, function() {map.emit('keyframe')})
 
     map.on('pointerdown', e => {
       MapAnimation.stop()
