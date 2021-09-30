@@ -3175,6 +3175,9 @@ class Events {
           sze = APP.computeSize(APP.container.offsetWidth,
                                     APP.container.offsetHeight);
         }
+
+        $('#mapbuttons').css('width', `${sze.width}px`);
+        $('#mapbuttons').css('height', `${sze.height}px`);
         APP.setSize(sze.width, sze.height)
       }, 250);
     });

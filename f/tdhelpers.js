@@ -40,7 +40,7 @@ var TDHelpers = {
     let winWidth = window.innerWidth;
     let winHeight = window.innerHeight;
 
-    let aspectRatio = 0.5837122778007441;
+    let aspectRatio = 0.5625; // 16:9 ~ 1.7777....
     let canvas = engine.getRenderingCanvas()
 
     let heightBased = {

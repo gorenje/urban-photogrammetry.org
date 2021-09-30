@@ -214,14 +214,19 @@ var MapHelper = {
     },
   ],
 
+  AllButtons: {},
+
   addButton: function(name, left, top, callback) {
     var img = document.createElement('img')
 
-    img.style = `position: absolute; top: ${top}%; left: ${left}%; width: 70px; background-color: #00000033; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 5px;`
+    img.style = `position: absolute; top: ${top}%; left: ${left}%; width: 50px; background-color: #00000033; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; pointer-events: auto;`
     img.src = ButtonHelpers.ImageMap[name]
     img.onclick = callback;
 
-    map.container.appendChild( img )
+    $('#mapbuttons').append( img )
+    MapHelper.AllButtons[name] = img;
+
+    return img;
   },
 
   createStreetMap: function() {
@@ -242,7 +247,7 @@ var MapHelper = {
       maxZoom: 18,
       tilt: 45,
       attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>',
-      aspectRatio: 0.5837122778007441,
+      aspectRatio: 0.5625, // 16:9 ~ 1.7777... but different
     })
 
     map.on('keyframe', function() {
@@ -320,11 +325,29 @@ var MapHelper = {
                                map.container.offsetHeight )
     map.setSize( sze.width, sze.height )
     map.events.emit( 'resize', sze )
+    $('#mapbuttons').css('width', `${sze.width}px`);
+    $('#mapbuttons').css('height', `${sze.height}px`);
 
-    // MapHelper.addButton( "butShare", 45, 40, function() {map.emit('keyframe')})
+    // MapHelper.addButton( "butShare", 5, 5, function() {map.emit('keyframe')})
+
+    MapHelper.addButton( "butPlay", 50, 95, function() {
+      $(MapHelper.AllButtons["butPlay"]).hide()
+      $(MapHelper.AllButtons["butPause"]).show()
+      MapAnimation.play()
+    })
+
+    MapHelper.addButton( "butPause", 50, 95, function() {
+      $(MapHelper.AllButtons["butPlay"]).show()
+      $(MapHelper.AllButtons["butPause"]).hide()
+      MapAnimation.pause()
+    })
+
+    $(MapHelper.AllButtons["butPlay"]).hide()
 
     map.on('pointerdown', e => {
-      MapAnimation.stop()
+      MapAnimation.pause()
+      $(MapHelper.AllButtons["butPlay"]).show()
+      $(MapHelper.AllButtons["butPause"]).hide()
     });
 
     map.on('pointerup', e => {

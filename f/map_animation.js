@@ -18,8 +18,27 @@ var MapAnimation = {
   animState: {
   },
 
+  emptyAnim: {
+    pause: function(){},
+    play: function(){},
+  },
+
   currKeyFrame: 0,
-  currAnim: null,
+  currAnim: {
+    pause: function(){},
+    play: function(){},
+  },
+  currTimeout: null,
+
+  stateFromCamera: function() {
+    MapAnimation.animState = {
+      tilt:               map.getTilt(),
+      rotation:           map.getRotation(),
+      position_latitude:  map.getPosition().latitude,
+      position_longitude: map.getPosition().longitude,
+      zoom:               map.getZoom()
+    }
+  },
 
   animUpdateCallback: function() {
     map.setTilt( MapAnimation.animState.tilt )
@@ -32,7 +51,10 @@ var MapAnimation = {
   },
 
   animCompleteCallback: function(anim) {
-    setTimeout(function() { MapAnimation.nextKeyFrame() }, 1000 );
+    MapAnimation.currAnim = MapAnimation.emptyAnim
+    MapAnimation.currTimeout = setTimeout(function() {
+      MapAnimation.nextKeyFrame()
+    }, 1000 );
   },
 
   moveToFrame: function(frameNr) {
@@ -61,13 +83,19 @@ var MapAnimation = {
   },
 
   stop: function() {
+    clearTimeout( MapAnimation.currTimeout )
     MapAnimation.currAnim.pause()
+    MapAnimation.currKeyFrame = 0;
   },
+
   pause: function() {
+    clearTimeout( MapAnimation.currTimeout )
     MapAnimation.currAnim.pause()
   },
+
   play: function() {
-    MapAnimation.currAnim.play()
+    MapAnimation.stateFromCamera()
+    MapAnimation.moveToFrame(MapAnimation.currKeyFrame)
   },
 
   start: function(fromFrame = 0) {

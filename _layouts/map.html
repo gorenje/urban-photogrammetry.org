@@ -71,6 +71,13 @@
           width: 100vw;
           height: 100vh;
       }
+      #mapbuttons {
+          z-index: 1000;
+          position: absolute;
+          width: 100vw;
+          height: 100vh;
+          pointer-events: none;
+      }
     </style>
   </head>
 
@@ -86,7 +93,9 @@
       </script>
 
     <div id="loadingScreen"></div>
-    <div id="map"></div>
+    <div id="map">
+      <div id="mapbuttons"></div>
+    </div>
     <div class="quattro" id="infoScreen">
       <div style="margin-top: 50%;">Virtual 3D Tours</div>
       <div style="height: 100px; margin-top: 60px;" class="break">Berlin</div>
@@ -98,15 +107,6 @@
 
         {{ content }}
 
-        <div class="footer-div">
-          <a href="mailto:contact@website.urban-photogrammetry.org">Contact</a>
-          <a href="/">Home</a>
-          <div style="float: right;">
-          <a href="https://www.instagram.com/urban.photogrammetry/">Instagram</a>
-          <a href="https://www.youtube.com/channel/UC3hzKyjUcDIuqP8iR5K8dmQ">YouTube</a>
-          <a href="https://sketchfab.com/urban.photogrammetry">Sketchfab</a>
-          </div>
-        </div>
       </div>
     </div>
   </body>
