@@ -212,6 +212,13 @@ var MapHelper = {
       scale: 50,
       altitude: 10,
     },
+    {
+      mlid: "c50d714f2f7e4534a73e7a0b370498f3",
+      loc: [52.53186,13.40898],
+      rotation: 210,
+      scale: 5,
+      altitude: 10,
+    },
   ],
 
   AllButtons: {},
