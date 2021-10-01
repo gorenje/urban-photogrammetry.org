@@ -110,7 +110,7 @@ var ButtonHelpers = {
       scene.stopAllAnimations()
       SoundsHelper.stopAll()
       ButtonHelpers.toggle("butPlay", "butPause")
-      setTimeout( MapAnimation.play, 1500 );
+      setTimeout( MapHelper.youAreUp, 1500 );
       $('#3dcanvas').fadeOut(500);
       $('#map').fadeIn(500);
     },

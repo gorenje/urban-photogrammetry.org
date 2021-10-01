@@ -236,6 +236,12 @@ var MapHelper = {
     return img;
   },
 
+  youAreUp: function() { // callback from the model navigator
+    $(MapHelper.AllButtons["butPlay"]).hide()
+    $(MapHelper.AllButtons["butPause"]).show()
+    MapAnimation.play()
+  },
+
   createStreetMap: function() {
     var browser = bowser.getParser(window.navigator.userAgent);
 
