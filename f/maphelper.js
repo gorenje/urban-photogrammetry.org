@@ -223,6 +223,12 @@ var MapHelper = {
 
   AllButtons: {},
 
+  youAreUp: function() { // callback from the model navigator
+    $(MapHelper.AllButtons["butPlay"]).hide()
+    $(MapHelper.AllButtons["butPause"]).show()
+    MapAnimation.play()
+  },
+
   addButton: function(name, left, top, callback) {
     var img = document.createElement('img')
 
@@ -236,10 +242,56 @@ var MapHelper = {
     return img;
   },
 
-  youAreUp: function() { // callback from the model navigator
-    $(MapHelper.AllButtons["butPlay"]).hide()
-    $(MapHelper.AllButtons["butPause"]).show()
-    MapAnimation.play()
+  currentVisibleModels: function() {
+    var mapBnds = map.getBounds()
+
+    var bnds = L.latLngBounds(
+      L.latLng(mapBnds[0].latitude, mapBnds[0].longitude),
+      L.latLng(mapBnds[2].latitude, mapBnds[2].longitude)
+    ).extend(
+      L.latLngBounds(
+        L.latLng(mapBnds[1].latitude, mapBnds[1].longitude),
+        L.latLng(mapBnds[3].latitude, mapBnds[3].longitude)
+      )
+    )
+
+    var models = MapHelper.AvailableModels.filter( function(model) {
+      return bnds.contains(model.latLngPt)
+    })
+
+    models.sort( function(model1,model2) {
+      return ( bnds.getCenter().distanceTo( model1.latLngPt ) -
+               bnds.getCenter().distanceTo( model2.latLngPt ) )
+    })
+
+    return models;
+  },
+
+  examineModel: function(mlid) {
+    MapAnimation.pause()
+    $(MapHelper.AllButtons["butPlay"]).show()
+    $(MapHelper.AllButtons["butPause"]).hide()
+
+    $('#3dcanvas').fadeIn(100, function() {
+      if ( engine == null ) {
+        displayModel(mlid)
+      } else {
+        clearScene(scene, skyboxMesh, alltextures)
+
+        // reconstruction
+        currModel      = UPModels.modelForMlid(mlid)
+        var r          = createSkyBox(scene)
+        skyboxMesh     = r[0]
+        multimat       = r[1]
+        textBlock.text = currModel.text;
+
+        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
+                           alltextures, multimat,scene)
+        addKeyboardObserver(scene, skyboxMesh);
+        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
+      }
+    })
+    $('#map').fadeOut(500)
   },
 
   createStreetMap: function() {
@@ -275,6 +327,23 @@ var MapHelper = {
       console.log(JSON.stringify(data)+",")
     });
 
+    map.on('getvisiblemodels', function() {
+      console.log( MapHelper.currentVisibleModels() )
+    });
+
+    // doesn't really work since when zooming out again, we also generate these
+    // events - so that an endless loop is created between showing the model and
+    // zooming out ...
+    map.on('mousewheelzoom', function(e) {
+      if ( map.getZoom() > 18 ) {
+        MapHelper.examineModel( MapHelper.currentVisibleModels()[0].mlid )
+      }
+    })
+    map.on('gesturezoom', function(e) {
+      if ( map.getZoom() > 18 ) {
+        MapHelper.examineModel( MapHelper.currentVisibleModels()[0].mlid )
+      }
+    });
 
     //map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
     //map.addMapTiles('http://localhost:6789/openstreetmap-carto/tile/{z}/{x}/{y}.png');
@@ -284,15 +353,15 @@ var MapHelper = {
       map.addMapTiles('https://t.urban-photogrammetry.org/f/images/tiles/{z}/{x}/{y}.png');
     }
 
-    if ( browser.getPlatformType() !== "mobile" ) {
+    /* if ( browser.getPlatformType() !== "mobile" ) {*/
       if ( window.location.hostname == "localhost" ) {
         map.addGeoJSONTiles('http://localhost:4002/f/images/geotiles/{z}/{x}/{y}.json');
 
       } else {
         map.addGeoJSONTiles('https://g.urban-photogrammetry.org/f/images/geotiles/{z}/{x}/{y}.json');
       }
-    }
-
+    /* }
+     */
     const lodUrlRg = /m\/([^/]+)\/lods.obj#([0-9]+)/i;
 
     window.addEventListener('message', (event) => {
@@ -341,7 +410,8 @@ var MapHelper = {
     $('#mapbuttons').css('width', `${sze.width}px`);
     $('#mapbuttons').css('height', `${sze.height}px`);
 
-    // MapHelper.addButton( "butShare", 5, 5, function() {map.emit('keyframe')})
+    MapHelper.addButton( "butShare", 5, 5, function() {map.emit('keyframe')})
+    // MapHelper.addButton( "butExit", 90, 5, function() {map.emit('getvisiblemodels')})
 
     MapHelper.addButton( "butPlay", 50, 95, function() {
       $(MapHelper.AllButtons["butPlay"]).hide()
@@ -364,32 +434,17 @@ var MapHelper = {
     });
 
     map.on('pointerup', e => {
-      console.log( "Features: " + (e.features || []).length)
       $.each( e.features || [], function(idx,obj) {
         if ( obj.id.substring(0,3) === "up-" ) {
-          $('#3dcanvas').fadeIn(500, function() {
-            MapAnimation.pause()
-            if ( engine == null ) {
-              displayModel(obj.id.substring(3))
-            } else {
-              clearScene(scene, skyboxMesh, alltextures)
-
-              // restruction
-              currModel      = UPModels.modelForMlid(obj.id.substring(3))
-              var r          = createSkyBox(scene)
-              skyboxMesh     = r[0]
-              multimat       = r[1]
-              textBlock.text = currModel.text;
-
-              loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                                 alltextures, multimat,scene)
-              addKeyboardObserver(scene, skyboxMesh);
-              loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
-            }
-          })
-          $('#map').fadeOut(500)
+          MapHelper.examineModel(obj.id.substring(3))
         }
       })
     });
   }
-}
+};
+
+$(function(){
+  $.each(MapHelper.AvailableModels, function(idx,obj){
+    obj.latLngPt = L.latLng(obj.loc[0], obj.loc[1])
+  })
+})

@@ -33,7 +33,7 @@ layout: map
 <script src="/f/maphelper.js"></script>
 <script src="/f/map_animation.js"></script>
 <script src="/f/anime.3.2.1.min.js"></script>
-
+<script src="/f/leaflet.js"></script>
 
 <script>
 
@@ -113,23 +113,6 @@ function displayModel(mlid) {
     advancedTexture.addControl(textBlock);
 
     if ( TDHelpers.isMobile() ) {
-      var button = ButtonHelpers.create("butPrev", "<<<", "-40%", "45%");
-      button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
-      advancedTexture.addControl(button);
-
-      var button = ButtonHelpers.create("butNext", ">>>", "40%", "45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.next)
-      advancedTexture.addControl(button);
-
-      var button = ButtonHelpers.create("butVol", "vol", "0%", "-45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
-      ButtonHelpers.hide(button)
-      advancedTexture.addControl(button);
-
-      var button = ButtonHelpers.create("butMute", "mute", "0%", "-45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
-      advancedTexture.addControl(button);
-
       var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
       advancedTexture.addControl(button);
@@ -142,9 +125,13 @@ function displayModel(mlid) {
       button.onPointerClickObservable.add(ButtonHelpers.CB.exit)
       advancedTexture.addControl(button);
 
-      if ( ButtonHelpers.showShare() && false ) {
-        var button = ButtonHelpers.create("butShare", "share", "-40%", "-40%")
+      if ( ButtonHelpers.showShare() ) {
+        var button = ButtonHelpers.create("butShare", "share", "45%", "45%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.share)
+        advancedTexture.addControl(button);
+        var button = ButtonHelpers.create("butCopied", "copied", "45%", "45%")
+        button.onPointerClickObservable.add(ButtonHelpers.CB.share)
+        ButtonHelpers.hide(button)
         advancedTexture.addControl(button);
       }
 
@@ -160,24 +147,6 @@ function displayModel(mlid) {
       }
 
     } else {
-      // --- this is the desktop interface
-      var button = ButtonHelpers.create("butPrev", "<<<", "-45%", "45%");
-      button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
-      advancedTexture.addControl(button);
-
-      var button = ButtonHelpers.create("butNext", ">>>", "45%", "45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.next)
-      advancedTexture.addControl(button);
-
-      var button = ButtonHelpers.create("butVol", "vol", "0%", "-45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
-      ButtonHelpers.hide(button)
-      advancedTexture.addControl(button);
-
-      var button = ButtonHelpers.create("butMute", "mute", "0%", "-45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
-      advancedTexture.addControl(button);
-
       var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
       button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
       advancedTexture.addControl(button);
@@ -190,9 +159,14 @@ function displayModel(mlid) {
       button.onPointerClickObservable.add(ButtonHelpers.CB.exit)
       advancedTexture.addControl(button);
 
-      if ( ButtonHelpers.showShare() && false ) {
-        var button = ButtonHelpers.create("butShare", "share", "-45%", "-42%")
+      if ( ButtonHelpers.showShare() ) {
+        var button = ButtonHelpers.create("butShare", "share", "45%", "45%")
         button.onPointerClickObservable.add(ButtonHelpers.CB.share)
+        advancedTexture.addControl(button);
+
+        var button = ButtonHelpers.create("butCopied", "copied", "45%", "45%")
+        button.onPointerClickObservable.add(ButtonHelpers.CB.share)
+        ButtonHelpers.hide(button)
         advancedTexture.addControl(button);
       }
 
