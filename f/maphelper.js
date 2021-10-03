@@ -268,6 +268,7 @@ var MapHelper = {
   },
 
   examineModel: function(mlid) {
+    console.log( "Examing model: " + mlid)
     MapAnimation.pause()
     $(MapHelper.AllButtons["butPlay"]).show()
     $(MapHelper.AllButtons["butPause"]).hide()
