@@ -276,6 +276,9 @@ var ButtonHelpers = {
       currFlythrough.onAnimationEndObservable.addOnce(function() {
         scene.onPointerDown = null
         currFlythrough = null
+        new BABYLON.SubMesh(3, 0, skyboxMesh.getTotalVertices(),
+                            0, skyboxMesh.getTotalIndices(),
+                            skyboxMesh);
         ButtonHelpers.toggle("butPlay", "butPause")
       })
     },
