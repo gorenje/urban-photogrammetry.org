@@ -11,6 +11,7 @@ var MapAnimation = {
 
 MapAnimation = {...MapAnimation, ...{
   keyFrames: [
+    {"zoom":17,"position_latitude":52.51617,"position_longitude":13.39676,"tilt":45,"rotation":39},
     {"zoom":17,"position_latitude":52.51617,"position_longitude":13.39676,"tilt":42,"rotation":39},
     {"zoom":17,"position_latitude":52.51697709428457,"position_longitude":13.398000502390245,"tilt":16.394759087066838,"rotation":9.682318415260493},
     {"zoom":17.9312481536,"position_latitude":52.516605341692376,"position_longitude":13.397216128811124,"tilt":0,"rotation":13.3936508358626},
@@ -117,6 +118,53 @@ MapAnimation = {...MapAnimation, ...{
   currAnim: MapAnimation.emptyAnim,
   currTimeout: null,
 
+  moveToShareData: function(sharedata) {
+    if ( sharedata.t == 'e' ) {
+      // this share data came from the model examiner, so we fly to that
+      // position and then open the model examiner
+      var onAnimComplete = function() {
+        MapHelper.examineModel(sharedata.model.mlid, sharedata.model)
+      };
+
+      MapAnimation.stateFromCamera()
+
+      MapAnimation.currAnim = anime({
+        targets:  MapAnimation.animState,
+        easing:   'easeInCubic',
+        duration: 1500,
+        update:   MapAnimation.animUpdateCallback,
+        complete: onAnimComplete,
+        ...{
+          tilt:               0,
+          rotation:           90,
+          position_latitude:  sharedata.pos.loc[0],
+          position_longitude: sharedata.pos.loc[1],
+          zoom:               19
+        }
+      })
+    }
+
+    if ( sharedata.t == 'm' ) {
+      // this share data came from the map, so we fly to the position given
+      // in the shared data and do nothing further.
+      MapAnimation.stateFromCamera()
+
+      MapAnimation.currAnim = anime({
+        targets:  MapAnimation.animState,
+        easing:   'easeInCubic',
+        duration: 1500,
+        update:   MapAnimation.animUpdateCallback,
+        ...{
+          tilt:               sharedata.pos.tl,
+          rotation:           sharedata.pos.r,
+          position_latitude:  sharedata.pos.lt,
+          position_longitude: sharedata.pos.lg,
+          zoom:               sharedata.pos.zm
+        }
+      })
+    }
+  },
+
   stateFromCamera: function() {
     MapAnimation.animState = {
       tilt:               map.getTilt(),
@@ -166,7 +214,9 @@ MapAnimation = {...MapAnimation, ...{
     if (MapAnimation.keyFrames[MapAnimation.currKeyFrame] == MapAnimation.ViewModelFrame){
       MapAnimation.currKeyFrame += 1
       MapHelper.examineModel( MapHelper.currentVisibleModels()[0].mlid )
-      setTimeout(ButtonHelpers.CB.flythrough, 1000)
+      setTimeout(function() {
+        ButtonHelpers.CB.flythrough( { autoExitAfterFlythrough: true } )
+      }, 1000)
     } else {
       console.log( "Next frame: " + MapAnimation.currKeyFrame)
       console.log( MapAnimation.keyFrames[MapAnimation.currKeyFrame] )

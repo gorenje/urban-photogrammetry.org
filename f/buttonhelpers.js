@@ -122,6 +122,7 @@ var ButtonHelpers = {
       SoundsHelper.stopAll()
       ButtonHelpers.toggle("butPlay", "butPause")
       setTimeout( MapHelper.modelExaminerDone, 750 );
+      ButtonHelpers.AllButtons["butExit"].background = "#00000033";
       $('#map').fadeIn(200);
     },
 
@@ -166,7 +167,8 @@ var ButtonHelpers = {
         a: camera.alpha,
         b: camera.beta,
         r: camera.radius,
-        o: currModel.mlid
+        o: currModel.mlid,
+        t: 'e'
       }
 
       var url = new URL(window.location)
@@ -290,6 +292,34 @@ var ButtonHelpers = {
                             0, skyboxMesh.getTotalIndices(),
                             skyboxMesh);
         ButtonHelpers.toggle("butPlay", "butPause")
+
+        if ( evt && evt.autoExitAfterFlythrough ) {
+          autoExitTimeout = setTimeout( function() {
+            var button = ButtonHelpers.AllButtons["butExit"]
+            autoExitTimeout = setTimeout( function() {
+              button.background = '#ff000033'
+              autoExitTimeout = setTimeout( function() {
+                button.background = '#f0f00033'
+                autoExitTimeout = setTimeout( function() {
+                  button.background = '#ff000033'
+                  autoExitTimeout = setTimeout( function() {
+                    button.background = '#f0f00033'
+                    autoExitTimeout = setTimeout( function() {
+                      button.background = '#ff000033'
+                      autoExitTimeout = setTimeout( function() {
+                        button.background = '#f0f00033'
+                        autoExitTimeout = setTimeout( function() {
+                          ButtonHelpers.CB.exit()
+                          button.background =  "#00000033";
+                        }, 300);
+                      }, 300);
+                    }, 300);
+                  }, 300);
+                }, 300);
+              }, 300);
+            }, 300)
+          }, 2000 )
+        }
       })
     },
 

@@ -149,11 +149,9 @@ layout: 3dtour
     button.onPointerClickObservable.add(ButtonHelpers.CB.playKeyframes)
     advancedTexture.addControl(button);
 
-
     var button = ButtonHelpers.create("butAddKeyFrame", "addKF", "45%", "10%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.addKeyframe)
     advancedTexture.addControl(button);
-
 
     var button = ButtonHelpers.create("butClear", "clearKF", "45%", "20%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.clearKeyframes)

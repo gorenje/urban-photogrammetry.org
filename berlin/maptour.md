@@ -5,6 +5,7 @@ layout: map
 ---
 
 <link href="/f/bs/bootstrap.min.css" rel="stylesheet"/>
+<script src="/f/buttonimages.js"></script>
 <script src="/f/bs/bootstrap.bundle.min.js"></script>
 <script src="/f/jq/jquery.3.5.1.js"></script>
 <script src="/f/bjs/ammo.js"></script>
@@ -22,7 +23,6 @@ layout: map
 <script src="/f/bjs/babylon.inspector.bundle.js"></script>
 <script src="/f/bjs/babylon.nodeEditor.js"></script>
 <script src="/f/bjs/babylon.guiEditor.js"></script>
-<script src="/f/buttonimages.js"></script>
 <script src="/f/bowser.js"></script>
 <script src="/f/models.js"></script>
 <script src="/f/babylonhelpers.js"></script>
@@ -72,14 +72,23 @@ var currModel = null;
 var baseMaterialSizes = [64, 256, 512, 1024]
 var textBlock = null;
 var cameraPath = []
-
+var autoExitTimeout = null;
 var map = null;
 
-function displayModel(mlid) {
+$(function(){
+  $(document).bind("scroll keypress touchstart click keydown keyup mousemove mousedown mouseup", function(){
+    clearTimeout(autoExitTimeout)
+  });
+  $(window).bind("scroll keypress touchstart click keydown keyup mousemove mousedown mouseup", function(){
+    clearTimeout(autoExitTimeout)
+  });
+});
+
+function displayModel(mlid, model_from_shared = undefined) {
   window.browser = bowser.getParser(window.navigator.userAgent);
 
   canvas = document.getElementById("3dcanvas");
-  currModel = UPModels.modelForMlid(mlid);
+  currModel = model_from_shared || UPModels.modelForMlid(mlid);
 
   var createDefaultEngine = function() {
     return new BABYLON.Engine(canvas, true, {
@@ -222,7 +231,6 @@ function displayModel(mlid) {
     }
   });
 }
-
 
 $(window).on('infoscreen:close', MapHelper.createStreetMap )
 </script>

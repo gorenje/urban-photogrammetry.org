@@ -267,19 +267,19 @@ var MapHelper = {
     return models;
   },
 
-  examineModel: function(mlid) {
+  examineModel: function(mlid, model_details = undefined) {
     console.log( "Examing model: " + mlid)
     MapAnimation.pause()
     $(MapHelper.AllButtons["butPlay"]).show()
     $(MapHelper.AllButtons["butPause"]).hide()
 
     if ( engine == null ) {
-      displayModel(mlid)
+      displayModel(mlid, model_details)
     } else {
       clearScene(scene, skyboxMesh, alltextures)
 
       // reconstruction
-      currModel      = UPModels.modelForMlid(mlid)
+      currModel      = model_details || UPModels.modelForMlid(mlid)
       var r          = createSkyBox(scene)
       skyboxMesh     = r[0]
       multimat       = r[1]
@@ -297,6 +297,7 @@ var MapHelper = {
 
   createStreetMap: function() {
     var browser = bowser.getParser(window.navigator.userAgent);
+    var shareData = TDHelpers.parseShareLink(window.location)
 
     $('#loadingScreen').hide()
     $('#3dcanvas').hide()
@@ -310,14 +311,14 @@ var MapHelper = {
       zoom: 17,
       minZoom: 15,
       rotation: 39,
-      maxZoom: 18,
+      maxZoom: 21,
       tilt: 45,
       attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>',
       aspectRatio: 0.5625, // 16:9 ~ 1.7777... but different
     })
 
     map.on('keyframe', function() {
-      data = {
+      var data = {
         zoom: map.getZoom(),
         position_latitude: map.getPosition().latitude,
         position_longitude: map.getPosition().longitude,
@@ -328,22 +329,34 @@ var MapHelper = {
       console.log(JSON.stringify(data)+",")
     });
 
-    map.on('getvisiblemodels', function() {
-      console.log( MapHelper.currentVisibleModels() )
-    });
+    map.on('sharelink', function() {
+      var data = {
+        zm: map.getZoom(),
+        lt: map.getPosition().latitude,
+        lg: map.getPosition().longitude,
+        tl: map.getTilt(),
+        r:  map.getRotation(),
+        t:  'm',
+      }
+      var url = new URL(window.location)
+      var shareUrl = url.origin + url.pathname + "#" + window.btoa(
+        JSON.stringify(data));
 
-    // doesn't really work since when zooming out again, we also generate these
-    // events - so that an endless loop is created between showing the model and
-    // zooming out ...
-    map.on('mousewheelzoom', function(e) {
-      if ( map.getZoom() > 18 ) {
-        MapHelper.examineModel( MapHelper.currentVisibleModels()[0].mlid )
-      }
-    })
-    map.on('gesturezoom', function(e) {
-      if ( map.getZoom() > 18 ) {
-        MapHelper.examineModel( MapHelper.currentVisibleModels()[0].mlid )
-      }
+      try {
+        navigator.share({ title: "Link to Model", url: shareUrl })
+      } catch ( e ) {}
+
+      try {
+        TDHelpers.copyToClipboard( shareUrl )
+        $(MapHelper.AllButtons["butShare"]).hide()
+        $(MapHelper.AllButtons["butCopied"]).show()
+        setTimeout( function() {
+          $(MapHelper.AllButtons["butShare"]).show()
+          $(MapHelper.AllButtons["butCopied"]).hide()
+        }, 2500)
+      } catch ( e ) {}
+
+      console.log( shareUrl )
     });
 
     //map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
@@ -354,15 +367,16 @@ var MapHelper = {
       map.addMapTiles('https://t.urban-photogrammetry.org/f/images/tiles/{z}/{x}/{y}.png');
     }
 
-    /* if ( browser.getPlatformType() !== "mobile" ) {*/
-      if ( window.location.hostname == "localhost" ) {
-        map.addGeoJSONTiles('http://localhost:4002/f/images/geotiles/{z}/{x}/{y}.json');
+    if ( window.location.hostname == "localhost" ) {
+      map.addGeoJSONTiles(
+        "http://localhost:4002/f/images/geotiles/{z}/{x}/{y}.json"
+      );
 
-      } else {
-        map.addGeoJSONTiles('https://g.urban-photogrammetry.org/f/images/geotiles/{z}/{x}/{y}.json');
-      }
-    /* }
-     */
+    } else {
+      map.addGeoJSONTiles(
+        'https://g.urban-photogrammetry.org/f/images/geotiles/{z}/{x}/{y}.json'
+      );
+    }
     const lodUrlRg = /m\/([^/]+)\/lods.obj#([0-9]+)/i;
 
     window.addEventListener('message', (event) => {
@@ -402,8 +416,6 @@ var MapHelper = {
       }, Math.ceil(1000 * Math.random()) + 10);
     })
 
-    setTimeout(MapAnimation.start, 2000)
-
     let sze = map.computeSize( map.container.offsetWidth,
                                map.container.offsetHeight )
     map.setSize( sze.width, sze.height )
@@ -411,8 +423,18 @@ var MapHelper = {
     $('#mapbuttons').css('width', `${sze.width}px`);
     $('#mapbuttons').css('height', `${sze.height}px`);
 
-    MapHelper.addButton( "butShare", 5, 5, function() {map.emit('keyframe')})
-    // MapHelper.addButton( "butExit", 90, 5, function() {map.emit('getvisiblemodels')})
+    MapHelper.addButton( "butCopied", 95, 95, function() {
+      $(MapHelper.AllButtons["butShare"]).show()
+      $(MapHelper.AllButtons["butCopied"]).hide()
+    })
+    $(MapHelper.AllButtons["butCopied"]).hide()
+    MapHelper.addButton( "butShare", 95, 95, function() {
+      map.emit('sharelink')
+    })
+
+    // MapHelper.addButton( "butExit", 90, 5, function() {
+    //   map.emit('keyframe')
+    // })
 
     MapHelper.addButton( "butPlay", 50, 95, function() {
       $(MapHelper.AllButtons["butPlay"]).hide()
@@ -426,7 +448,20 @@ var MapHelper = {
       MapAnimation.pause()
     })
 
-    $(MapHelper.AllButtons["butPlay"]).hide()
+    $(MapHelper.AllButtons["butPause"]).hide()
+
+    if ( shareData != undefined ) {
+      $(MapHelper.AllButtons["butPause"]).hide()
+      setTimeout( function() {
+        MapAnimation.moveToShareData(shareData)
+      }, 1000)
+    } else {
+      setTimeout(function() {
+        $(MapHelper.AllButtons["butPlay"]).hide()
+        $(MapHelper.AllButtons["butPause"]).show()
+        MapAnimation.start()
+      }, 1500)
+    }
 
     map.on('pointerdown', e => {
       MapAnimation.pause()

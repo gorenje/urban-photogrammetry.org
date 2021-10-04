@@ -64,6 +64,35 @@ var TDHelpers = {
     canvas.height = whatToUse.height
   },
 
+  parseShareLink(url) {
+    var urlhash = new URL(url).hash
+    if ( urlhash !== "" ) {
+      try {
+        var data = JSON.parse(atob(urlhash.substring(1)))
+
+        if ( data.t == "e" ) {
+          return {
+            t: 'e',
+            model: TDHelpers.checkForShareData(url),
+            pos: MapHelper.AvailableModels.filter( function(obj) {
+              return obj.mlid == data.o
+            } )[0]
+          }
+        }
+
+        if ( data.t == "m" ) {
+          return {
+            t: 'm',
+            pos: data
+          }
+        }
+      } catch (e) {
+        return undefined;
+      }
+    }
+    return undefined;
+  },
+
   checkForShareData(url) {
     var urlhash = new URL(url).hash
     if ( urlhash !== "" ) {
