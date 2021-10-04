@@ -122,7 +122,7 @@ function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
 }
 
 function clearScene(scene, skyboxMesh, alltextures) {
-  skyboxMesh.dispose()
+  skyboxMesh.dispose(true,true)
   for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
     scene.meshes[idx].dispose()
   }

@@ -223,7 +223,7 @@ var MapHelper = {
 
   AllButtons: {},
 
-  youAreUp: function() { // callback from the model navigator
+  modelExaminerDone: function() { // callback from the model navigator
     $(MapHelper.AllButtons["butPlay"]).hide()
     $(MapHelper.AllButtons["butPause"]).show()
     MapAnimation.play()
@@ -273,25 +273,25 @@ var MapHelper = {
     $(MapHelper.AllButtons["butPlay"]).show()
     $(MapHelper.AllButtons["butPause"]).hide()
 
-    $('#3dcanvas').fadeIn(100, function() {
-      if ( engine == null ) {
-        displayModel(mlid)
-      } else {
-        clearScene(scene, skyboxMesh, alltextures)
+    if ( engine == null ) {
+      displayModel(mlid)
+    } else {
+      clearScene(scene, skyboxMesh, alltextures)
 
-        // reconstruction
-        currModel      = UPModels.modelForMlid(mlid)
-        var r          = createSkyBox(scene)
-        skyboxMesh     = r[0]
-        multimat       = r[1]
-        textBlock.text = currModel.text;
+      // reconstruction
+      currModel      = UPModels.modelForMlid(mlid)
+      var r          = createSkyBox(scene)
+      skyboxMesh     = r[0]
+      multimat       = r[1]
+      textBlock.text = currModel.text;
 
-        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                           alltextures, multimat,scene)
-        addKeyboardObserver(scene, skyboxMesh);
-        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
-      }
-    })
+      loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
+                         alltextures, multimat,scene)
+      addKeyboardObserver(scene, skyboxMesh);
+      loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
+    }
+
+    $('#3dcanvas').fadeIn(100)
     $('#map').fadeOut(500)
   },
 

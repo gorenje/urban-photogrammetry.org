@@ -107,12 +107,22 @@ var ButtonHelpers = {
   // Callbacks for the button clicks.
   CB: {
     exit: function(evt) {
+      $('#3dcanvas').fadeOut(500);
+
       scene.stopAllAnimations()
+      setTimeout(function() {
+        modelMesh.dispose(true,true)
+        skyboxMesh.dispose(true,true)
+        for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
+          scene.meshes[idx].dispose()
+        }
+        scene.meshes.length = 0
+      }, 20)
+
       SoundsHelper.stopAll()
       ButtonHelpers.toggle("butPlay", "butPause")
-      setTimeout( MapHelper.youAreUp, 1500 );
-      $('#3dcanvas').fadeOut(500);
-      $('#map').fadeIn(500);
+      setTimeout( MapHelper.modelExaminerDone, 750 );
+      $('#map').fadeIn(200);
     },
 
     mute: function(evt) {
