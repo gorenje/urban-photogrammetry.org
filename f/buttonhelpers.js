@@ -273,6 +273,7 @@ var ButtonHelpers = {
                                                   lastFrame + frameRate,
                                                   false);
 
+      currFlythrough.disposeOnEnd = true
       scene.onPointerDown = function(e) {
         try { currFlythrough.stop() } catch (e) {}
         currFlythrough = null

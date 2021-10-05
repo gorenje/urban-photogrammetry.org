@@ -223,12 +223,6 @@ var MapHelper = {
 
   AllButtons: {},
 
-  modelExaminerDone: function() { // callback from the model navigator
-    $(MapHelper.AllButtons["butPlay"]).hide()
-    $(MapHelper.AllButtons["butPause"]).show()
-    MapAnimation.play()
-  },
-
   addButton: function(name, left, top, callback) {
     var img = document.createElement('img')
 
@@ -252,6 +246,26 @@ var MapHelper = {
     img.innerHTML = "<span style='font-size: 100%; display: inline-block; vertical-align: middle; line-height: normal;'>" + ModelNames[mlid].title + "</span>"
 
     return img;
+  },
+
+  addObj: function(idx,obj, prefix="") {
+    map.addOBJ(`${TDHelpers.modelHost()}/m/${obj.mlid}/${prefix}lods.obj#${idx}`,
+                {
+                  latitude: obj.loc[0],
+                  longitude: obj.loc[1]
+                },
+                {
+                  scale:    obj.scale,
+                  altitude: obj.altitude || 0,
+                  color:    'red',
+                  id:       'up-' + obj.mlid,
+                  rotation: obj.rotation
+                }
+              );
+  },
+
+  addSmallerObj: function(idx,obj) {
+    MapHelper.addObj(idx,obj,"smaller-")
   },
 
   currentVisibleModels: function() {
@@ -279,6 +293,13 @@ var MapHelper = {
     return models;
   },
 
+  modelExaminerDone: function() { // callback from the model navigator
+    $(MapHelper.AllButtons["butPlay"]).hide()
+    $(MapHelper.AllButtons["butPause"]).show()
+    MapAnimation.play()
+    clearScene(scene, skyboxMesh, alltextures)
+  },
+
   examineModel: function(mlid, opts = {}) {
     console.log( "Examing model: " + mlid)
 
@@ -288,29 +309,33 @@ var MapHelper = {
     $(MapHelper.AllButtons["butPause"]).hide()
 
     $('#modeltitle').fadeIn(300, function() {
+      if ( engine == null ) {
+        displayModel(mlid, opts.model_details)
+      } else {
+        clearScene(scene, skyboxMesh, alltextures)
+
+        // reconstruction
+        currModel      = opts.model_details || UPModels.modelForMlid(mlid)
+        var r          = createSkyBox(scene)
+        skyboxMesh     = r[0]
+        multimat       = r[1]
+        textBlock.text = currModel.text;
+
+        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
+                           alltextures, multimat,scene)
+        addKeyboardObserver(scene, skyboxMesh);
+        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
+      }
       $('#modeltitle').fadeOut(3500, function() {
         $('#modeltitle').remove()
-
-        if ( engine == null ) {
-          displayModel(mlid, opts.model_details)
-        } else {
-          clearScene(scene, skyboxMesh, alltextures)
-
-          // reconstruction
-          currModel      = opts.model_details || UPModels.modelForMlid(mlid)
-          var r          = createSkyBox(scene)
-          skyboxMesh     = r[0]
-          multimat       = r[1]
-          textBlock.text = currModel.text;
-
-          loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                             alltextures, multimat,scene)
-          addKeyboardObserver(scene, skyboxMesh);
-          loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
-        }
-
         $('#map').fadeOut(500)
-        $('#3dcanvas').fadeIn(100, opts.callback || function(){})
+        $('#3dcanvas').fadeIn(500, function() {
+          if ( startAnim ) {
+            console.log( "starting anim" )
+            startAnim()
+          }
+          (opts.callback || function(){})();
+        })
       })
     })
   },
@@ -333,7 +358,7 @@ var MapHelper = {
       rotation: 39,
       maxZoom: 21,
       tilt: 45,
-      attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>',
+      attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>© 3D <a href="https://urban-photogrammetry.org">Urban Models</a>',
     })
 
     map.on('keyframe', function() {
@@ -378,24 +403,6 @@ var MapHelper = {
       console.log( shareUrl )
     });
 
-    //map.addMapTiles('https://tile.openstreetmap.org/{z}/{x}/{y}.png');
-    //map.addMapTiles('http://localhost:6789/openstreetmap-carto/tile/{z}/{x}/{y}.png');
-    if ( window.location.hostname == "localhost" ) {
-      map.addMapTiles('http://localhost:4001/f/images/tiles/{z}/{x}/{y}.png');
-    } else {
-      map.addMapTiles('https://t.urban-photogrammetry.org/f/images/tiles/{z}/{x}/{y}.png');
-    }
-
-    if ( window.location.hostname == "localhost" ) {
-      map.addGeoJSONTiles(
-        "http://localhost:4002/f/images/geotiles/{z}/{x}/{y}.json"
-      );
-
-    } else {
-      map.addGeoJSONTiles(
-        'https://g.urban-photogrammetry.org/f/images/geotiles/{z}/{x}/{y}.json'
-      );
-    }
     const lodUrlRg = /m\/([^/]+)\/lods.obj#([0-9]+)/i;
 
     window.addEventListener('message', (event) => {
@@ -406,34 +413,25 @@ var MapHelper = {
           event.data.url.match(lodUrlRg)[2])]
 
         setTimeout( function() {
-          try {
-            map.addOBJ( `${TDHelpers.modelHost()}/m/${obj.mlid}/smaller-lods.obj`,
-                        { latitude: obj.loc[0], longitude: obj.loc[1] },
-                        { scale: obj.scale,
-                          altitude: obj.altitude || 0,
-                          color: 'red',
-                          id: 'up-' + obj.mlid,
-                          rotation: obj.rotation
-                        });
-          } catch (e ) { console.log(e) }
-        }, Math.ceil(1000 * Math.random()) + 10);
+          try { MapHelper.addSmallerObj("1",obj) } catch (e) { console.log(e) }
+        }, Math.ceil(100 * Math.random()) + 10);
       }
     })
 
     $.each( MapHelper.AvailableModels, function(idx, obj) {
-      setTimeout( function() {
-        try {
-          map.addOBJ( `${TDHelpers.modelHost()}/m/${obj.mlid}/lods.obj#${idx}`,
-                    { latitude: obj.loc[0], longitude: obj.loc[1] },
-                    { scale: obj.scale,
-                      altitude: obj.altitude || 0,
-                      color: 'red',
-                      id: 'up-' + obj.mlid,
-                      rotation: obj.rotation
-                    });
-        } catch (e ) { console.log(e) }
-      }, Math.ceil(1000 * Math.random()) + 10);
+      if (shareData && shareData.t == 'e' && shareData.model.mlid == obj.mlid) {
+        try { MapHelper.addObj(idx,obj) } catch (e ) { console.log(e) }
+      } else {
+        setTimeout( function() {
+          try { MapHelper.addObj(idx,obj) } catch (e ) { console.log(e) }
+        }, Math.ceil(100 * Math.random()) + 10);
+      }
     })
+
+    map.addMapTiles(`${TDHelpers.osmTileHost()}/f/images/tiles/{z}/{x}/{y}.png`)
+    map.addGeoJSONTiles(
+      `${TDHelpers.geoTileHost()}/f/images/geotiles/{z}/{x}/{y}.json`
+    );
 
     let sze = {
       width: map.container.offsetWidth,

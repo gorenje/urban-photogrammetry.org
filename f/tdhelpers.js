@@ -16,14 +16,25 @@ var TDHelpers = {
     return window.browser.getPlatformType() == "mobile"
   },
 
+  osmTileHost: function() {
+    if ( window.location.hostname == "localhost" ) {
+      return "http://localhost:4001"
+    }
+    return "https://t.urban-photogrammetry.org"
+  },
+
+  geoTileHost: function() {
+    if ( window.location.hostname == "localhost" ) {
+      return "http://localhost:4002"
+    }
+    return "https://g.urban-photogrammetry.org"
+  },
+
   modelHost: function() {
     if ( window.location.hostname == "localhost" ) {
       return "http://localhost:4003"
-    } else {
-      return "https://m.urban-photogrammetry.org"
     }
-
-    return window.browser.getPlatformType() == "mobile"
+    return "https://m.urban-photogrammetry.org"
   },
 
   copyToClipboard: function(content) {
@@ -36,7 +47,7 @@ var TDHelpers = {
     document.body.removeChild(tempInput);
   },
 
-  setupAutoExit: function() {
+  setupAutoExit: function(start_after = 2000) {
     autoExitTimeout = setTimeout( function() {
       var button = ButtonHelpers.AllButtons["butExit"]
       autoExitTimeout = setTimeout( function() {
@@ -61,10 +72,11 @@ var TDHelpers = {
           }, 300);
         }, 300);
       }, 300)
-    }, 2000 )
+    }, start_after )
   },
 
   resize: function() {
+    let canvas = engine.getRenderingCanvas()
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 

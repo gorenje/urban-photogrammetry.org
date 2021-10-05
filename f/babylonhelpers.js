@@ -124,7 +124,7 @@ function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
 function clearScene(scene, skyboxMesh, alltextures) {
   skyboxMesh.dispose(true,true)
   for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
-    scene.meshes[idx].dispose()
+    scene.meshes[idx].dispose(true,true)
   }
   scene.meshes.length = 0
   alltextures.length = 0
@@ -183,6 +183,7 @@ function isTextureReady(texture) {
 }
 
 var prevLODIdx = 0;
+var startAnim = undefined;
 function loadModel(model, scene, skyboxMesh, multimat, sizes) {
   var mlid = model.mlid;
   var rotateFactor = model.rotate;
@@ -250,13 +251,13 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
     // position. This is one time operation. a share camera is a camera location
     // that was attached to a share link i.e. viewer starts and then moves to
     // the location set with the shared link.
-    try {
-      if ( model.sharecamera ) {
+    if ( model.sharecamera ) {
+      startAnim = function() {
+        var model = this;
+        var camera = scene.activeCamera;
         var frameRate = Math.ceil(TDHelpers.average(lastTenFps)) || 30;
         var anims = TDHelpers.prepareAnimations(frameRate)
         var attrs = [ [], [], [], [], [] ]
-
-        var camera = scene.activeCamera;
 
         attrs[0].push({ frame: 0, value: camera.position.clone() })
         attrs[1].push({ frame: 0, value: camera.alpha })
@@ -273,23 +274,19 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                         value: model.sharecamera.target.clone() })
 
         $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
+        var anim = scene.beginDirectAnimation(camera,anims,0,2*frameRate,false);
+        anim.disposeOnEnd = true
 
-        var startAnim = scene.beginDirectAnimation(camera,
-                                                   anims,
-                                                   0,
-                                                   2*frameRate,
-                                                   false);
         if ( model.autoExitAfterAnim ) {
-          startAnim.onAnimationEndObservable.addOnce(function() {
-            TDHelpers.setupAutoExit()
+          anim.onAnimationEndObservable.addOnce(function() {
+            TDHelpers.setupAutoExit(5000)
+            anim = undefined
           })
           delete model.autoExitAfterAnim
         }
-
+        startAnim = undefined
         delete model.sharecamera
-      }
-    } catch (e) {
-      console.log(e)
+      }.bind(model);
     }
 
     // Load the various LODs for the model and once they are all loaded,
@@ -304,8 +301,8 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
             modelMesh.addLODLevel(6,mesh.meshes[1])
             for ( var idx = 1; idx < 2; idx++ ) {
               setTimeout( function() {
-                loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
-              }, 20 * idx)
+                loadSkyBoxMaterial(mlid,sizes[this],alltextures,multimat,scene)
+              }.bind(idx), 20 * idx)
             }
             ModelCache.cachePrevAndNext(mlid)
           })
@@ -344,11 +341,11 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                     for ( var idx = 1; idx < sizes.length; idx++ ) {
                       setTimeout(function() {
                         loadSkyBoxMaterial(mlid,
-                                           sizes[idx],
+                                           sizes[this],
                                            alltextures,
                                            multimat,
                                            scene)
-                      }, 20 * idx)
+                        }.bind(idx), 20 * idx)
                     }
                     ModelCache.cachePrevAndNext(mlid)
                   })
