@@ -36,32 +36,63 @@ var TDHelpers = {
     document.body.removeChild(tempInput);
   },
 
+  setupAutoExit: function() {
+    autoExitTimeout = setTimeout( function() {
+      var button = ButtonHelpers.AllButtons["butExit"]
+      autoExitTimeout = setTimeout( function() {
+        button.background = '#ff000033'
+        autoExitTimeout = setTimeout( function() {
+          button.background = '#f0f00033'
+          autoExitTimeout = setTimeout( function() {
+            button.background = '#ff000033'
+            autoExitTimeout = setTimeout( function() {
+              button.background = '#f0f00033'
+              autoExitTimeout = setTimeout( function() {
+                button.background = '#ff000033'
+                autoExitTimeout = setTimeout( function() {
+                  button.background = '#f0f00033'
+                  autoExitTimeout = setTimeout( function() {
+                    ButtonHelpers.CB.exit()
+                    button.background =  "#00000033";
+                  }, 300);
+                }, 300);
+              }, 300);
+            }, 300);
+          }, 300);
+        }, 300);
+      }, 300)
+    }, 2000 )
+  },
+
   resize: function() {
-    let winWidth = window.innerWidth;
-    let winHeight = window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    let aspectRatio = 0.5625; // 16:9 ~ 1.7777....
-    let canvas = engine.getRenderingCanvas()
+    /* let winWidth = window.innerWidth;
+     * let winHeight = window.innerHeight;
 
-    let heightBased = {
-      width: Math.round(winHeight * aspectRatio),
-      height: winHeight,
-    }
-    let widthBased = {
-      width: winWidth,
-      height: Math.round(winWidth / aspectRatio)
-    }
-    let whatToUse = undefined;
+     * let aspectRatio = 0.5625; // 16:9 ~ 1.7777....
+     * let canvas = engine.getRenderingCanvas()
 
-    if ( winWidth > winHeight ) {
-      whatToUse = heightBased
-      if ( whatToUse.width > winWidth ) { whatToUse = widthBased }
-    } else {
-      whatToUse = widthBased
-      if ( whatToUse.height > winHeight ) { whatToUse = heightBased }
-    }
-    canvas.width = whatToUse.width
-    canvas.height = whatToUse.height
+     * let heightBased = {
+     *   width: Math.round(winHeight * aspectRatio),
+     *   height: winHeight,
+     * }
+     * let widthBased = {
+     *   width: winWidth,
+     *   height: Math.round(winWidth / aspectRatio)
+     * }
+     * let whatToUse = undefined;
+
+     * if ( winWidth > winHeight ) {
+     *   whatToUse = heightBased
+     *   if ( whatToUse.width > winWidth ) { whatToUse = widthBased }
+     * } else {
+     *   whatToUse = widthBased
+     *   if ( whatToUse.height > winHeight ) { whatToUse = heightBased }
+     * }
+     * canvas.width = whatToUse.width
+     * canvas.height = whatToUse.height*/
   },
 
   parseShareLink(url) {

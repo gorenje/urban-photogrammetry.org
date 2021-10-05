@@ -20,16 +20,9 @@ var ButtonHelpers = {
   },
 
   imageButton: function(filename) {
-    var width = "70px";
-    var height = "70px";
-    if ( !TDHelpers.isMobile() ) {
-      width = "62px"
-      height = "62px"
-    }
-
     button = BABYLON.GUI.Button.CreateImageOnlyButton(name, filename);
-    button.width = width;
-    button.height = height;
+    button.width = "0.07vw";
+    button.fixedRatio = 1
     button.color = "#ffffff33";
     button.cornerRadius = 10;
     button.background = "#00000033";
@@ -294,31 +287,7 @@ var ButtonHelpers = {
         ButtonHelpers.toggle("butPlay", "butPause")
 
         if ( evt && evt.autoExitAfterFlythrough ) {
-          autoExitTimeout = setTimeout( function() {
-            var button = ButtonHelpers.AllButtons["butExit"]
-            autoExitTimeout = setTimeout( function() {
-              button.background = '#ff000033'
-              autoExitTimeout = setTimeout( function() {
-                button.background = '#f0f00033'
-                autoExitTimeout = setTimeout( function() {
-                  button.background = '#ff000033'
-                  autoExitTimeout = setTimeout( function() {
-                    button.background = '#f0f00033'
-                    autoExitTimeout = setTimeout( function() {
-                      button.background = '#ff000033'
-                      autoExitTimeout = setTimeout( function() {
-                        button.background = '#f0f00033'
-                        autoExitTimeout = setTimeout( function() {
-                          ButtonHelpers.CB.exit()
-                          button.background =  "#00000033";
-                        }, 300);
-                      }, 300);
-                    }, 300);
-                  }, 300);
-                }, 300);
-              }, 300);
-            }, 300)
-          }, 2000 )
+          TDHelpers.setupAutoExit()
         }
       })
     },

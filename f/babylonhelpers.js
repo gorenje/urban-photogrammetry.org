@@ -274,7 +274,17 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
 
         $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
 
-        scene.beginDirectAnimation(camera, anims, 0, 2*frameRate, false);
+        var startAnim = scene.beginDirectAnimation(camera,
+                                                   anims,
+                                                   0,
+                                                   2*frameRate,
+                                                   false);
+        if ( model.autoExitAfterAnim ) {
+          startAnim.onAnimationEndObservable.addOnce(function() {
+            TDHelpers.setupAutoExit()
+          })
+          delete model.autoExitAfterAnim
+        }
 
         delete model.sharecamera
       }
@@ -293,7 +303,9 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
             modelMesh.addLODLevel(20,modelMesh.clone())
             modelMesh.addLODLevel(6,mesh.meshes[1])
             for ( var idx = 1; idx < 2; idx++ ) {
-              loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
+              setTimeout( function() {
+                loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
+              }, 20 * idx)
             }
             ModelCache.cachePrevAndNext(mlid)
           })
@@ -330,7 +342,13 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                       modelMesh.addLODLevel(0,mesh.meshes[1])
                     }
                     for ( var idx = 1; idx < sizes.length; idx++ ) {
-                      loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
+                      setTimeout(function() {
+                        loadSkyBoxMaterial(mlid,
+                                           sizes[idx],
+                                           alltextures,
+                                           multimat,
+                                           scene)
+                      }, 20 * idx)
                     }
                     ModelCache.cachePrevAndNext(mlid)
                   })

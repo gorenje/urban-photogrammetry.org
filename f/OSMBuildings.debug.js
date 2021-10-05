@@ -3165,23 +3165,39 @@ class Events {
       }
       resizeTimer = setTimeout(() => {
         resizeTimer = null;
-        var sze = null;
-
         if ( APP.container.offsetWidth == 0 && APP.container.offsetHeight == 0 ) {
           if ( window.fullScreen || (window.innerWidth == screen.width &&
                                      window.innerHeight == screen.height)) {
-            sze = APP.computeSize(screen.width, screen.height)
+            APP.setSize(screen.width, screen.height);
+            $('#mapbuttons').css('width', `${screen.width}px`);
+            $('#mapbuttons').css('height', `${screen.height}px`);
           } else {
-            sze = APP.computeSize(window.innerWidth, window.innerHeight)
+            APP.setSize(window.innerWidth, window.innerHeight);
+            $('#mapbuttons').css('width', `${window.innerWidth}px`);
+            $('#mapbuttons').css('height', `${window.innerHeight}px`);
           }
         } else {
-          sze = APP.computeSize(APP.container.offsetWidth,
-                                    APP.container.offsetHeight);
+          APP.setSize(APP.container.offsetWidth, APP.container.offsetHeight);
+          $('#mapbuttons').css('width', `${APP.container.offsetWidth}px`);
+          $('#mapbuttons').css('height', `${APP.container.offsetHeight}px`);
         }
 
-        $('#mapbuttons').css('width', `${sze.width}px`);
-        $('#mapbuttons').css('height', `${sze.height}px`);
-        APP.setSize(sze.width, sze.height)
+
+        // var sze = null;
+        // if ( APP.container.offsetWidth == 0 && APP.container.offsetHeight == 0 ) {
+        //   if ( window.fullScreen || (window.innerWidth == screen.width &&
+        //                              window.innerHeight == screen.height)) {
+        //     sze = APP.computeSize(screen.width, screen.height)
+        //   } else {
+        //     sze = APP.computeSize(window.innerWidth, window.innerHeight)
+        //   }
+        // } else {
+        //   sze = APP.computeSize(APP.container.offsetWidth,
+        //                             APP.container.offsetHeight);
+        // }
+        // $('#mapbuttons').css('width', `${sze.width}px`);
+        // $('#mapbuttons').css('height', `${sze.height}px`);
+        // APP.setSize(sze.width, sze.height)
       }, 250);
     });
   }

@@ -232,7 +232,7 @@ var MapHelper = {
   addButton: function(name, left, top, callback) {
     var img = document.createElement('img')
 
-    img.style = `position: absolute; top: ${top}%; left: ${left}%; width: 50px; background-color: #00000033; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; pointer-events: auto;`
+    img.style = `position: absolute; top: ${top}%; left: ${left}%; width: 7vw; background-color: #00000033; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; pointer-events: auto;`
     img.src = ButtonHelpers.ImageMap[name]
     img.onclick = callback;
 
@@ -314,7 +314,6 @@ var MapHelper = {
       maxZoom: 21,
       tilt: 45,
       attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>',
-      aspectRatio: 0.5625, // 16:9 ~ 1.7777... but different
     })
 
     map.on('keyframe', function() {
@@ -416,19 +415,32 @@ var MapHelper = {
       }, Math.ceil(1000 * Math.random()) + 10);
     })
 
-    let sze = map.computeSize( map.container.offsetWidth,
-                               map.container.offsetHeight )
+    let sze = {
+      width: map.container.offsetWidth,
+      height: map.container.offsetHeight
+    };
+
+    if ( map.container.offsetWidth == 0 && map.container.offsetHeight == 0 ) {
+      if ( window.fullScreen || (window.innerWidth == screen.width &&
+                                 window.innerHeight == screen.height)) {
+        sze = { width: screen.width, height: screen.height }
+      } else {
+        sze = { width: window.innerWidth, height: window.innerHeight }
+      }
+    }
+
     map.setSize( sze.width, sze.height )
     map.events.emit( 'resize', sze )
+
     $('#mapbuttons').css('width', `${sze.width}px`);
     $('#mapbuttons').css('height', `${sze.height}px`);
 
-    MapHelper.addButton( "butCopied", 95, 95, function() {
+    MapHelper.addButton( "butCopied", 90, 93, function() {
       $(MapHelper.AllButtons["butShare"]).show()
       $(MapHelper.AllButtons["butCopied"]).hide()
     })
     $(MapHelper.AllButtons["butCopied"]).hide()
-    MapHelper.addButton( "butShare", 95, 95, function() {
+    MapHelper.addButton( "butShare", 90, 93, function() {
       map.emit('sharelink')
     })
 
@@ -436,13 +448,13 @@ var MapHelper = {
     //   map.emit('keyframe')
     // })
 
-    MapHelper.addButton( "butPlay", 50, 95, function() {
+    MapHelper.addButton( "butPlay", 45, 93, function() {
       $(MapHelper.AllButtons["butPlay"]).hide()
       $(MapHelper.AllButtons["butPause"]).show()
       MapAnimation.play()
     })
 
-    MapHelper.addButton( "butPause", 50, 95, function() {
+    MapHelper.addButton( "butPause", 45, 93, function() {
       $(MapHelper.AllButtons["butPlay"]).show()
       $(MapHelper.AllButtons["butPause"]).hide()
       MapAnimation.pause()
@@ -451,9 +463,11 @@ var MapHelper = {
     $(MapHelper.AllButtons["butPause"]).hide()
 
     if ( shareData != undefined ) {
-      $(MapHelper.AllButtons["butPause"]).hide()
       setTimeout( function() {
-        MapAnimation.moveToShareData(shareData)
+        if ( MapAnimation.moveToShareData(shareData) ) {
+          $(MapHelper.AllButtons["butPause"]).show()
+          $(MapHelper.AllButtons["butPlay"]).hide()
+        }
       }, 1000)
     } else {
       setTimeout(function() {

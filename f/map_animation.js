@@ -119,50 +119,67 @@ MapAnimation = {...MapAnimation, ...{
   currTimeout: null,
 
   moveToShareData: function(sharedata) {
+    MapAnimation.stateFromCamera()
+    var startPos = L.latLng( MapAnimation.animState.position_latitude,
+                             MapAnimation.animState.position_longitude )
+    var endPos = null;
+    var onAnimComplete = function() {}
+    var toFrameData = {}
+
     if ( sharedata.t == 'e' ) {
       // this share data came from the model examiner, so we fly to that
       // position and then open the model examiner
-      var onAnimComplete = function() {
-        MapHelper.examineModel(sharedata.model.mlid, sharedata.model)
+      onAnimComplete = function() {
+        setTimeout( function() {
+          sharedata.model.autoExitAfterAnim = true
+          MapHelper.examineModel( sharedata.model.mlid, sharedata.model )
+        }, 750)
       };
 
-      MapAnimation.stateFromCamera()
+      endPos = L.latLng( sharedata.pos.loc[0], sharedata.pos.loc[1] )
 
-      MapAnimation.currAnim = anime({
-        targets:  MapAnimation.animState,
-        easing:   'easeInCubic',
-        duration: 1500,
-        update:   MapAnimation.animUpdateCallback,
-        complete: onAnimComplete,
-        ...{
-          tilt:               0,
-          rotation:           90,
-          position_latitude:  sharedata.pos.loc[0],
-          position_longitude: sharedata.pos.loc[1],
-          zoom:               19
-        }
-      })
+      toFrameData = {
+        tilt:               0,
+        rotation:           90,
+        position_latitude:  sharedata.pos.loc[0],
+        position_longitude: sharedata.pos.loc[1],
+        zoom:               18
+      }
     }
 
     if ( sharedata.t == 'm' ) {
       // this share data came from the map, so we fly to the position given
       // in the shared data and do nothing further.
-      MapAnimation.stateFromCamera()
+      onAnimComplete = function() {
+        setTimeout( function() {
+          $(MapHelper.AllButtons["butPause"]).hide()
+          $(MapHelper.AllButtons["butPlay"]).show()
+        }, 150)
+      };
 
+      endPos = L.latLng( sharedata.pos.lt, sharedata.pos.lg )
+
+      toFrameData = {
+        tilt:               sharedata.pos.tl,
+        rotation:           sharedata.pos.r,
+        position_latitude:  sharedata.pos.lt,
+        position_longitude: sharedata.pos.lg,
+        zoom:               sharedata.pos.zm
+      }
+    }
+
+    if ( endPos != null ) {
       MapAnimation.currAnim = anime({
         targets:  MapAnimation.animState,
-        easing:   'easeInCubic',
-        duration: 1500,
+        easing:   'cubicBezier(.62,.28,.56,.88)',
+        duration: Math.max(1500, endPos.distanceTo(startPos) / 0.25),
         update:   MapAnimation.animUpdateCallback,
-        ...{
-          tilt:               sharedata.pos.tl,
-          rotation:           sharedata.pos.r,
-          position_latitude:  sharedata.pos.lt,
-          position_longitude: sharedata.pos.lg,
-          zoom:               sharedata.pos.zm
-        }
+        complete: onAnimComplete,
+        ...toFrameData
       })
+      return true;
     }
+    return false;
   },
 
   stateFromCamera: function() {
@@ -194,10 +211,15 @@ MapAnimation = {...MapAnimation, ...{
   },
 
   moveToFrame: function(frameNr) {
+    var startPos = L.latLng( MapAnimation.animState.position_latitude,
+                             MapAnimation.animState.position_longitude )
+    var endPos = L.latLng( MapAnimation.keyFrames[frameNr].position_latitude,
+                           MapAnimation.keyFrames[frameNr].position_longitude )
+
     MapAnimation.currAnim = anime({
       targets:  MapAnimation.animState,
-      easing:   'easeInCubic',
-      duration: 1500,
+      easing:   'cubicBezier(.62,.28,.56,.88)',
+      duration: Math.max(1500,startPos.distanceTo(endPos) / 0.25),
       update:   MapAnimation.animUpdateCallback,
       complete: MapAnimation.animCompleteCallback,
       ...MapAnimation.keyFrames[frameNr]
