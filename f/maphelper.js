@@ -242,6 +242,18 @@ var MapHelper = {
     return img;
   },
 
+  addModelTitle: function(mlid) {
+    var img = document.createElement('div')
+
+    img.id = "modeltitle"
+    img.style = `display: none; position: relative; top: 30%; left: 30%; height: 20vh; width: 40vw; background-color: #000000aa; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; text-align: center; color: #eee;`
+
+    $('#mapbuttons').append( img )
+    img.innerHTML = "<span style='font-size: 100%; display: inline-block; vertical-align: middle; line-height: normal;'>" + ModelNames[mlid].title + "</span>"
+
+    return img;
+  },
+
   currentVisibleModels: function() {
     var mapBnds = map.getBounds()
 
@@ -267,32 +279,40 @@ var MapHelper = {
     return models;
   },
 
-  examineModel: function(mlid, model_details = undefined) {
+  examineModel: function(mlid, opts = {}) {
     console.log( "Examing model: " + mlid)
+
+    var txt = MapHelper.addModelTitle(mlid);
     MapAnimation.pause()
     $(MapHelper.AllButtons["butPlay"]).show()
     $(MapHelper.AllButtons["butPause"]).hide()
 
-    if ( engine == null ) {
-      displayModel(mlid, model_details)
-    } else {
-      clearScene(scene, skyboxMesh, alltextures)
+    $('#modeltitle').fadeIn(300, function() {
+      $('#modeltitle').fadeOut(3500, function() {
+        $('#modeltitle').remove()
 
-      // reconstruction
-      currModel      = model_details || UPModels.modelForMlid(mlid)
-      var r          = createSkyBox(scene)
-      skyboxMesh     = r[0]
-      multimat       = r[1]
-      textBlock.text = currModel.text;
+        if ( engine == null ) {
+          displayModel(mlid, opts.model_details)
+        } else {
+          clearScene(scene, skyboxMesh, alltextures)
 
-      loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                         alltextures, multimat,scene)
-      addKeyboardObserver(scene, skyboxMesh);
-      loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
-    }
+          // reconstruction
+          currModel      = opts.model_details || UPModels.modelForMlid(mlid)
+          var r          = createSkyBox(scene)
+          skyboxMesh     = r[0]
+          multimat       = r[1]
+          textBlock.text = currModel.text;
 
-    $('#3dcanvas').fadeIn(100)
-    $('#map').fadeOut(500)
+          loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
+                             alltextures, multimat,scene)
+          addKeyboardObserver(scene, skyboxMesh);
+          loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
+        }
+
+        $('#map').fadeOut(500)
+        $('#3dcanvas').fadeIn(100, opts.callback || function(){})
+      })
+    })
   },
 
   createStreetMap: function() {

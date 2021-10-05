@@ -132,7 +132,9 @@ MapAnimation = {...MapAnimation, ...{
       onAnimComplete = function() {
         setTimeout( function() {
           sharedata.model.autoExitAfterAnim = true
-          MapHelper.examineModel( sharedata.model.mlid, sharedata.model )
+          MapHelper.examineModel( sharedata.model.mlid, {
+            model_details: sharedata.model
+          })
         }, 750)
       };
 
@@ -235,10 +237,13 @@ MapAnimation = {...MapAnimation, ...{
 
     if (MapAnimation.keyFrames[MapAnimation.currKeyFrame] == MapAnimation.ViewModelFrame){
       MapAnimation.currKeyFrame += 1
-      MapHelper.examineModel( MapHelper.currentVisibleModels()[0].mlid )
-      setTimeout(function() {
-        ButtonHelpers.CB.flythrough( { autoExitAfterFlythrough: true } )
-      }, 1000)
+      MapHelper.examineModel( MapHelper.currentVisibleModels()[0].mlid, {
+        callback: function() {
+          setTimeout(function() {
+            ButtonHelpers.CB.flythrough( { autoExitAfterFlythrough: true } )
+          }, 1000)
+        }
+      })
     } else {
       console.log( "Next frame: " + MapAnimation.currKeyFrame)
       console.log( MapAnimation.keyFrames[MapAnimation.currKeyFrame] )

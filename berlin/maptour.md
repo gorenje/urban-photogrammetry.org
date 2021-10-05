@@ -6,6 +6,7 @@ layout: map
 
 <link href="/f/bs/bootstrap.min.css" rel="stylesheet"/>
 <script src="/f/buttonimages.js"></script>
+<script src="/f/modelnames.js"></script>
 <script src="/f/bs/bootstrap.bundle.min.js"></script>
 <script src="/f/jq/jquery.3.5.1.js"></script>
 <script src="/f/bjs/ammo.js"></script>
