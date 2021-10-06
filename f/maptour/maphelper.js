@@ -116,11 +116,10 @@ var MapHelper = {
 
       $('#modeltitle').fadeOut(3000, function() {
         $('#modeltitle').remove()
-        $('#map').fadeOut(400, function() {
-          $('#3dcanvas').fadeIn(400, function() {
-            if ( currModel.sharecamera ) { MapHelper.playIntroAnim() }
-            (opts.callback || function(){})();
-          })
+        $('#map').fadeOut(400)
+        $('#3dcanvas').fadeIn(400, function() {
+          if ( currModel.sharecamera ) { MapHelper.playIntroAnim() }
+          (opts.callback || function(){})();
         })
       })
     })
