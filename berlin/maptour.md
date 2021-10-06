@@ -39,7 +39,6 @@ var sceneToRender = null;
 var skyboxMesh = null;
 var currModel = null;
 var baseMaterialSizes = [64, 256, 512, 1024]
-var textBlock = null;
 var cameraPath = []
 var autoExitTimeout = null;
 var map = null;
@@ -86,9 +85,6 @@ function displayModel(mlid, model_from_shared = undefined) {
     addKeyboardObserver(scene, skyboxMesh);
 
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-
-    textBlock = ButtonHelpers.createTextBlock()
-    advancedTexture.addControl(textBlock);
 
     if ( TDHelpers.isMobile() ) {
       var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")

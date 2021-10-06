@@ -14,7 +14,7 @@
          "type" : "image/png"
       }
    ],
-   "name" : "Urban Photogrammetry Berlin Tour",
-   "short_name" : "VirtualBerlinTour",
+   "name" : "Urban Photogrammetry Model Viewer",
+   "short_name" : "UPModelViewer",
    "theme_color" : "#333"
 }

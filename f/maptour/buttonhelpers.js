@@ -66,23 +66,6 @@ var ButtonHelpers = {
     return button;
   },
 
-  createTextBlock: function() {
-    var textBlock = new BABYLON.GUI.TextBlock()
-
-    textBlock.text         = currModel.text;
-    textBlock.isVisible    = false;
-    textBlock.width        = "300px";
-    textBlock.height       = "300px";
-    textBlock.color        = "white";
-    textBlock.left         = "45%";
-    textBlock.top          = "-40%";
-    textBlock.background   = "red";
-    textBlock.cornerRadius = 20;
-    textBlock.fontSize     = "10px"
-
-    return textBlock;
-  },
-
   showShare: function() {
     return true;
     /* return browser.satisfies( { mobile: {
@@ -182,48 +165,6 @@ var ButtonHelpers = {
       } catch ( e ) {}
 
       console.log( shareUrl)
-    },
-
-    previous: function(evt) {
-      prepareFadeOut(function() {
-        // destruction
-        clearScene(scene, skyboxMesh, alltextures)
-
-        // restruction
-        currModel      = UPModels.previous(currModel)
-        var r          = createSkyBox(scene)
-        skyboxMesh     = r[0]
-        multimat       = r[1]
-        textBlock.text = currModel.text;
-
-        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                           alltextures, multimat,scene)
-        addKeyboardObserver(scene, skyboxMesh);
-        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
-      })
-    },
-
-    next: function(evt) {
-      prepareFadeOut(function() {
-	      // destruction
-        clearScene(scene, skyboxMesh, alltextures)
-
-        // restruction
-        currModel      = UPModels.next(currModel)
-        var r          = createSkyBox(scene)
-        skyboxMesh     = r[0]
-        multimat       = r[1]
-        textBlock.text = currModel.text;
-
-        loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
-                           alltextures, multimat, scene)
-        addKeyboardObserver(scene, skyboxMesh);
-        loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
-      })
-    },
-
-    info: function(evt) {
-      textBlock.isVisible = !textBlock.isVisible;
     },
 
     stopflythrough: function(evt) {
@@ -339,45 +280,6 @@ var ButtonHelpers = {
       } catch(e) {
         console.log(e)
       }
-    },
-
-    addKeyframe: function(evt) {
-      var camera = scene.activeCamera;
-
-      cameraPath.push({
-        frame: frameCounter,
-        avgfps: Math.ceil(TDHelpers.average(lastTenFps)),
-        rotation: {
-          alpha:  camera.alpha,
-          beta:   camera.beta,
-          radius: camera.radius
-        },
-        position: camera.position.clone(),
-        target:   camera.target.clone()
-      })
-    },
-
-    clearKeyframes: function(evt) {
-      cameraPath.length = 0;
-      scene.stopAllAnimations()
-    },
-
-    showCameraDetails: function(evt) {
-      var camera = scene.activeCamera;
-      var jsonStr = "{ alpha: " + camera.alpha +
-                    ", beta: " + camera.beta +
-                    ", radius: " + camera.radius +
-                    ", position: {" +
-                    "  x: " + camera.position.x +
-                    ", y: " + camera.position.y +
-                    ", z: " + camera.position.z +
-                    "}, target: { "+
-                    "  x: " + camera.target.x +
-                    ", y: " + camera.target.y +
-                    ", z: " + camera.target.z +
-                    "}},";
-      console.log( jsonStr )
-      TDHelpers.copyToClipboard( jsonStr )
     },
   }
 }

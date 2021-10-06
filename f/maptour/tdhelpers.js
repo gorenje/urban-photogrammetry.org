@@ -108,7 +108,7 @@ var TDHelpers = {
     return undefined;
   },
 
-  checkForShareData(url) {
+  checkForShareData: function(url) {
     var urlhash = new URL(url).hash || new URL(url).search.replace("?l=","#")
     if ( urlhash !== "" ) {
       try {
