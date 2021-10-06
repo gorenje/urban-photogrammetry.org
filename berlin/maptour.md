@@ -5,8 +5,6 @@ layout: map
 ---
 
 <link href="/f/bs/bootstrap.min.css" rel="stylesheet"/>
-<script src="/f/buttonimages.js"></script>
-<script src="/f/modelnames.js"></script>
 <script src="/f/bs/bootstrap.bundle.min.js"></script>
 <script src="/f/jq/jquery.3.5.1.js"></script>
 <script src="/f/bjs/ammo.js"></script>
@@ -21,9 +19,6 @@ layout: map
 <script src="/f/bjs/babylonjs.loaders.min.js"></script>
 <script src="/f/bjs/babylonjs.serializers.min.js"></script>
 <script src="/f/bjs/babylon.gui.min.js"></script>
-<script src="/f/bjs/babylon.inspector.bundle.js"></script>
-<script src="/f/bjs/babylon.nodeEditor.js"></script>
-<script src="/f/bjs/babylon.guiEditor.js"></script>
 <script src="/f/bowser.js"></script>
 <script src="/f/models.js"></script>
 <script src="/f/babylonhelpers.js"></script>

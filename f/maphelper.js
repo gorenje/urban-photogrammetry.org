@@ -240,10 +240,10 @@ var MapHelper = {
     var img = document.createElement('div')
 
     img.id = "modeltitle"
-    img.style = `display: none; position: relative; top: 30%; left: 30%; height: 20vh; width: 40vw; background-color: #000000aa; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; text-align: center; color: #eee;`
+    img.style = `display: none; position: absolute; top: 30%; left: 30%; height: 15vh; width: 30vw; background-color: #000000aa; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; color: #eee;text-align: center;`
 
     $('#mapbuttons').append( img )
-    img.innerHTML = "<span style='font-size: 100%; display: inline-block; vertical-align: middle; line-height: normal;'>" + ModelNames[mlid].title + "</span>"
+    img.innerHTML = "<strong class='d-inline-block h1 align-text-bottom text-center' style='margin-top: 30%;'>" + ModelNames[mlid].title + "</strong>"
 
     return img;
   },
@@ -300,6 +300,14 @@ var MapHelper = {
     clearScene(scene, skyboxMesh, alltextures)
   },
 
+  playIntroAnim: function () {
+    if ( scene.isReady() ) {
+      defineIntroAnim(currModel, scene)()
+    } else {
+      setTimeout(MapHelper.playIntroAnim, 300)
+    }
+  },
+
   examineModel: function(mlid, opts = {}) {
     console.log( "Examing model: " + mlid)
 
@@ -326,15 +334,14 @@ var MapHelper = {
         addKeyboardObserver(scene, skyboxMesh);
         loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
       }
-      $('#modeltitle').fadeOut(3500, function() {
+
+      $('#modeltitle').fadeOut(3000, function() {
         $('#modeltitle').remove()
-        $('#map').fadeOut(500)
-        $('#3dcanvas').fadeIn(500, function() {
-          if ( startAnim ) {
-            console.log( "starting anim" )
-            startAnim()
-          }
-          (opts.callback || function(){})();
+        $('#map').fadeOut(400, function() {
+          $('#3dcanvas').fadeIn(400, function() {
+            if ( currModel.sharecamera ) { MapHelper.playIntroAnim() }
+            (opts.callback || function(){})();
+          })
         })
       })
     })

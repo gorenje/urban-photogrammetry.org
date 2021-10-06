@@ -182,8 +182,45 @@ function isTextureReady(texture) {
   return texture.isReady()
 }
 
+function defineIntroAnim(model, scene) {
+  return function() {
+    var model = this;
+    var camera = scene.activeCamera;
+    var frameRate = Math.ceil(TDHelpers.average(lastTenFps)) || 30;
+    var anims = TDHelpers.prepareAnimations(frameRate)
+    var attrs = [ [], [], [], [], [] ]
+
+    attrs[0].push({ frame: 0, value: camera.position.clone() })
+    attrs[1].push({ frame: 0, value: camera.alpha })
+    attrs[2].push({ frame: 0, value: camera.beta })
+    attrs[3].push({ frame: 0, value: camera.radius })
+    attrs[4].push({ frame: 0, value: camera.target.clone() })
+
+    attrs[0].push({ frame: frameRate*2,
+                    value: model.sharecamera.position.clone() })
+    attrs[1].push({ frame: frameRate*2, value: model.sharecamera.alpha })
+    attrs[2].push({ frame: frameRate*2, value: model.sharecamera.beta })
+    attrs[3].push({ frame: frameRate*2, value: model.sharecamera.radius })
+    attrs[4].push({ frame: frameRate*2,
+                    value: model.sharecamera.target.clone() })
+
+    $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
+    var anim = scene.beginDirectAnimation(camera,anims,0,2*frameRate,false);
+    anim.disposeOnEnd = true
+
+    if ( model.autoExitAfterAnim ) {
+      anim.onAnimationEndObservable.addOnce(function() {
+        TDHelpers.setupAutoExit(5000)
+        anim = undefined
+      })
+      delete model.autoExitAfterAnim
+    }
+    introAnim = undefined
+    delete model.sharecamera
+  }.bind(model);
+}
+
 var prevLODIdx = 0;
-var startAnim = undefined;
 function loadModel(model, scene, skyboxMesh, multimat, sizes) {
   var mlid = model.mlid;
   var rotateFactor = model.rotate;
@@ -247,48 +284,6 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
       }
     }
 
-    // if this mdoel comes with a shareCamera, then animate the camera to that
-    // position. This is one time operation. a share camera is a camera location
-    // that was attached to a share link i.e. viewer starts and then moves to
-    // the location set with the shared link.
-    if ( model.sharecamera ) {
-      startAnim = function() {
-        var model = this;
-        var camera = scene.activeCamera;
-        var frameRate = Math.ceil(TDHelpers.average(lastTenFps)) || 30;
-        var anims = TDHelpers.prepareAnimations(frameRate)
-        var attrs = [ [], [], [], [], [] ]
-
-        attrs[0].push({ frame: 0, value: camera.position.clone() })
-        attrs[1].push({ frame: 0, value: camera.alpha })
-        attrs[2].push({ frame: 0, value: camera.beta })
-        attrs[3].push({ frame: 0, value: camera.radius })
-        attrs[4].push({ frame: 0, value: camera.target.clone() })
-
-        attrs[0].push({ frame: frameRate*2,
-                        value: model.sharecamera.position.clone() })
-        attrs[1].push({ frame: frameRate*2, value: model.sharecamera.alpha })
-        attrs[2].push({ frame: frameRate*2, value: model.sharecamera.beta })
-        attrs[3].push({ frame: frameRate*2, value: model.sharecamera.radius })
-        attrs[4].push({ frame: frameRate*2,
-                        value: model.sharecamera.target.clone() })
-
-        $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
-        var anim = scene.beginDirectAnimation(camera,anims,0,2*frameRate,false);
-        anim.disposeOnEnd = true
-
-        if ( model.autoExitAfterAnim ) {
-          anim.onAnimationEndObservable.addOnce(function() {
-            TDHelpers.setupAutoExit(5000)
-            anim = undefined
-          })
-          delete model.autoExitAfterAnim
-        }
-        startAnim = undefined
-        delete model.sharecamera
-      }.bind(model);
-    }
-
     // Load the various LODs for the model and once they are all loaded,
     // loaed all the materials for the skybox.
     try {
@@ -304,7 +299,9 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                 loadSkyBoxMaterial(mlid,sizes[this],alltextures,multimat,scene)
               }.bind(idx), 20 * idx)
             }
-            ModelCache.cachePrevAndNext(mlid)
+            setTimeout( function() {
+              ModelCache.cachePrevAndNext(this)
+            }.bind(mlid), 1000)
           })
       } else {
         // desktop devics get complete resolution and details.
@@ -347,7 +344,9 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                                            scene)
                         }.bind(idx), 20 * idx)
                     }
-                    ModelCache.cachePrevAndNext(mlid)
+                    setTimeout( function() {
+                      ModelCache.cachePrevAndNext(this)
+                    }.bind(mlid), 1000)
                   })
               })
           })
