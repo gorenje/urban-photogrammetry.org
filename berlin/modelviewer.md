@@ -1,10 +1,9 @@
 ---
 title: 3D Tour
-permalink: /berlin/babylon
-layout: 3dtour
+permalink: /berlin/modelviewer
+layout: modelviewer
 ---
 
-<script src="/f/bjs/jquery.js"></script>
 <script src="/f/bjs/jquery.qrcode.min.js"></script>
 <script src="/f/bjs/ammo.js"></script>
 <script src="/f/bjs/recast.js"></script>
@@ -18,17 +17,7 @@ layout: 3dtour
 <script src="/f/bjs/babylonjs.loaders.min.js"></script>
 <script src="/f/bjs/babylonjs.serializers.min.js"></script>
 <script src="/f/bjs/babylon.gui.min.js"></script>
-<script src="/f/bjs/babylon.inspector.bundle.js"></script>
-<script src="/f/bjs/babylon.nodeEditor.js"></script>
-<script src="/f/bjs/babylon.guiEditor.js"></script>
-<script src="/f/buttonimages.js"></script>
 <script src="/f/bowser.js"></script>
-<script src="/f/babylonhelpers.js"></script>
-<script src="/f/models.js"></script>
-<script src="/f/modelcache.js"></script>
-<script src='/f/buttonhelpers.js'></script>
-<script src="/f/soundshelper.js"></script>
-<script src="/f/tdhelpers.js"></script>
 
 <script>
   BABYLON.Effect.RegisterShader("fade", "precision highp float;" +
@@ -67,7 +56,10 @@ layout: 3dtour
   var skyboxMesh = null;
   var currModel = TDHelpers.checkForShareData(window.location)
   var baseMaterialSizes = [64, 256, 512, 1024]
-  var textBlock = null;
+  var textBlock = {
+    text:"",
+    isVisible: false
+  }
   var cameraPath = []
 
   var createDefaultEngine = function() {
@@ -94,8 +86,30 @@ layout: 3dtour
 
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-    textBlock = ButtonHelpers.createTextBlock()
-    advancedTexture.addControl(textBlock);
+    if ( TDHelpers.isLocalhost() ) {
+      textBlock = ButtonHelpers.createTextBlock()
+      advancedTexture.addControl(textBlock);
+
+      var button = ButtonHelpers.create("butInfo", "&#128712;", "0%", "45%");
+      button.onPointerClickObservable.add(ButtonHelpers.CB.info)
+      advancedTexture.addControl(button);
+
+      var button = ButtonHelpers.create("butFTPlay", "playKFs", "45%", "0%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.playKeyframes)
+      advancedTexture.addControl(button);
+
+      var button = ButtonHelpers.create("butAddKeyFrame", "addKF", "45%", "10%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.addKeyframe)
+      advancedTexture.addControl(button);
+
+      var button = ButtonHelpers.create("butClear", "clearKF", "45%", "20%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.clearKeyframes)
+      advancedTexture.addControl(button);
+
+      var button = ButtonHelpers.create("butKFInfo", "info", "45%", "30%")
+      button.onPointerClickObservable.add(ButtonHelpers.CB.showCameraDetails)
+      advancedTexture.addControl(button);
+    }
 
     var button = ButtonHelpers.create("butPrev", "<<<", "-45%", "45%");
     button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
@@ -105,9 +119,6 @@ layout: 3dtour
     button.onPointerClickObservable.add(ButtonHelpers.CB.next)
     advancedTexture.addControl(button);
 
-    var button = ButtonHelpers.create("butInfo", "&#128712;", "0%", "45%");
-    button.onPointerClickObservable.add(ButtonHelpers.CB.info)
-    advancedTexture.addControl(button);
 
     var button = ButtonHelpers.create("butFS", "fulls", "45%", "-30%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
@@ -143,22 +154,6 @@ layout: 3dtour
     var button = ButtonHelpers.create("butPause", "fly>", "45%", "-10%")
     button.onPointerClickObservable.add(ButtonHelpers.CB.stopflythrough)
     ButtonHelpers.hide(button)
-    advancedTexture.addControl(button);
-
-    var button = ButtonHelpers.create("butFTPlay", "playKFs", "45%", "0%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.playKeyframes)
-    advancedTexture.addControl(button);
-
-    var button = ButtonHelpers.create("butAddKeyFrame", "addKF", "45%", "10%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.addKeyframe)
-    advancedTexture.addControl(button);
-
-    var button = ButtonHelpers.create("butClear", "clearKF", "45%", "20%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.clearKeyframes)
-    advancedTexture.addControl(button);
-
-    var button = ButtonHelpers.create("butKFInfo", "info", "45%", "30%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.showCameraDetails)
     advancedTexture.addControl(button);
 
     // Finally load the model.

@@ -1,35 +1,8 @@
 ---
 title: 3D Tour
 permalink: /berlin/maptour
-layout: map
+layout: maptour
 ---
-
-<link href="/f/bs/bootstrap.min.css" rel="stylesheet"/>
-<script src="/f/bs/bootstrap.bundle.min.js"></script>
-<script src="/f/jq/jquery.3.5.1.js"></script>
-<script src="/f/bjs/ammo.js"></script>
-<script src="/f/bjs/recast.js"></script>
-<script src="/f/bjs/cannon.js"></script>
-<script src="/f/bjs/Oimo.js"></script>
-<script src="/f/bjs/earcut.min.js"></script>
-<script src="/f/bjs/babylon.js"></script>
-<script src="/f/bjs/babylonjs.materials.min.js"></script>
-<script src="/f/bjs/babylonjs.proceduralTextures.min.js"></script>
-<script src="/f/bjs/babylonjs.postProcess.min.js"></script>
-<script src="/f/bjs/babylonjs.loaders.min.js"></script>
-<script src="/f/bjs/babylonjs.serializers.min.js"></script>
-<script src="/f/bjs/babylon.gui.min.js"></script>
-<script src="/f/bowser.js"></script>
-<script src="/f/models.js"></script>
-<script src="/f/babylonhelpers.js"></script>
-<script src="/f/modelcache.js"></script>
-<script src="/f/buttonhelpers.js"></script>
-<script src="/f/soundshelper.js"></script>
-<script src="/f/tdhelpers.js"></script>
-<script src="/f/maphelper.js"></script>
-<script src="/f/map_animation.js"></script>
-<script src="/f/anime.3.2.1.min.js"></script>
-<script src="/f/leaflet.js"></script>
 
 <script>
 

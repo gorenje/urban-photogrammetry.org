@@ -2,9 +2,7 @@
 var TDHelpers = {
   disableWebGL2: function() {
     return window.browser.satisfies( {
-      mobile: {
-        safari: "=13.1.1"
-      }
+      safari: ">0"
     } ) || false;
   },
 
@@ -79,36 +77,10 @@ var TDHelpers = {
     let canvas = engine.getRenderingCanvas()
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
-    /* let winWidth = window.innerWidth;
-     * let winHeight = window.innerHeight;
-
-     * let aspectRatio = 0.5625; // 16:9 ~ 1.7777....
-     * let canvas = engine.getRenderingCanvas()
-
-     * let heightBased = {
-     *   width: Math.round(winHeight * aspectRatio),
-     *   height: winHeight,
-     * }
-     * let widthBased = {
-     *   width: winWidth,
-     *   height: Math.round(winWidth / aspectRatio)
-     * }
-     * let whatToUse = undefined;
-
-     * if ( winWidth > winHeight ) {
-     *   whatToUse = heightBased
-     *   if ( whatToUse.width > winWidth ) { whatToUse = widthBased }
-     * } else {
-     *   whatToUse = widthBased
-     *   if ( whatToUse.height > winHeight ) { whatToUse = heightBased }
-     * }
-     * canvas.width = whatToUse.width
-     * canvas.height = whatToUse.height*/
   },
 
-  parseShareLink(url) {
-    var urlhash = new URL(url).hash
+  parseShareLink: function(url) {
+    var urlhash = new URL(url).hash || new URL(url).search.replace("?l=","#")
     if ( urlhash !== "" ) {
       try {
         var data = JSON.parse(atob(urlhash.substring(1)))
@@ -137,7 +109,7 @@ var TDHelpers = {
   },
 
   checkForShareData(url) {
-    var urlhash = new URL(url).hash
+    var urlhash = new URL(url).hash || new URL(url).search.replace("?l=","#")
     if ( urlhash !== "" ) {
       try {
         var data = JSON.parse(atob(urlhash.substring(1)))

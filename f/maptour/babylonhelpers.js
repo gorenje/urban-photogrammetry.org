@@ -178,8 +178,7 @@ function createSkyBox(scene) {
 }
 
 function isTextureReady(texture) {
-  if ( texture == undefined || texture == null ) return false;
-  return texture.isReady()
+  return texture != undefined && texture != null && texture.isReady()
 }
 
 function defineIntroAnim(model, scene) {
@@ -295,9 +294,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
             modelMesh.addLODLevel(20,modelMesh.clone())
             modelMesh.addLODLevel(6,mesh.meshes[1])
             for ( var idx = 1; idx < 2; idx++ ) {
-              setTimeout( function() {
-                loadSkyBoxMaterial(mlid,sizes[this],alltextures,multimat,scene)
-              }.bind(idx), 20 * idx)
+              loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
             }
             setTimeout( function() {
               ModelCache.cachePrevAndNext(this)
@@ -336,13 +333,11 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                       modelMesh.addLODLevel(0,mesh.meshes[1])
                     }
                     for ( var idx = 1; idx < sizes.length; idx++ ) {
-                      setTimeout(function() {
-                        loadSkyBoxMaterial(mlid,
-                                           sizes[this],
-                                           alltextures,
-                                           multimat,
-                                           scene)
-                        }.bind(idx), 20 * idx)
+                      loadSkyBoxMaterial(mlid,
+                                         sizes[idx],
+                                         alltextures,
+                                         multimat,
+                                         scene)
                     }
                     setTimeout( function() {
                       ModelCache.cachePrevAndNext(this)

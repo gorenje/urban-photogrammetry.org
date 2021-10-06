@@ -33,6 +33,4 @@ var ModelCache = {
     delete ModelCache.Cache[idx]
     return v;
   },
-
-
 }

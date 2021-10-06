@@ -165,8 +165,9 @@ var ButtonHelpers = {
       }
 
       var url = new URL(window.location)
-      var shareUrl = url.origin + url.pathname + "#" + window.btoa(
-        JSON.stringify(data));
+      var shareUrl = url.origin + url.pathname + "?l=" + window.btoa(
+        JSON.stringify(data)
+      );
 
       try {
         TDHelpers.copyToClipboard( shareUrl )
@@ -174,15 +175,12 @@ var ButtonHelpers = {
         setTimeout( function() {
           ButtonHelpers.toggle("butShare", "butCopied")
         }, 2500)
-      } catch ( e ) {
-        console.log(e)
-      }
+      } catch ( e ) {}
 
       try {
         navigator.share({ title: "Link to Model", url: shareUrl })
-      } catch ( e ) {
-        console.log(e)
-      }
+      } catch ( e ) {}
+
       console.log( shareUrl)
     },
 
