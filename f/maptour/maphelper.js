@@ -88,7 +88,7 @@ var MapHelper = {
   },
 
   examineModel: function(mlid, opts = {}) {
-    console.log( "Examing model: " + mlid)
+    // console.log( "Examing model: " + mlid)
 
     var txt = MapHelper.addModelTitle(mlid);
     MapAnimation.pause()

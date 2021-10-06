@@ -48,6 +48,7 @@ MapAnimation = {...MapAnimation, ...{
     {"zoom":18,"position_latitude":52.507567666135095,"position_longitude":13.362337183393484,"tilt":12.590870667793833,"rotation":205.13352898019113},
     {"zoom":15.600000000000009,"position_latitude":52.507567666135095,"position_longitude":13.362337183393484,"tilt":12.590870667793833,"rotation":205.13352898019113},
     {"zoom":15.600000000000009,"position_latitude":52.54046778346811,"position_longitude":13.378807178013023,"tilt":12.590870667793833,"rotation":205.13352898019113},
+    {"zoom":16.199999999999996,"position_latitude":52.535904085410046,"position_longitude":13.374351176086716,"tilt":55.68460518363935,"rotation":-5.337236467232307},
     {"zoom":18,"position_latitude":52.53775770525703,"position_longitude":13.377584785752653,"tilt":12.590870667793833,"rotation":205.13352898019113},
     {"zoom":18,"position_latitude":52.53854603161615,"position_longitude":13.3786339448949,"tilt":0,"rotation":166.47205038096948},
     MapAnimation.ViewModelFrame, // engel - friedhof
@@ -83,6 +84,7 @@ MapAnimation = {...MapAnimation, ...{
     {"zoom":18,"position_latitude":52.54050572752514,"position_longitude":13.428048775594958,"tilt":41.96253602305475,"rotation":17.940464241184763},
     {"zoom":15.800000000000008,"position_latitude":52.56913380160043,"position_longitude":13.444883040641702,"tilt":41.96253602305475,"rotation":17.940464241184763},
     {"zoom":18,"position_latitude":52.57024470438567,"position_longitude":13.446422278491994,"tilt":41.96253602305475,"rotation":17.940464241184763},
+    {"zoom":17.1559271546841,"position_latitude":52.56968583253286,"position_longitude":13.445750871722785,"tilt":64.8536613661472,"rotation":17.660308599161418},
     {"zoom":18,"position_latitude":52.56900237887969,"position_longitude":13.445535257467034,"tilt":22.521613832852978,"rotation":-110.5994130594287},
     {"zoom":18,"position_latitude":52.569218516339504,"position_longitude":13.445453494706767,"tilt":0,"rotation":-109.75894613335865},
     MapAnimation.ViewModelFrame, // buddhist temple
@@ -97,8 +99,14 @@ MapAnimation = {...MapAnimation, ...{
     {"zoom":17.59999999999999,"position_latitude":52.57168891211305,"position_longitude":13.386199568519876,"tilt":22.521613832852978,"rotation":-110.5994130594287},
     {"zoom":15,"position_latitude":52.569444571635636,"position_longitude":13.375270426633922,"tilt":42,"rotation":-202.47671367292543},
     {"zoom":15,"position_latitude":52.56133415453316,"position_longitude":13.314320718016232,"tilt":42,"rotation":-272.7098425072809},
+
+
     {"zoom":15,"position_latitude":52.52689912600376,"position_longitude":13.29552629309822,"tilt":42,"rotation":-272.7098425072809},
     {"zoom":15,"position_latitude":52.50827405347126,"position_longitude":13.279230307661816,"tilt":42,"rotation":-272.7098425072809},
+
+    {"zoom":15,"position_latitude":52.550019970716185,"position_longitude":13.308145506688174,"tilt":56.98627630375114,"rotation":-290.35964795475167},
+    {"zoom":15,"position_latitude":52.54537972467756,"position_longitude":13.320828357473939,"tilt":48.7520585544373,"rotation":-322.2973911454136},
+
     {"zoom":18,"position_latitude":52.507198628666764,"position_longitude":13.286118650911469,"tilt":21.82997118155617,"rotation":-275.36014925574733},
     {"zoom":18,"position_latitude":52.50722677642856,"position_longitude":13.2865878032603,"tilt":0,"rotation":-273.6792154036072},
     MapAnimation.ViewModelFrame, // seals in charlottenburg
@@ -245,8 +253,8 @@ MapAnimation = {...MapAnimation, ...{
         }
       })
     } else {
-      console.log( "Next frame: " + MapAnimation.currKeyFrame)
-      console.log( MapAnimation.keyFrames[MapAnimation.currKeyFrame] )
+      // console.log( "Next frame: " + MapAnimation.currKeyFrame)
+      // console.log( MapAnimation.keyFrames[MapAnimation.currKeyFrame] )
       MapAnimation.moveToFrame(MapAnimation.currKeyFrame)
     }
   },
@@ -263,8 +271,14 @@ MapAnimation = {...MapAnimation, ...{
   },
 
   play: function() {
-    MapAnimation.stateFromCamera()
-    MapAnimation.moveToFrame(MapAnimation.currKeyFrame)
+    if (MapAnimation.currKeyFrame < MapAnimation.keyFrames.length ) {
+      MapAnimation.stateFromCamera()
+      MapAnimation.moveToFrame(MapAnimation.currKeyFrame)
+    } else {
+      $(MapHelper.AllButtons["butPause"]).hide()
+      $(MapHelper.AllButtons["butPlay"]).show()
+      MapAnimation.currKeyFrame = 0
+    }
   },
 
   start: function(fromFrame = 0) {

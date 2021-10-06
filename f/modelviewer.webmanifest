@@ -2,6 +2,7 @@
    "background_color" : "#000",
    "display": "fullscreen",
    "orientation": "portrait",
+   "start_url": "/berlin/modelviewer",
    "icons" : [
       {
          "sizes" : "192x192",
@@ -16,5 +17,6 @@
    ],
    "name" : "Urban Photogrammetry Model Viewer",
    "short_name" : "UPModelViewer",
+   "description": "This project is focused on creating a three dimensional documentation of our ever changing urban environments.",
    "theme_color" : "#333"
 }
