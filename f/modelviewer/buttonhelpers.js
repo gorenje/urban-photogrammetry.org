@@ -119,6 +119,10 @@ var ButtonHelpers = {
       $('#map').fadeIn(200);
     },
 
+    inspect: function(evt) {
+      scene.debugLayer.show({ embedMode: true });
+    },
+
     mute: function(evt) {
       muteOn = false;
       BABYLON.Engine.audioEngine.setGlobalVolume(1)

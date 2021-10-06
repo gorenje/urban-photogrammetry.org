@@ -77,7 +77,6 @@ var MapHelper = {
     $(MapHelper.AllButtons["butPlay"]).hide()
     $(MapHelper.AllButtons["butPause"]).show()
     MapAnimation.play()
-    clearScene(scene, skyboxMesh, alltextures)
   },
 
   playIntroAnim: function () {
@@ -247,9 +246,14 @@ var MapHelper = {
       map.emit('sharelink')
     })
 
-    // MapHelper.addButton( "butExit", 90, 5, function() {
-    //   map.emit('keyframe')
-    // })
+    if ( TDHelpers.isLocalhost() ) {
+      MapHelper.addButton( "butExit", 90, 5, function() {
+        map.emit('keyframe')
+      })
+      MapHelper.addButton( "butMute", 90, 10, function() {
+        scene.debugLayer.show({ embedMode: true });
+      })
+    }
 
     MapHelper.addButton( "butPlay", 45, 93, function() {
       $(MapHelper.AllButtons["butPlay"]).hide()

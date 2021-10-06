@@ -122,12 +122,38 @@ function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
 }
 
 function clearScene(scene, skyboxMesh, alltextures) {
-  skyboxMesh.dispose(true,true)
-  for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
-    scene.meshes[idx].dispose(true,true)
+  if ( skyboxMesh ) { skyboxMesh.dispose(false,true) }
+  if ( multimat ) { multimat.dispose(true,true,true) }
+
+  for ( var idx = 0; idx < scene.rootNodes.length; idx++ ) {
+    if ( ["hdrSkyBox64", "__root__"].includes(scene.rootNodes[idx].id) ) {
+      scene.rootNodes[idx].dispose(false,true)
+    }
   }
+  for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
+    scene.meshes[idx].dispose(false,true)
+  }
+  for ( var idx = 0; idx < scene.textures.length; idx++ ) {
+    if ( !["data:EnvironmentBRDFTexture0", "UI"].includes(scene.textures[idx].name)) {
+      scene.textures[idx].dispose()
+    }
+  }
+  for ( var idx = 0; idx < scene.materials.length; idx++ ) {
+    scene.materials[idx].dispose()
+  }
+  for ( var idx = 0; idx < scene.multiMaterials.length; idx++ ) {
+    scene.multiMaterials[idx].dispose()
+  }
+  for ( var idx = 0; idx < alltextures.length; idx++ ) {
+    alltextures[idx].dispose()
+  }
+
+  alltextures.length = 0
   scene.meshes.length = 0
   alltextures.length = 0
+  skyboxMesh = undefined;
+  multimat = undefined;
+  engine.clearInternalTexturesCache()
 }
 
 var cameraInitialised = false;

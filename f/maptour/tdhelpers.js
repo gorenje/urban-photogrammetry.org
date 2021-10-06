@@ -14,22 +14,26 @@ var TDHelpers = {
     return window.browser.getPlatformType() == "mobile"
   },
 
+  isLocalhost: function() {
+    return window.location.hostname == "localhost"
+  },
+
   osmTileHost: function() {
-    if ( window.location.hostname == "localhost" ) {
+    if ( TDHelpers.isLocalhost() ) {
       return "http://localhost:4001"
     }
     return "https://t.urban-photogrammetry.org"
   },
 
   geoTileHost: function() {
-    if ( window.location.hostname == "localhost" ) {
+    if ( TDHelpers.isLocalhost() ) {
       return "http://localhost:4002"
     }
     return "https://g.urban-photogrammetry.org"
   },
 
   modelHost: function() {
-    if ( window.location.hostname == "localhost" ) {
+    if ( TDHelpers.isLocalhost() ) {
       return "http://localhost:4003"
     }
     return "https://m.urban-photogrammetry.org"

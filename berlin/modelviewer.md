@@ -87,8 +87,19 @@ layout: modelviewer
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
     if ( TDHelpers.isLocalhost() ) {
+      var wa = document.createElement('script');
+      wa.type = 'text/javascript';
+      wa.async = true;
+		  wa.src = '/f/bjs/babylon.inspector.bundle.js';
+		  var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wa, s);
+
       textBlock = ButtonHelpers.createTextBlock()
       advancedTexture.addControl(textBlock);
+
+      var button = ButtonHelpers.create("butInsp", "insp", "45%", "15%");
+      button.onPointerClickObservable.add(ButtonHelpers.CB.inspect)
+      advancedTexture.addControl(button);
 
       var button = ButtonHelpers.create("butInfo", "&#128712;", "0%", "45%");
       button.onPointerClickObservable.add(ButtonHelpers.CB.info)

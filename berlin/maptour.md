@@ -79,6 +79,14 @@ function displayModel(mlid, model_from_shared = undefined) {
     skyboxMesh = r[0]
     multimat = r[1]
 
+    if ( TDHelpers.isLocalhost() ) {
+      var wa = document.createElement('script');
+      wa.type = 'text/javascript';
+	  wa.src = '/f/bjs/babylon.inspector.bundle.js';
+	  var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wa, s);
+    }
+
     loadSkyBoxMaterial(currModel.mlid,baseMaterialSizes[0],alltextures,
                        multimat,scene)
 
