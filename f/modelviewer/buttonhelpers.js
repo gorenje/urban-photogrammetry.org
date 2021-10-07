@@ -99,26 +99,6 @@ var ButtonHelpers = {
 
   // Callbacks for the button clicks.
   CB: {
-    exit: function(evt) {
-      $('#3dcanvas').fadeOut(500);
-
-      scene.stopAllAnimations()
-      setTimeout(function() {
-        modelMesh.dispose(true,true)
-        skyboxMesh.dispose(true,true)
-        for ( var idx = 0; idx < scene.meshes.length; idx++ ) {
-          scene.meshes[idx].dispose()
-        }
-        scene.meshes.length = 0
-      }, 20)
-
-      SoundsHelper.stopAll()
-      ButtonHelpers.toggle("butPlay", "butPause")
-      setTimeout( MapHelper.modelExaminerDone, 750 );
-      ButtonHelpers.AllButtons["butExit"].background = "#00000033";
-      $('#map').fadeIn(200);
-    },
-
     inspect: function(evt) {
       scene.debugLayer.show({ embedMode: true });
     },
@@ -231,8 +211,10 @@ var ButtonHelpers = {
     },
 
     stopflythrough: function(evt) {
-      try { currFlythrough.stop() } catch (e) {}
+      var ref = currFlythrough;
       currFlythrough = null
+      try { ref.stop() } catch (e) {}
+      scene.onPointerDown = null;
     },
 
     flythrough: function(evt) {
@@ -244,55 +226,108 @@ var ButtonHelpers = {
           currModel.flythrough.map( a => a.avgfps )
         )
       )
-      var anims = TDHelpers.prepareAnimations(frameRate)
+
+      /*
+       * The intention here so to have 3 animations two with easing and the
+       * third has no easing. Basically initial animation are the two first
+       * keyframes, the middle animation has no easing and contains all the
+       * keyframes from 2 to n-1 (n being total number of keyframes). The
+       * last anim contains the last 2 keyframes and has an easing. This
+       * makes for a smoother animation around the model.
+       *
+       * Tricky is stopping the right animation and preventing the other
+       * animations from running when one animation is stopped.
+       */
+      var anims = TDHelpers.prepareAnimationsFirstMiddleLast(frameRate)
+
       var startFrame = currModel.flythrough[0].frame;
       var lastFrame = 0;
-      var attrs = [ [], [], [], [], [] ];
+      var attrs = {
+        first:  [ [], [], [], [], [] ],
+        middle: [ [], [], [], [], [] ],
+        last:   [ [], [], [], [], [] ],
+      }
 
       var camera = scene.activeCamera;
+      var idxSecondToLastFrame = currModel.flythrough.length - 2
+      var idxLastFrame = currModel.flythrough.length - 1
 
-      attrs[0].push({ frame: 0, value: camera.position.clone() })
-      attrs[1].push({ frame: 0, value: camera.alpha })
-      attrs[2].push({ frame: 0, value: camera.beta })
-      attrs[3].push({ frame: 0, value: camera.radius })
-      attrs[4].push({ frame: 0, value: camera.target.clone() })
+      attrs.first[0].push({ frame: 0, value: camera.position.clone() })
+      attrs.first[1].push({ frame: 0, value: camera.alpha })
+      attrs.first[2].push({ frame: 0, value: camera.beta })
+      attrs.first[3].push({ frame: 0, value: camera.radius })
+      attrs.first[4].push({ frame: 0, value: camera.target.clone() })
 
       $.each( currModel.flythrough, function(idx,keyframe) {
         var frame = keyframe.frame - startFrame + frameRate;
 
-        attrs[0].push({ frame: frame, value: vector3FromHash(keyframe.position)})
-        attrs[1].push({ frame: frame, value: keyframe.alpha })
-        attrs[2].push({ frame: frame, value: keyframe.beta })
-        attrs[3].push({ frame: frame, value: keyframe.radius })
-        attrs[4].push({ frame: frame, value: vector3FromHash(keyframe.target)})
+        var dp = [
+          { frame: frame, value: vector3FromHash(keyframe.position)},
+          { frame: frame, value: keyframe.alpha },
+          { frame: frame, value: keyframe.beta },
+          { frame: frame, value: keyframe.radius },
+          { frame: frame, value: vector3FromHash(keyframe.target)}
+        ];
+
+        if ( idx == 0 ) {
+          $.each(attrs.first,  function(idx,obj){ obj.push(dp[idx]) })
+          $.each(attrs.middle, function(idx,obj){ obj.push(dp[idx]) })
+        } else if ( idx == idxSecondToLastFrame ) {
+          $.each(attrs.middle, function(idx,obj){ obj.push(dp[idx]) })
+          $.each(attrs.last,   function(idx,obj){ obj.push(dp[idx]) })
+        } else if ( idx == idxLastFrame ) {
+          $.each(attrs.last,   function(idx,obj){ obj.push(dp[idx]) })
+        } else {
+          $.each(attrs.middle, function(idx,obj){ obj.push(dp[idx]) })
+        }
+
         lastFrame = frame;
       })
 
-      $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
-      currFlythrough = scene.beginDirectAnimation(camera,
-                                                  anims,
-                                                  0,
-                                                  lastFrame + frameRate,
-                                                  false);
+      for ( var idx = 0; idx < 5; idx++ ) {
+        anims.first[idx].setKeys( attrs.first[idx] )
+        anims.middle[idx].setKeys( attrs.middle[idx] )
+        anims.last[idx].setKeys( attrs.last[idx] )
+      }
 
+      currFlythrough = new BABYLON.Animatable(
+        scene, camera, 0, anims.middle[0]._keys[0].frame,false, 1,
+        function() {
+          if ( currFlythrough == null ) {
+            return ButtonHelpers.toggle("butPlay", "butPause")
+          }
+
+          currFlythrough = new BABYLON.Animatable(
+            scene, camera, anims.middle[0]._keys[0].frame,
+            anims.last[0]._keys[0].frame, false, 1,
+            function() {
+              if ( currFlythrough == null ) {
+                return ButtonHelpers.toggle("butPlay", "butPause")
+              }
+
+              currFlythrough = new BABYLON.Animatable(
+                scene, camera, anims.last[0]._keys[0].frame,
+                lastFrame + frameRate, false, 1,
+                function() {
+                  currFlythrough = null
+                  scene.onPointerDown = null
+                  new BABYLON.SubMesh(3, 0, skyboxMesh.getTotalVertices(),
+                                      0, skyboxMesh.getTotalIndices(),
+                                      skyboxMesh);
+                  ButtonHelpers.toggle("butPlay", "butPause")
+                }, anims.last)
+              currFlythrough.disposeOnEnd = true
+            }, anims.middle)
+          currFlythrough.disposeOnEnd = true
+        }, anims.first)
       currFlythrough.disposeOnEnd = true
+
       scene.onPointerDown = function(e) {
-        try { currFlythrough.stop() } catch (e) {}
+        var ref = currFlythrough;
         currFlythrough = null
+        try { ref.stop() } catch (exp) {}
         scene.onPointerDown = null;
       }
-      currFlythrough.onAnimationEndObservable.addOnce(function() {
-        scene.onPointerDown = null
-        currFlythrough = null
-        new BABYLON.SubMesh(3, 0, skyboxMesh.getTotalVertices(),
-                            0, skyboxMesh.getTotalIndices(),
-                            skyboxMesh);
-        ButtonHelpers.toggle("butPlay", "butPause")
-
-        if ( evt && evt.autoExitAfterFlythrough ) {
-          TDHelpers.setupAutoExit()
-        }
-      })
     },
 
     playKeyframes: function(evt) {

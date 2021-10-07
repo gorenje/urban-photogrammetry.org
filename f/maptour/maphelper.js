@@ -20,10 +20,10 @@ var MapHelper = {
     var img = document.createElement('div')
 
     img.id = "modeltitle"
-    img.style = `display: none; position: absolute; top: 30%; left: 30%; height: 15vh; width: 30vw; background-color: #000000aa; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; color: #eee;text-align: center;`
+    img.style = `display: none; position: absolute; top: 30%; left: 30%; height: 15vh; width: 30vw; background-color: #000000aa; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; color: #eee;text-align: center; pointer-events: auto;`
 
     $('#mapbuttons').append( img )
-    img.innerHTML = "<strong class='d-inline-block h1 align-text-bottom text-center' style='margin-top: 30%;'>" + ModelNames[mlid].title + "</strong>"
+    img.innerHTML = "<strong class='d-inline-block h1 align-text-bottom text-center' style='margin-top: 30%;'>" + ModelNames[mlid].title + "</strong><span style='position: absolute;  right: 0;  bottom: 0;  padding: 1px 3px;  font: 13px sans-serif;  z-index: 10;  white-space: nowrap;  text-overflow: ellipsis;  overflow: hidden;  max-width: 100%;'><a target=_blank href='/berlin/" + mlid + "'>More details</a></span>";
 
     return img;
   },
@@ -79,16 +79,13 @@ var MapHelper = {
     MapAnimation.play()
   },
 
-  playIntroAnim: function () {
-    if ( scene.isReady() ) {
-      defineIntroAnim(currModel, scene)()
-    } else {
-      setTimeout(MapHelper.playIntroAnim, 300)
-    }
+  onSceneReadyCallback: function(cb) {
+    if ( scene && scene.isReady() ) { return cb() }
+    setTimeout(function() { MapHelper.onSceneReadyCallback(cb) }, 300)
   },
 
   examineModel: function(mlid, opts = {}) {
-    // console.log( "Examing model: " + mlid)
+    console.log( "Examing model: " + mlid)
 
     var txt = MapHelper.addModelTitle(mlid);
     MapAnimation.pause()
@@ -113,14 +110,34 @@ var MapHelper = {
         loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)
       }
 
-      $('#modeltitle').fadeOut(3000, function() {
-        $('#modeltitle').remove()
-        $('#map').fadeOut(400)
-        $('#3dcanvas').fadeIn(400, function() {
-          if ( currModel.sharecamera ) { MapHelper.playIntroAnim() }
-          (opts.callback || function(){})();
+      if ( scene ) {
+        var timestamp = Date.now()
+        scene.onReadyObservable.addOnce(function() {
+          $('#modeltitle').fadeOut(Math.max(300, 3000 - (Date.now() - timestamp)), function() {
+            $('#map').fadeOut(100)
+            $('#3dcanvas').fadeIn(100, function() {
+              if ( currModel.sharecamera ) {
+                defineIntroAnim(currModel, scene)()
+              }
+              (opts.callback || function(){})()
+            })
+            $('#modeltitle').remove()
+          })
         })
-      })
+      } else {
+        $('#modeltitle').fadeOut(3000, function() {
+          $('#modeltitle').remove()
+          $('#map').fadeOut(400)
+          $('#3dcanvas').fadeIn(400, function() {
+            if ( currModel.sharecamera ) {
+              MapHelper.onSceneReadyCallback( function() {
+                defineIntroAnim(currModel, scene)()
+              })
+            }
+            if (opts.callback) {MapHelper.onSceneReadyCallback(opts.callback)}
+          })
+        })
+      }
     })
   },
 

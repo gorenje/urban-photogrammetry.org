@@ -112,13 +112,14 @@ function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
   var cacheEntry = ModelCache.getEntry(filename)
   if ( cacheEntry != undefined ) { filename = cacheEntry; }
 
-  var txt = new BABYLON.EquiRectangularCubeTexture(filename, scene, sze);
-  var mat = new BABYLON.StandardMaterial("skyBox"+sze, scene);
-
-  mat.reflectionTexture = txt
-  configMaterial(mat)
-  multimat.subMaterials.push(mat)
-  alltextures.push(txt)
+  var txt = new BABYLON.EquiRectangularCubeTexture(
+    filename, scene, sze, false, true, function(){
+      var mat = new BABYLON.StandardMaterial("skyBox"+sze, scene);
+      mat.reflectionTexture = txt
+      configMaterial(mat)
+      multimat.subMaterials.push(mat)
+      alltextures.push(txt)
+    })
 }
 
 function clearScene(scene, skyboxMesh, alltextures) {
@@ -153,6 +154,7 @@ function clearScene(scene, skyboxMesh, alltextures) {
   alltextures.length = 0
   skyboxMesh = undefined;
   multimat = undefined;
+  scene.clearCachedVertexData()
   engine.clearInternalTexturesCache()
 }
 
@@ -240,7 +242,6 @@ function defineIntroAnim(model, scene) {
       })
       delete model.autoExitAfterAnim
     }
-    introAnim = undefined
     delete model.sharecamera
   }.bind(model);
 }

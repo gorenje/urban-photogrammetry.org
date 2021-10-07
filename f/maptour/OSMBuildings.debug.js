@@ -3517,7 +3517,7 @@ const
   MIN_ZOOM = 15,
   MAX_ZOOM = 22,
 
-  MAX_TILT = 80;
+  MAX_TILT = 75;
   // MAX_TILT = 45;
 
 

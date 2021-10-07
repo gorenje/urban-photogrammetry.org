@@ -91,7 +91,7 @@ var TDHelpers = {
     return undefined;
   },
 
-  checkForShareData(url) {
+  checkForShareData: function(url) {
     var urlhash = new URL(url).hash || new URL(url).search.replace("?l=","#")
     if ( urlhash !== "" ) {
       try {
@@ -165,5 +165,29 @@ var TDHelpers = {
     });
 
     return anims;
+  },
+
+  prepareAnimationsFirstMiddleLast: function(frameRate) {
+    var first  = TDHelpers.prepareAnimations(frameRate)
+    var middle = TDHelpers.prepareAnimations(frameRate)
+    var last   = TDHelpers.prepareAnimations(frameRate)
+
+    $.each( first, function(idx, anim) {
+      var easingFunction = new BABYLON.CircleEase();
+      easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEIN);
+      anim.setEasingFunction(easingFunction)
+    });
+
+    $.each( middle, function(idx, anim) {
+      anim.setEasingFunction(undefined)
+    });
+
+    $.each( last, function(idx, anim) {
+      var easingFunction = new BABYLON.CircleEase();
+      easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
+      anim.setEasingFunction(easingFunction)
+    });
+
+    return { first: first, middle: middle, last: last };
   }
 }

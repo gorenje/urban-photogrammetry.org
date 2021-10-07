@@ -97,16 +97,8 @@ MapAnimation = {...MapAnimation, ...{
 
     {"zoom":15.999999999999996,"position_latitude":52.56981876935501,"position_longitude":13.393942801841346,"tilt":22.521613832852978,"rotation":-110.5994130594287},
     {"zoom":17.59999999999999,"position_latitude":52.57168891211305,"position_longitude":13.386199568519876,"tilt":22.521613832852978,"rotation":-110.5994130594287},
-    {"zoom":15,"position_latitude":52.569444571635636,"position_longitude":13.375270426633922,"tilt":42,"rotation":-202.47671367292543},
-    {"zoom":15,"position_latitude":52.56133415453316,"position_longitude":13.314320718016232,"tilt":42,"rotation":-272.7098425072809},
-
-
-    {"zoom":15,"position_latitude":52.52689912600376,"position_longitude":13.29552629309822,"tilt":42,"rotation":-272.7098425072809},
     {"zoom":15,"position_latitude":52.50827405347126,"position_longitude":13.279230307661816,"tilt":42,"rotation":-272.7098425072809},
-
-    {"zoom":15,"position_latitude":52.550019970716185,"position_longitude":13.308145506688174,"tilt":56.98627630375114,"rotation":-290.35964795475167},
-    {"zoom":15,"position_latitude":52.54537972467756,"position_longitude":13.320828357473939,"tilt":48.7520585544373,"rotation":-322.2973911454136},
-
+    {"zoom":15,"position_latitude":52.50075194713044,"position_longitude":13.300630881970854,"tilt":56.98627630375114,"rotation":-282.0534231246126},
     {"zoom":18,"position_latitude":52.507198628666764,"position_longitude":13.286118650911469,"tilt":21.82997118155617,"rotation":-275.36014925574733},
     {"zoom":18,"position_latitude":52.50722677642856,"position_longitude":13.2865878032603,"tilt":0,"rotation":-273.6792154036072},
     MapAnimation.ViewModelFrame, // seals in charlottenburg
@@ -217,7 +209,7 @@ MapAnimation = {...MapAnimation, ...{
 
     MapAnimation.currTimeout = setTimeout(function() {
       MapAnimation.nextKeyFrame()
-    }, 1000 );
+    }, 600 );
   },
 
   moveToFrame: function(frameNr) {
