@@ -3,11 +3,11 @@ var MapHelper = {
 
   AllButtons: {},
 
-  addButton: function(name, left, top, callback = undefined) {
+  addButton: function(name, left, top, callback = undefined, icon_name = undefined) {
     var img = document.createElement('img')
 
     img.style = `position: absolute; top: ${top}%; left: ${left}%; width: 7vw; background-color: #00000033; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; pointer-events: auto;`
-    img.src = ButtonHelpers.ImageMap[name]
+    img.src = ButtonHelpers.ImageMap[icon_name || name]
     img.onclick = callback || function(){};
 
     $('#mapbuttons').append( img )
@@ -267,6 +267,31 @@ var MapHelper = {
 
     $('#mapbuttons').css('width', `${sze.width}px`);
     $('#mapbuttons').css('height', `${sze.height}px`);
+
+    MapHelper.addButton( "butLoader1", 45, 5, function(){}, "butLoader");
+    $(MapHelper.AllButtons["butLoader1"]).hide()
+
+    MapHelper.addButton( "butNav", 45, 5, function() {
+      var func = function() {
+        $(MapHelper.AllButtons["butLoader1"]).hide()
+        $(MapHelper.AllButtons["butNav"]).show()
+        $(window).off("movetopos:complete", func);
+      }
+      $(window).on("movetopos:complete",func);
+
+      $(MapHelper.AllButtons["butLoader1"]).show()
+      $(MapHelper.AllButtons["butNav"]).hide()
+
+      MapAnimation.pause()
+      $(MapHelper.AllButtons["butPlay"]).show()
+      $(MapHelper.AllButtons["butPause"]).hide()
+
+      MapAnimation.moveToPos({"zoom":15.999999999999996,
+                           "position_latitude":52.521959731734135,
+                           "position_longitude":13.40975201573759,
+                           "tilt":13.245142620917735,
+                           "rotation":24.57576092466016})
+    })
 
     MapHelper.addButton( "butCopied", 90, 93, function() {
       $(MapHelper.AllButtons["butShare"]).show()

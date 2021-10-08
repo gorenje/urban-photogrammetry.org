@@ -216,6 +216,22 @@ MapAnimation = {...MapAnimation, ...{
     }, 600 );
   },
 
+  moveToPos: function(pos) {
+    MapAnimation.stateFromCamera()
+    var startPos = L.latLng( MapAnimation.animState.position_latitude,
+                             MapAnimation.animState.position_longitude )
+    var endPos = L.latLng( pos.position_latitude, pos.position_longitude )
+
+    MapAnimation.currAnim = anime({
+      targets:  MapAnimation.animState,
+      easing:   'cubicBezier(.62,.28,.56,.88)',
+      duration: Math.max(1500,startPos.distanceTo(endPos) / 0.25),
+      update:   MapAnimation.animUpdateCallback,
+      complete: function() { $(window).trigger("movetopos:complete") },
+      ...pos
+    })
+  },
+
   moveToFrame: function(frameNr) {
     var startPos = L.latLng( MapAnimation.animState.position_latitude,
                              MapAnimation.animState.position_longitude )
