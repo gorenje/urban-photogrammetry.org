@@ -5,19 +5,7 @@ var ButtonHelpers = {
   AllButtons: {
   },
 
-  ImageMap: {
-    butFS:     ButtonImages.butFS,
-    butFSexit: ButtonImages.butFSexit,
-    butShare:  ButtonImages.butShare,
-    butCopied: ButtonImages.butCopied,
-    butPlay:   ButtonImages.butPlay,
-    butPause:  ButtonImages.butPause,
-    butPrev:   ButtonImages.butPrev,
-    butNext:   ButtonImages.butNext,
-    butVol:    ButtonImages.butVol,
-    butMute:   ButtonImages.butMute,
-    butExit:   ButtonImages.butExit,
-  },
+  ImageMap: ButtonImages,
 
   imageButton: function(filename) {
     button = BABYLON.GUI.Button.CreateImageOnlyButton(name, filename);

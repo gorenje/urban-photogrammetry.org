@@ -3,12 +3,12 @@ var MapHelper = {
 
   AllButtons: {},
 
-  addButton: function(name, left, top, callback) {
+  addButton: function(name, left, top, callback = undefined) {
     var img = document.createElement('img')
 
     img.style = `position: absolute; top: ${top}%; left: ${left}%; width: 7vw; background-color: #00000033; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; pointer-events: auto;`
     img.src = ButtonHelpers.ImageMap[name]
-    img.onclick = callback;
+    img.onclick = callback || function(){};
 
     $('#mapbuttons').append( img )
     MapHelper.AllButtons[name] = img;
@@ -23,7 +23,8 @@ var MapHelper = {
     img.style = `display: none; position: absolute; top: 30%; left: 30%; height: 15vh; width: 30vw; background-color: #000000aa; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; color: #eee;text-align: center; pointer-events: auto;`
 
     $('#mapbuttons').append( img )
-    img.innerHTML = "<strong class='d-inline-block h1 align-text-bottom text-center' style='margin-top: 30%;'>" + ModelNames[mlid].title + "</strong><span style='position: absolute;  right: 0;  bottom: 0;  padding: 1px 3px;  font: 13px sans-serif;  z-index: 10;  white-space: nowrap;  text-overflow: ellipsis;  overflow: hidden;  max-width: 100%;'><a target=_blank href='/berlin/" + mlid + "'>More details</a></span>";
+
+    img.innerHTML = "<strong class='d-inline-block h1 align-text-bottom text-center' style='margin-top: 30%;'>" + ModelNames[mlid].title + "</strong><span style='position: absolute;  right: 0;  bottom: 0;  padding: 1px 3px;  font: 13px sans-serif;  z-index: 10;  white-space: nowrap;  text-overflow: ellipsis;  overflow: hidden;  max-width: 100%;'><a target=_blank href='/berlin/" + mlid + "'>More details</a></span><img width='40px' height='40px' src='"+ButtonHelpers.ImageMap["butLoader"]+"'/>";
 
     return img;
   },
@@ -86,6 +87,7 @@ var MapHelper = {
 
   examineModel: function(mlid, opts = {}) {
     console.log( "Examing model: " + mlid)
+    $(window).trigger('model:show', mlid)
 
     var txt = MapHelper.addModelTitle(mlid);
     MapAnimation.pause()
@@ -144,6 +146,15 @@ var MapHelper = {
   createStreetMap: function() {
     var browser = bowser.getParser(window.navigator.userAgent);
     var shareData = TDHelpers.parseShareLink(window.location)
+    $(window).off('infoscreen:close', MapHelper.createStreetMap)
+
+    var hideinfoscreen = function(event, data) {
+      if ( data.frameNr == 2 ) {
+        $('#infoScreen').fadeOut(300)
+        $(window).off('keyframe:moveto', hideinfoscreen)
+      }
+    };
+    $(window).on('keyframe:moveto', hideinfoscreen)
 
     $('#loadingScreen').hide()
     $('#3dcanvas').hide()
@@ -161,6 +172,7 @@ var MapHelper = {
       tilt: 45,
       attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>© 3D <a href="https://urban-photogrammetry.org">Urban Models</a>',
     })
+
 
     map.on('keyframe', function() {
       var data = {
@@ -193,8 +205,10 @@ var MapHelper = {
 
       try {
         TDHelpers.copyToClipboard( shareUrl )
-        $(MapHelper.AllButtons["butShare"]).hide()
-        $(MapHelper.AllButtons["butCopied"]).show()
+        setTimeout( function() {
+          $(MapHelper.AllButtons["butLoader"]).hide()
+          $(MapHelper.AllButtons["butCopied"]).show()
+        }, 1000)
         setTimeout( function() {
           $(MapHelper.AllButtons["butShare"]).show()
           $(MapHelper.AllButtons["butCopied"]).hide()
@@ -259,7 +273,13 @@ var MapHelper = {
       $(MapHelper.AllButtons["butCopied"]).hide()
     })
     $(MapHelper.AllButtons["butCopied"]).hide()
+
+    MapHelper.addButton( "butLoader", 90, 93 )
+    $(MapHelper.AllButtons["butLoader"]).hide()
+
     MapHelper.addButton( "butShare", 90, 93, function() {
+      $(MapHelper.AllButtons["butShare"]).hide()
+      $(MapHelper.AllButtons["butLoader"]).show()
       map.emit('sharelink')
     })
 
