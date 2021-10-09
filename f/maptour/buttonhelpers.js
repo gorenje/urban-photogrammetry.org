@@ -158,10 +158,11 @@ var ButtonHelpers = {
 
         try {
           navigator.share({
-            title: "Link to Urban-Photogrammetry.org",
+            title: "Urban-Photogrammetry.org",
+            text: "Check out the model @ Urban-Photogrammetry.org",
             url: shareUrl
           })
-        } catch ( e ) { alert(shareUrl) }
+        } catch ( e ) { prompt("URL", shareUrl) }
       }).error(function(err){
         try {
           TDHelpers.copyToClipboard( shareUrl )
@@ -173,10 +174,11 @@ var ButtonHelpers = {
 
         try {
           navigator.share({
-            title: "Link to Urban-Photogrammetry.org",
+            title: "Urban-Photogrammetry.org",
+            text: "Check out the model @ Urban-Photogrammetry.org",
             url: shareUrl
           })
-        } catch ( e ) { alert(shareUrl) }
+        } catch ( e ) { prompt("URL",shareUrl) }
       })
     },
 

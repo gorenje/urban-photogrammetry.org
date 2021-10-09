@@ -3,6 +3,7 @@
    "display": "fullscreen",
    "orientation": "portrait",
    "start_url": "/berlin/modelviewer",
+   "permissions": ["clipboardWrite"],
    "icons" : [
       {
          "sizes" : "192x192",

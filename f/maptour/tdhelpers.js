@@ -44,8 +44,13 @@ var TDHelpers = {
     tempInput.style = "position: absolute; left: -1000px; top: -1000px";
     tempInput.value = content;
     document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
+
+    navigator.permissions.query({name: "clipboard-write"}).then(result => {
+      if (result.state == "granted" || result.state == "prompt") {
+        tempInput.select();
+        document.execCommand("copy");
+      }
+    });
     document.body.removeChild(tempInput);
   },
 
