@@ -136,16 +136,38 @@ var ButtonHelpers = {
         JSON.stringify(data)
       );
 
-      try {
-        TDHelpers.copyToClipboard( shareUrl )
-        ButtonHelpers.toggle("butCopied", "butShare")
-        setTimeout( function() {
-          ButtonHelpers.toggle("butShare", "butCopied")
-        }, 2500)
-      } catch ( e ) {}
+      $.ajax({
+        url: "https://r.upo.sh/image",
+        method: "post",
+        async: true,
+        data: { },
+        dataType: "text",
+        crossDomain: true,
+        headers: { "X-UPO-Data": window.btoa(JSON.stringify(data)) }
+      }).done(function(data,status,resp){
+        shareUrl = resp.getResponseHeader("X-UPO-Data");
+        try {
+          TDHelpers.copyToClipboard( shareUrl )
+          ButtonHelpers.toggle("butCopied", "butShare")
+          setTimeout( function() {
+            ButtonHelpers.toggle("butShare", "butCopied")
+          }, 2500)
+        } catch ( e ) {}
+      }).error(function(err){
+        try {
+          TDHelpers.copyToClipboard( shareUrl )
+          ButtonHelpers.toggle("butCopied", "butShare")
+          setTimeout( function() {
+            ButtonHelpers.toggle("butShare", "butCopied")
+          }, 2500)
+        } catch ( e ) {}
+      })
 
       try {
-        navigator.share({ title: "Link to Model", url: shareUrl })
+        navigator.share({
+          title: "Link to Urban-Photogrammetry.org",
+          url: shareUrl
+        })
       } catch ( e ) {}
 
       console.log( shareUrl)

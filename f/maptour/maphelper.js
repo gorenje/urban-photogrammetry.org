@@ -199,20 +199,42 @@ var MapHelper = {
       var shareUrl = url.origin + url.pathname + "?l=" + window.btoa(
         JSON.stringify(data));
 
-      try {
-        navigator.share({ title: "Link to Model", url: shareUrl })
-      } catch ( e ) {}
-
-      try {
-        TDHelpers.copyToClipboard( shareUrl )
-        setTimeout( function() {
+      $.ajax({
+        url: "https://r.upo.sh/image",
+        method: "post",
+        async: true,
+        data: { },
+        dataType: "text",
+        crossDomain: true,
+        headers: { "X-UPO-Data": window.btoa(JSON.stringify(data)) }
+      }).done(function(data,status,resp){
+        shareUrl = resp.getResponseHeader("X-UPO-Data");
+        try {
+          TDHelpers.copyToClipboard( shareUrl )
           $(MapHelper.AllButtons["butLoader"]).hide()
           $(MapHelper.AllButtons["butCopied"]).show()
-        }, 1000)
-        setTimeout( function() {
-          $(MapHelper.AllButtons["butShare"]).show()
-          $(MapHelper.AllButtons["butCopied"]).hide()
-        }, 2500)
+          setTimeout( function() {
+            $(MapHelper.AllButtons["butShare"]).show()
+            $(MapHelper.AllButtons["butCopied"]).hide()
+          }, 2500)
+        } catch ( e ) {}
+      }).error(function(err){
+        try {
+          TDHelpers.copyToClipboard( shareUrl )
+          $(MapHelper.AllButtons["butLoader"]).hide()
+          $(MapHelper.AllButtons["butCopied"]).show()
+          setTimeout( function() {
+            $(MapHelper.AllButtons["butShare"]).show()
+            $(MapHelper.AllButtons["butCopied"]).hide()
+          }, 2500)
+        } catch ( e ) {}
+      })
+
+      try {
+        navigator.share({
+          title: "Link to Urban-Photogrammetry.org",
+          url: shareUrl
+        })
       } catch ( e ) {}
 
       console.log( shareUrl )
