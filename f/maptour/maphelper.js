@@ -38,7 +38,7 @@ var MapHelper = {
                 {
                   scale:    obj.scale,
                   altitude: obj.altitude || 0,
-                  color:    'orange',
+                  color:    '#ff911e',
                   id:       'up-' + obj.mlid,
                   rotation: obj.rotation
                 }
