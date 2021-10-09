@@ -152,9 +152,11 @@ var MapHelper = {
       if ( data.frameNr == 2 ) {
         $('#infoScreen').fadeOut(300)
         $(window).off('keyframe:moveto', hideinfoscreen)
+        $(window).off('infoscreen:hide', hideinfoscreen)
       }
     };
     $(window).on('keyframe:moveto', hideinfoscreen)
+    $(window).on('infoscreen:hide', hideinfoscreen)
 
     $('#loadingScreen').hide()
     $('#3dcanvas').hide()

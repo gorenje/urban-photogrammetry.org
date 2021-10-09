@@ -175,10 +175,15 @@ MapAnimation = {...MapAnimation, ...{
     }
 
     if ( endPos != null ) {
+      var duration = Math.max(1500, endPos.distanceTo(startPos) / 0.25)
+      setTimeout( function() {
+        $(window).trigger("infoscreen:hide", { frameNr: 2 } )
+      }, duration / 2)
+
       MapAnimation.currAnim = anime({
         targets:  MapAnimation.animState,
         easing:   'cubicBezier(.62,.28,.56,.88)',
-        duration: Math.max(1500, endPos.distanceTo(startPos) / 0.25),
+        duration: duration,
         update:   MapAnimation.animUpdateCallback,
         complete: onAnimComplete,
         ...toFrameData
