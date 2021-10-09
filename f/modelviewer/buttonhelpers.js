@@ -161,7 +161,7 @@ var ButtonHelpers = {
         try {
           navigator.share({
             title: "Urban-Photogrammetry.org",
-            text: "Link to Urban-Photogrammetry.org",
+            text: "Check out the model @ Urban-Photogrammetry.org",
             url: shareUrl
           })
         } catch ( e ) { prompt("URL",shareUrl) }
@@ -176,7 +176,7 @@ var ButtonHelpers = {
         try {
           navigator.share({
             title: "Urban-Photogrammetry.org",
-            text: "Link to Urban-Photogrammetry.org",
+            text: "Check out the model @ Urban-Photogrammetry.org",
             url: shareUrl
           })
         } catch ( e ) { prompt("URL",shareUrl) }
