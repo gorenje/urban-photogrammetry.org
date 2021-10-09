@@ -138,6 +138,7 @@ var ButtonHelpers = {
       var shareUrl = url.origin + url.pathname + "?l=" + window.btoa(
         JSON.stringify(data)
       );
+      console.log( shareUrl)
 
       $.ajax({
         url: "https://r.upo.sh/image",
@@ -156,6 +157,12 @@ var ButtonHelpers = {
             ButtonHelpers.toggle("butShare", "butCopied")
           }, 2500)
         } catch ( e ) {}
+        try {
+          navigator.share({
+            title: "Link to Urban-Photogrammetry.org",
+            url: shareUrl
+          })
+        } catch ( e ) { alert(shareUrl) }
       }).error(function(err){
         try {
           TDHelpers.copyToClipboard( shareUrl )
@@ -164,16 +171,13 @@ var ButtonHelpers = {
             ButtonHelpers.toggle("butShare", "butCopied")
           }, 2500)
         } catch ( e ) {}
+        try {
+          navigator.share({
+            title: "Link to Urban-Photogrammetry.org",
+            url: shareUrl
+          })
+        } catch ( e ) { alert(shareUrl) }
       })
-
-      try {
-        navigator.share({
-          title: "Link to Urban-Photogrammetry.org",
-          url: shareUrl
-        })
-      } catch ( e ) {}
-
-      console.log( shareUrl)
     },
 
     previous: function(evt) {
