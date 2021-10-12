@@ -2,56 +2,36 @@ var currFlythrough = null;
 
 var ButtonHelpers = {
 
-  AllButtons: {
-  },
-
+  AllButtons: {},
   ImageMap: ButtonImages,
 
-  imageButton: function(filename) {
-    button = BABYLON.GUI.Button.CreateImageOnlyButton(name, filename);
-    button.width = "0.07vw";
-    button.fixedRatio = 1
-    button.color = "#ffffff33";
-    button.cornerRadius = 10;
-    button.background = "#00000033";
+  addButton: function(name, cssClass, callback = undefined, icon_name = undefined) {
+    var img = document.createElement('img')
 
-    return button
+    img.className = `viewerbutton ${cssClass}`
+    img.src = ButtonHelpers.ImageMap[icon_name || name] || ButtonHelpers.ImageMap.butUnknown;
+    img.onclick = callback || function(){};
+
+    $('#viewerbuttons').append( img )
+    ButtonHelpers.AllButtons[name] = img;
+
+    return img;
   },
 
   hide: function(button) {
-    button.isEnabled = false
-    button.notRenderable = true
+    $(button).hide()
   },
 
   show: function(button) {
-    button.isEnabled = true
-    button.notRenderable = false
+    $(button).show()
   },
 
-  toggle: function(showButName, hideButName) {
+  toggle: function(showButName, hideButName, thirdButName=undefined) {
     ButtonHelpers.show(ButtonHelpers.AllButtons[showButName])
     ButtonHelpers.hide(ButtonHelpers.AllButtons[hideButName])
-  },
-
-  create: function(name, text, left, top) {
-    var button = BABYLON.GUI.Button.CreateSimpleButton(name, text);
-
-    button.height       = "30px";
-    button.width        = "100px";
-    button.color        = "white";
-    button.background   = "#22222255";
-    button.cornerRadius = 20;
-
-    var imageName = ButtonHelpers.ImageMap[name]
-    if ( imageName ) {
-      button = ButtonHelpers.imageButton(imageName);
+    if (thirdButName) {
+      ButtonHelpers.hide(ButtonHelpers.AllButtons[thirdButName])
     }
-
-    button.left = left;
-    button.top  = top;
-
-    ButtonHelpers.AllButtons[name] = button
-    return button;
   },
 
   showShare: function() {
@@ -71,7 +51,7 @@ var ButtonHelpers = {
   // Callbacks for the button clicks.
   CB: {
     exit: function(evt) {
-      $('#3dcanvas').fadeOut(500);
+      $('#modelviewer').fadeOut(500);
 
       scene.stopAllAnimations()
       setTimeout(function() {
@@ -81,7 +61,7 @@ var ButtonHelpers = {
       SoundsHelper.stopAll()
       ButtonHelpers.toggle("butPlay", "butPause")
       setTimeout( MapHelper.modelExaminerDone, 750 );
-      ButtonHelpers.AllButtons["butExit"].background = "#00000033";
+      $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
       $('#map').fadeIn(200);
       clearTimeout(autoExitTimeout)
     },
@@ -137,6 +117,8 @@ var ButtonHelpers = {
       );
       console.log( shareUrl)
 
+      ButtonHelpers.toggle("butLoader", "butCopied", "butShare")
+
       $.ajax({
         url: "https://r.upo.sh/image",
         method: "post",
@@ -150,9 +132,9 @@ var ButtonHelpers = {
 
         try {
           TDHelpers.copyToClipboard( shareUrl )
-          ButtonHelpers.toggle("butCopied", "butShare")
+          ButtonHelpers.toggle("butCopied", "butShare", "butLoader")
           setTimeout( function() {
-            ButtonHelpers.toggle("butShare", "butCopied")
+            ButtonHelpers.toggle("butShare", "butLoader","butCopied")
           }, 2500)
         } catch ( e ) {}
 
@@ -162,13 +144,13 @@ var ButtonHelpers = {
             text: "Check out the model @ Urban-Photogrammetry.org",
             url: shareUrl
           })
-        } catch ( e ) { prompt("URL", shareUrl) }
-      }).error(function(err){
+        } catch ( e ) { prompt("URL",shareUrl) }
+      }).fail(function(err){
         try {
           TDHelpers.copyToClipboard( shareUrl )
-          ButtonHelpers.toggle("butCopied", "butShare")
+          ButtonHelpers.toggle("butCopied", "butShare", "butLoader")
           setTimeout( function() {
-            ButtonHelpers.toggle("butShare", "butCopied")
+            ButtonHelpers.toggle("butShare", "butLoader","butCopied")
           }, 2500)
         } catch ( e ) {}
 

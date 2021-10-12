@@ -43,62 +43,266 @@
     <script src="/f/bjs/babylonjs.postProcess.min.js"></script>
     <script src="/f/bjs/babylonjs.loaders.min.js"></script>
     <script src="/f/bjs/babylonjs.serializers.min.js"></script>
-    <script src="/f/bjs/babylon.gui.min.js"></script>
     <script src="/f/anime.3.2.1.min.js"></script>
     <script src="/f/leaflet.js"></script>
 
 
     <style type='text/css'>
-      body {
-        background-color: black;
-      }
+body {
+    background-color: black;
+}
 
-      #3dcanvas {
-          width: 100%;
-          height: 100%;
-          touch-action: none;
-      }
+#3dcanvas {
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
 
-      .break {
-        flex-basis: 100%;
-        height: 0;
-      }
+.break {
+    flex-basis: 100%;
+    height: 0;
+}
 
-      .osmb-viewport {
-        background-color: black;
-      }
+.osmb-viewport {
+    background-color: black;
+}
 
-      #infoScreen {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          color: white;
-          text-align: center;
-          z-index: 9999;
-          display: flex;
-          flex-flow: column;
-          justify-content: center;
-          align-items: center;
+#infoScreen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: white;
+    text-align: center;
+    z-index: 9999;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
 
-          min-height: 50px;
-          padding: 0px;
-          background-color: #00000055;
-          color: white;
-          font-size: 30px;
-      }
-      #map {
-          position: absolute;
-          width: 100vw;
-          height: 100vh;
-      }
-      #mapbuttons {
-          z-index: 1000;
-          position: absolute;
-          width: 100vw;
-          height: 100vh;
-          pointer-events: none;
-      }
-    </style>
+    min-height: 50px;
+    padding: 0px;
+    background-color: #00000055;
+    color: white;
+    font-size: 30px;
+}
+#map {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+#mapbuttons {
+    z-index: 1000;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
+#viewerbuttons {
+    z-index: 1000;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
+
+
+/* Basis for the buttons */
+.mapbutton {
+    position: absolute;
+    width: 45px;
+    background-color: #00000033;
+    border-width: 1px;
+    border-color: #ffffff88;
+    border-style: solid;
+    border-radius: 10px;
+    pointer-events: auto;
+}
+.modeltextbox {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    height: fit-content;
+    width: fit-content;
+    padding: 30px;
+    background-color: #000000aa;
+    border-width: 1px;
+    border-color: #ffffff88;
+    border-style: solid;
+    border-radius: 10px;
+    color: #eee;
+    text-align: center;
+    pointer-events: auto;
+}
+.modeltextbox .loader {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 1px 3px;
+    width: 25px;
+    height: 25px;
+    display: block;
+}
+
+.modeltextbox strong {
+    position: relative;
+    color: #eee;
+    height: 100%;
+    padding-top: 50%;
+    text-align: center;
+}
+.modeltextbox .moredetails {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 1px 3px;
+    font: 13px sans-serif;
+    z-index: 10;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+}
+.modeltextbox .moredetails a {
+    text-decoration: none;
+}
+
+#mapbuttons .navbutton { top: 5%; left: 45%; }
+#mapbuttons .sharebutton { top: 5%; left: 90%; }
+#mapbuttons .playbutton { top: 5%; left: 5%; }
+#mapbuttons .mutebutton { top: 20%; left: 90%; /* display: none; */ }
+#mapbuttons .exitbutton { top: 30%; left: 90%; /* display: none; */ }
+
+/* Button Specifics for various resolutions */
+
+
+@media screen and (max-width: 600px) {
+    .modeltextbox {
+        top: 30%;
+        left: 10%;
+        width: 80%;
+    }
+    .modeltextbox .loader {
+        width: 35px;
+        height: 35px;
+    }
+
+    #mapbuttons .navbutton { top: 5%; left: 45%; }
+    #mapbuttons .sharebutton { top: 5%; left: 85%; }
+    #mapbuttons .playbutton { top: 5%; left: 5%; }
+    #mapbuttons .mutebutton { top: 12%; left: 85%; }
+    #mapbuttons .exitbutton { top: 20%; left: 85%; }
+}
+
+
+@media screen and (max-width: 414px) {
+    .modeltextbox {
+        top: 30%;
+        left: 10%;
+        width: 80%;
+    }
+
+    #mapbuttons .navbutton { top: 5%; left: 45%; }
+    #mapbuttons .sharebutton { top: 5%; left: 85%; }
+    #mapbuttons .playbutton { top: 5%; left: 5%; }
+    #mapbuttons .mutebutton { top: 12%; left: 85%; }
+    #mapbuttons .exitbutton { top: 20%; left: 85%; }
+}
+
+@media screen and (max-width: 375px) {
+    .modeltextbox {
+        top: 30%;
+        left: 10%;
+        width: 80%;
+    }
+
+    #mapbuttons .navbutton { top: 5%; left: 45%; }
+    #mapbuttons .sharebutton { top: 5%; left: 85%; }
+    #mapbuttons .playbutton { top: 5%; left: 5%; }
+    #mapbuttons .mutebutton { top: 12%; left: 85%; }
+    #mapbuttons .exitbutton { top: 20%; left: 85%; }
+}
+
+
+@media screen and (max-width: 800px) and (min-width: 600px) and (orientation: portrait) {
+    .modeltextbox {
+        top: 30%;
+        left: 30%;
+        width: 40%;
+    }
+    .modeltextbox .loader {
+        width: 40px;
+        height: 40px;
+    }
+    #mapbuttons .navbutton { top: 5%; left: 45%; }
+    #mapbuttons .sharebutton { top: 5%; left: 85%; }
+    #mapbuttons .playbutton { top: 5%; left: 5%; }
+    #mapbuttons .mutebutton { top: 10%; left: 90%; }
+    #mapbuttons .exitbutton { top: 20%; left: 90%; }
+}
+
+@media screen and (max-width: 800px) and (min-width: 600px) and (orientation: landscape) {
+    .modeltextbox {
+        top: 30%;
+        left: 30%;
+        width: 40%;
+    }
+    .modeltextbox .loader {
+        width: 40px;
+        height: 40px;
+    }
+    #mapbuttons .navbutton { top: 5%; left: 45%; }
+    #mapbuttons .sharebutton { top: 5%; left: 90%; }
+    #mapbuttons .playbutton { top: 5%; left: 5%; }
+    #mapbuttons .mutebutton { top: 20%; left: 90%; }
+    #mapbuttons .exitbutton { top: 30%; left: 90%; }
+}
+
+@media screen and (min-width: 800px) {
+    .modeltextbox {
+        top: 30%;
+        left: 30%;
+        width: 40%;
+    }
+    .modeltextbox .loader {
+        width: 40px;
+        height: 40px;
+    }
+
+    #mapbuttons .navbutton { top: 5%; left: 46%; }
+    #mapbuttons .sharebutton { top: 5%; left: 90%; }
+    #mapbuttons .playbutton { top: 5%; left: 5%; }
+    #mapbuttons .mutebutton { top: 30%; left: 90%; }
+    #mapbuttons .exitbutton { top: 20%; left: 90%; }
+}
+
+/* Model viewer buttons */
+.viewerbutton {
+    position: absolute;
+    width: 45px;
+    background-color: #00000033;
+    border-width: 1px;
+    border-color: #ffffff88;
+    border-style: solid;
+    border-radius: 10px;
+    pointer-events: auto;
+}
+
+#viewerbuttons .mvplaybutton { top: 5%; left: 5%; }
+#viewerbuttons .mvsharebutton { top: 5%; left: 45%; }
+#viewerbuttons .mvexitbutton { top: 5%; right: 5%; }
+#viewerbuttons .fullscreenbutton { top: 15%; right: 5%; }
+
+@media screen and (max-width: 800px) and (min-width: 600px) and (orientation: landscape) {
+    #viewerbuttons .fullscreenbutton { top: 20%; right: 5%; }
+}
+
+@media screen and (min-width: 800px) and (max-height: 428px) and (orientation: landscape) {
+    #viewerbuttons .fullscreenbutton { top: 20%; right: 5%; }
+}
+
+
+
+</style>
   </head>
 
   <body>
@@ -111,15 +315,24 @@
         })
       </script>
 
-    <div id="loadingScreen"></div>
+      <div id="loadingScreen"></div>
+
     <div id="map">
-      <div id="mapbuttons"></div>
+      <div id="mapbuttons">
+      </div>
     </div>
+
     <div class="quattro" id="infoScreen">
-      <div style="margin-top: 50%;">Virtual 3D Tours</div>
-      <div style="height: 100px; margin-top: 60px;" class="break">Berlin</div>
+      <div style="margin-top: 20%;">Virtual 3D Tours</div>
+      <div style="margin-top: 20%;" class="break">Berlin</div>
     </div>
-    <canvas id="3dcanvas" style="width: 100vw; height: 100%; touch-action: none;"></canvas>
+
+    <div id="modelviewer">
+      <div id="viewerbuttons"></div>
+      <canvas id="3dcanvas"
+              style="width: 100vw; height: 100%; touch-action: none;">
+      </canvas>
+    </div>
 
     <div id="root">
       <div class="quattro">

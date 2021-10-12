@@ -45,12 +45,8 @@ var TDHelpers = {
     tempInput.value = content;
     document.body.appendChild(tempInput);
 
-    navigator.permissions.query({name: "clipboard-write"}).then(result => {
-      if (result.state == "granted" || result.state == "prompt") {
-        tempInput.select();
-        document.execCommand("copy");
-      }
-    });
+    tempInput.select();
+    document.execCommand("copy");
     document.body.removeChild(tempInput);
   },
 
@@ -58,20 +54,20 @@ var TDHelpers = {
     autoExitTimeout = setTimeout( function() {
       var button = ButtonHelpers.AllButtons["butExit"]
       autoExitTimeout = setTimeout( function() {
-        button.background = '#ff000033'
+        $(button).css("background-color", '#ff000033')
         autoExitTimeout = setTimeout( function() {
-          button.background = '#f0f00033'
+          $(button).css("background-color", '#f0f00033')
           autoExitTimeout = setTimeout( function() {
-            button.background = '#ff000033'
+            $(button).css("background-color", '#ff000033')
             autoExitTimeout = setTimeout( function() {
-              button.background = '#f0f00033'
+              $(button).css("background-color", '#f0f00033')
               autoExitTimeout = setTimeout( function() {
-                button.background = '#ff000033'
+                $(button).css("background-color", '#ff000033')
                 autoExitTimeout = setTimeout( function() {
-                  button.background = '#f0f00033'
+                  $(button).css("background-color", '#f0f00033')
                   autoExitTimeout = setTimeout( function() {
                     ButtonHelpers.CB.exit()
-                    button.background =  "#00000033";
+                    $(button).css("background-color", '#00000033')
                   }, 300);
                 }, 300);
               }, 300);
@@ -86,6 +82,7 @@ var TDHelpers = {
     let canvas = engine.getRenderingCanvas()
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    $('#viewerbuttons').css(`width: ${window.innerWidth}px; height: ${window.innerHeight}px;`)
   },
 
   parseShareLink: function(url) {

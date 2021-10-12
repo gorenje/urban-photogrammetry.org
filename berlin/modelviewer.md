@@ -16,7 +16,6 @@ layout: modelviewer
 <script src="/f/bjs/babylonjs.postProcess.min.js"></script>
 <script src="/f/bjs/babylonjs.loaders.min.js"></script>
 <script src="/f/bjs/babylonjs.serializers.min.js"></script>
-<script src="/f/bjs/babylon.gui.min.js"></script>
 <script src="/f/bowser.js"></script>
 
 <script>
@@ -84,9 +83,8 @@ layout: modelviewer
 
     addKeyboardObserver(scene, skyboxMesh);
 
-    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
-    if ( TDHelpers.isLocalhost() ) {
+    if ( TDHelpers.isLocalhost() && false ) {
       var wa = document.createElement('script');
       wa.type = 'text/javascript';
       wa.async = true;
@@ -94,78 +92,52 @@ layout: modelviewer
 		  var s = document.getElementsByTagName('script')[0];
       s.parentNode.insertBefore(wa, s);
 
-      textBlock = ButtonHelpers.createTextBlock()
-      advancedTexture.addControl(textBlock);
+      ButtonHelpers.addButton("butInsp", "inspbutton", ButtonHelpers.CB.inspect)
 
-      var button = ButtonHelpers.create("butInsp", "insp", "45%", "15%");
-      button.onPointerClickObservable.add(ButtonHelpers.CB.inspect)
-      advancedTexture.addControl(button);
+      ButtonHelpers.addButton("butInfo", "infobutton", ButtonHelpers.CB.info)
 
-      var button = ButtonHelpers.create("butInfo", "&#128712;", "0%", "45%");
-      button.onPointerClickObservable.add(ButtonHelpers.CB.info)
-      advancedTexture.addControl(button);
+      ButtonHelpers.addButton("butFTPlay", "playkfsbutton",
+                              ButtonHelpers.CB.playKeyframes)
 
-      var button = ButtonHelpers.create("butFTPlay", "playKFs", "45%", "0%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.playKeyframes)
-      advancedTexture.addControl(button);
+      ButtonHelpers.addButton("butAddKeyFrame", "addkfsbutton",
+                              ButtonHelpers.CB.addKeyframe)
 
-      var button = ButtonHelpers.create("butAddKeyFrame", "addKF", "45%", "10%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.addKeyframe)
-      advancedTexture.addControl(button);
+      ButtonHelpers.addButton("butClear", "clearkfsbutton",
+                              ButtonHelpers.CB.clearKeyframes)
 
-      var button = ButtonHelpers.create("butClear", "clearKF", "45%", "20%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.clearKeyframes)
-      advancedTexture.addControl(button);
-
-      var button = ButtonHelpers.create("butKFInfo", "info", "45%", "30%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.showCameraDetails)
-      advancedTexture.addControl(button);
+      ButtonHelpers.addButton("butKFInfo", "showkfsbutton",
+                              ButtonHelpers.CB.showCameraDetails)
     }
 
-    var button = ButtonHelpers.create("butPrev", "<<<", "-45%", "45%");
-    button.onPointerClickObservable.add(ButtonHelpers.CB.previous)
-    advancedTexture.addControl(button);
+    ButtonHelpers.addButton("butPrev", "prevbutton", ButtonHelpers.CB.previous)
+    ButtonHelpers.addButton("butNext", "nextbutton", ButtonHelpers.CB.next)
 
-    var button = ButtonHelpers.create("butNext", ">>>", "45%", "45%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.next)
-    advancedTexture.addControl(button);
+    ButtonHelpers.addButton("butFS", "fullscreenbutton",
+                            ButtonHelpers.CB.fullscreen)
+
+    var b = ButtonHelpers.addButton("butFSexit", "fullscreenbutton",
+                                    ButtonHelpers.CB.fullscreen_exit)
+    $(b).hide()
 
 
-    var button = ButtonHelpers.create("butFS", "fulls", "45%", "-30%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
-    advancedTexture.addControl(button);
+    var b = ButtonHelpers.addButton("butVol", "mvmutebutton",
+                                    ButtonHelpers.CB.volume)
+    $(b).hide()
+    ButtonHelpers.addButton("butMute", "mvmutebutton", ButtonHelpers.CB.mute)
 
-    var button = ButtonHelpers.create("butFSexit", "fulls", "45%", "-30%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen_exit)
-    ButtonHelpers.hide(button)
-    advancedTexture.addControl(button);
+    ButtonHelpers.addButton("butShare", "mvsharebutton", ButtonHelpers.CB.share)
 
-    var button = ButtonHelpers.create("butVol", "fulls", "45%", "-40%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.volume)
-    ButtonHelpers.hide(button)
-    advancedTexture.addControl(button);
+    var b = ButtonHelpers.addButton("butCopied", "mvsharebutton",
+                                    ButtonHelpers.CB.share)
+    $(b).hide()
+    var b = ButtonHelpers.addButton("butLoader", "mvsharebutton")
+    $(b).hide()
 
-    var button = ButtonHelpers.create("butMute", "fulls", "45%", "-40%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.mute)
-    advancedTexture.addControl(button);
+    ButtonHelpers.addButton("butPlay", "mvplaybutton", ButtonHelpers.CB.flythrough)
 
-    var button = ButtonHelpers.create("butShare", "share", "45%", "-20%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.share)
-    advancedTexture.addControl(button);
-
-    var button = ButtonHelpers.create("butCopied", "copied", "45%", "-20%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.share)
-    ButtonHelpers.hide(button)
-    advancedTexture.addControl(button);
-
-    var button = ButtonHelpers.create("butPlay", "fly>", "45%", "-10%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
-    advancedTexture.addControl(button);
-
-    var button = ButtonHelpers.create("butPause", "fly>", "45%", "-10%")
-    button.onPointerClickObservable.add(ButtonHelpers.CB.stopflythrough)
-    ButtonHelpers.hide(button)
-    advancedTexture.addControl(button);
+    var b = ButtonHelpers.addButton("butPause", "mvplaybutton",
+                                    ButtonHelpers.CB.stopflythrough)
+    $(b).hide()
 
     // Finally load the model.
     loadModel(currModel, scene, skyboxMesh, multimat, baseMaterialSizes)

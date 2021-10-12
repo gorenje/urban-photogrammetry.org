@@ -46,9 +46,11 @@ var map = null;
 $(function(){
   $(document).bind("scroll keypress touchstart click keydown keyup mousemove mousedown mouseup", function(){
     clearTimeout(autoExitTimeout)
+    $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
   });
   $(window).bind("scroll keypress touchstart click keydown keyup mousemove mousedown mouseup", function(){
     clearTimeout(autoExitTimeout)
+    $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
   });
 });
 
@@ -82,8 +84,8 @@ function displayModel(mlid, model_from_shared = undefined) {
     if ( TDHelpers.isLocalhost() ) {
       var wa = document.createElement('script');
       wa.type = 'text/javascript';
-	  wa.src = '/f/bjs/babylon.inspector.bundle.js';
-	  var s = document.getElementsByTagName('script')[0];
+	    wa.src = '/f/bjs/babylon.inspector.bundle.js';
+	    var s = document.getElementsByTagName('script')[0];
       s.parentNode.insertBefore(wa, s);
     }
 
@@ -92,76 +94,27 @@ function displayModel(mlid, model_from_shared = undefined) {
 
     addKeyboardObserver(scene, skyboxMesh);
 
-    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    ButtonHelpers.addButton("butPlay", "mvplaybutton",
+                            ButtonHelpers.CB.flythrough)
 
-    if ( TDHelpers.isMobile() ) {
-      var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
-      advancedTexture.addControl(button);
-      var button = ButtonHelpers.create("butPause", "fly>", "0%", "45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.stopflythrough)
-      ButtonHelpers.hide(button)
-      advancedTexture.addControl(button);
+    var button = ButtonHelpers.addButton("butPause", "mvplaybutton",
+                                         ButtonHelpers.CB.stopflythrough)
+    $(button).hide()
 
-      var button = ButtonHelpers.create("butExit", "fulls", "-40%", "-45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.exit)
-      advancedTexture.addControl(button);
+    ButtonHelpers.addButton("butExit", "mvexitbutton", ButtonHelpers.CB.exit)
+    ButtonHelpers.addButton("butShare", "mvsharebutton", ButtonHelpers.CB.share)
 
-      if ( ButtonHelpers.showShare() ) {
-        var button = ButtonHelpers.create("butShare", "share", "45%", "45%")
-        button.onPointerClickObservable.add(ButtonHelpers.CB.share)
-        advancedTexture.addControl(button);
-        var button = ButtonHelpers.create("butCopied", "copied", "45%", "45%")
-        button.onPointerClickObservable.add(ButtonHelpers.CB.share)
-        ButtonHelpers.hide(button)
-        advancedTexture.addControl(button);
-      }
+    var button = ButtonHelpers.addButton("butCopied", "mvsharebutton")
+    $(button).hide()
+    var button = ButtonHelpers.addButton("butLoader", "mvsharebutton")
+    $(button).hide()
 
-      if ( !ButtonHelpers.isSafari() ) {
-        var button = ButtonHelpers.create("butFS", "fulls", "40%", "-45%")
-        button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
-        advancedTexture.addControl(button);
-
-        var button = ButtonHelpers.create("butFSexit", "fulls", "45%", "-45%")
-        button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen_exit)
-        ButtonHelpers.hide(button)
-        advancedTexture.addControl(button);
-      }
-
-    } else {
-      var button = ButtonHelpers.create("butPlay", "play", "0%", "45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.flythrough)
-      advancedTexture.addControl(button);
-      var button = ButtonHelpers.create("butPause", "fly>", "0%", "45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.stopflythrough)
-      ButtonHelpers.hide(button)
-      advancedTexture.addControl(button);
-
-      var button = ButtonHelpers.create("butExit", "fulls", "-45%", "-45%")
-      button.onPointerClickObservable.add(ButtonHelpers.CB.exit)
-      advancedTexture.addControl(button);
-
-      if ( ButtonHelpers.showShare() ) {
-        var button = ButtonHelpers.create("butShare", "share", "45%", "45%")
-        button.onPointerClickObservable.add(ButtonHelpers.CB.share)
-        advancedTexture.addControl(button);
-
-        var button = ButtonHelpers.create("butCopied", "copied", "45%", "45%")
-        button.onPointerClickObservable.add(ButtonHelpers.CB.share)
-        ButtonHelpers.hide(button)
-        advancedTexture.addControl(button);
-      }
-
-      if ( !ButtonHelpers.isSafari() ) {
-        var button = ButtonHelpers.create("butFS", "fulls", "45%", "-45%")
-        button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen)
-        advancedTexture.addControl(button);
-
-        var button = ButtonHelpers.create("butFSexit", "fulls", "45%", "-45%")
-        button.onPointerClickObservable.add(ButtonHelpers.CB.fullscreen_exit)
-        ButtonHelpers.hide(button)
-        advancedTexture.addControl(button);
-      }
+    if ( !ButtonHelpers.isSafari() ) {
+      ButtonHelpers.addButton("butFS", "fullscreenbutton",
+                              ButtonHelpers.CB.fullscreen);
+      var button = ButtonHelpers.addButton("butFSexit", "fullscreenbutton",
+                                           ButtonHelpers.CB.fullscreen_exit);
+      $(button).hide()
     }
 
     // Finally load the model.

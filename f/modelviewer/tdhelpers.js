@@ -28,38 +28,11 @@ var TDHelpers = {
     document.body.removeChild(tempInput);
   },
 
-  setupAutoExit: function(start_after = 2000) {
-    autoExitTimeout = setTimeout( function() {
-      var button = ButtonHelpers.AllButtons["butExit"]
-      autoExitTimeout = setTimeout( function() {
-        button.background = '#ff000033'
-        autoExitTimeout = setTimeout( function() {
-          button.background = '#f0f00033'
-          autoExitTimeout = setTimeout( function() {
-            button.background = '#ff000033'
-            autoExitTimeout = setTimeout( function() {
-              button.background = '#f0f00033'
-              autoExitTimeout = setTimeout( function() {
-                button.background = '#ff000033'
-                autoExitTimeout = setTimeout( function() {
-                  button.background = '#f0f00033'
-                  autoExitTimeout = setTimeout( function() {
-                    ButtonHelpers.CB.exit()
-                    button.background =  "#00000033";
-                  }, 300);
-                }, 300);
-              }, 300);
-            }, 300);
-          }, 300);
-        }, 300);
-      }, 300)
-    }, start_after )
-  },
-
   resize: function() {
     let canvas = engine.getRenderingCanvas()
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    $('#viewerbuttons').css(`width: ${window.innerWidth}px; height: ${window.innerHeight}px;`)
   },
 
   parseShareLink: function(url) {

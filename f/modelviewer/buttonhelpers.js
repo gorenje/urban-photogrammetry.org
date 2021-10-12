@@ -5,68 +5,34 @@ var ButtonHelpers = {
   AllButtons: {},
   ImageMap: ButtonImages,
 
-  imageButton: function(filename) {
-    button = BABYLON.GUI.Button.CreateImageOnlyButton(name, filename);
-    button.width = "0.07vw";
-    button.fixedRatio = 1
-    button.color = "#ffffff33";
-    button.cornerRadius = 10;
-    button.background = "#00000033";
+  addButton: function(name, cssClass, callback = undefined, icon_name = undefined) {
+    var img = document.createElement('img')
 
-    return button
+    img.className = `viewerbutton ${cssClass}`
+    img.src = ButtonHelpers.ImageMap[icon_name || name] || ButtonHelpers.ImageMap.butUnknown;
+    img.onclick = callback || function(){};
+    if ( TDHelpers.isLocalhost() ) { img.title = name }
+
+    $('#viewerbuttons').append( img )
+    ButtonHelpers.AllButtons[name] = img;
+
+    return img;
   },
 
   hide: function(button) {
-    button.isEnabled = false
-    button.notRenderable = true
+    $(button).hide()
   },
 
   show: function(button) {
-    button.isEnabled = true
-    button.notRenderable = false
+    $(button).show()
   },
 
-  toggle: function(showButName, hideButName) {
+  toggle: function(showButName, hideButName, thirdButName=undefined) {
     ButtonHelpers.show(ButtonHelpers.AllButtons[showButName])
     ButtonHelpers.hide(ButtonHelpers.AllButtons[hideButName])
-  },
-
-  create: function(name, text, left, top) {
-    var button = BABYLON.GUI.Button.CreateSimpleButton(name, text);
-
-    button.height       = "30px";
-    button.width        = "100px";
-    button.color        = "white";
-    button.background   = "#22222255";
-    button.cornerRadius = 20;
-
-    var imageName = ButtonHelpers.ImageMap[name]
-    if ( imageName ) {
-      button = ButtonHelpers.imageButton(imageName);
+    if (thirdButName) {
+      ButtonHelpers.hide(ButtonHelpers.AllButtons[thirdButName])
     }
-
-    button.left = left;
-    button.top  = top;
-
-    ButtonHelpers.AllButtons[name] = button
-    return button;
-  },
-
-  createTextBlock: function() {
-    var textBlock = new BABYLON.GUI.TextBlock()
-
-    textBlock.text         = currModel.text;
-    textBlock.isVisible    = false;
-    textBlock.width        = "300px";
-    textBlock.height       = "300px";
-    textBlock.color        = "white";
-    textBlock.left         = "45%";
-    textBlock.top          = "-40%";
-    textBlock.background   = "red";
-    textBlock.cornerRadius = 20;
-    textBlock.fontSize     = "10px"
-
-    return textBlock;
   },
 
   showShare: function() {
@@ -140,6 +106,8 @@ var ButtonHelpers = {
       );
       console.log( shareUrl)
 
+      ButtonHelpers.toggle("butLoader", "butCopied", "butShare")
+
       $.ajax({
         url: "https://r.upo.sh/image",
         method: "post",
@@ -150,11 +118,12 @@ var ButtonHelpers = {
         headers: { "X-UPO-Data": window.btoa(JSON.stringify(data)) }
       }).done(function(data,status,resp){
         shareUrl = resp.getResponseHeader("X-UPO-Data");
+
         try {
           TDHelpers.copyToClipboard( shareUrl )
-          ButtonHelpers.toggle("butCopied", "butShare")
+          ButtonHelpers.toggle("butCopied", "butShare", "butLoader")
           setTimeout( function() {
-            ButtonHelpers.toggle("butShare", "butCopied")
+            ButtonHelpers.toggle("butShare", "butLoader","butCopied")
           }, 2500)
         } catch ( e ) {}
 
@@ -165,14 +134,15 @@ var ButtonHelpers = {
             url: shareUrl
           })
         } catch ( e ) { prompt("URL",shareUrl) }
-      }).error(function(err){
+      }).fail(function(err){
         try {
           TDHelpers.copyToClipboard( shareUrl )
-          ButtonHelpers.toggle("butCopied", "butShare")
+          ButtonHelpers.toggle("butCopied", "butShare", "butLoader")
           setTimeout( function() {
-            ButtonHelpers.toggle("butShare", "butCopied")
+            ButtonHelpers.toggle("butShare", "butLoader","butCopied")
           }, 2500)
         } catch ( e ) {}
+
         try {
           navigator.share({
             title: "Urban-Photogrammetry.org",
@@ -193,7 +163,6 @@ var ButtonHelpers = {
         var r          = createSkyBox(scene)
         skyboxMesh     = r[0]
         multimat       = r[1]
-        textBlock.text = currModel.text;
 
         loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
                            alltextures, multimat,scene)
@@ -212,7 +181,6 @@ var ButtonHelpers = {
         var r          = createSkyBox(scene)
         skyboxMesh     = r[0]
         multimat       = r[1]
-        textBlock.text = currModel.text;
 
         loadSkyBoxMaterial(currModel.mlid, baseMaterialSizes[0],
                            alltextures, multimat, scene)
@@ -222,7 +190,7 @@ var ButtonHelpers = {
     },
 
     info: function(evt) {
-      textBlock.isVisible = !textBlock.isVisible;
+      console.log( currModel.mlid )
     },
 
     stopflythrough: function(evt) {

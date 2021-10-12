@@ -3,10 +3,10 @@ var MapHelper = {
 
   AllButtons: {},
 
-  addButton: function(name, left, top, callback = undefined, icon_name = undefined) {
+  addButton: function(name, cssClass, callback = undefined, icon_name = undefined) {
     var img = document.createElement('img')
 
-    img.style = `position: absolute; top: ${top}%; left: ${left}%; width: 7vw; background-color: #00000033; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; pointer-events: auto;`
+    img.className = `mapbutton ${cssClass}`
     img.src = ButtonHelpers.ImageMap[icon_name || name]
     img.onclick = callback || function(){};
 
@@ -20,11 +20,12 @@ var MapHelper = {
     var img = document.createElement('div')
 
     img.id = "modeltitle"
-    img.style = `display: none; position: absolute; top: 30%; left: 30%; height: 15vh; width: 30vw; background-color: #000000aa; border-width: 1px; border-color: #ffffff88; border-style: solid; border-radius: 10px; color: #eee;text-align: center; pointer-events: auto;`
+    img.className = "modeltextbox"
+    img.style = "display: none;"
 
     $('#mapbuttons').append( img )
 
-    img.innerHTML = "<strong class='d-inline-block h1 align-text-bottom text-center' style='margin-top: 30%;'>" + ModelNames[mlid].title + "</strong><span style='position: absolute;  right: 0;  bottom: 0;  padding: 1px 3px;  font: 13px sans-serif;  z-index: 10;  white-space: nowrap;  text-overflow: ellipsis;  overflow: hidden;  max-width: 100%;'><a target=_blank href='/berlin/" + mlid + "'>More details</a></span><img width='40px' height='40px' src='"+ButtonHelpers.ImageMap["butLoader"]+"'/>";
+    img.innerHTML = "<strong>" + ModelNames[mlid].title + "</strong><span class='moredetails'><a target=_blank href='/berlin/" + mlid + "'>More details</a></span><img class='loader' src='"+ButtonHelpers.ImageMap["butLoader"]+"'/>";
 
     return img;
   },
@@ -117,7 +118,7 @@ var MapHelper = {
         scene.onReadyObservable.addOnce(function() {
           $('#modeltitle').fadeOut(Math.max(300, 3000 - (Date.now() - timestamp)), function() {
             $('#map').fadeOut(100)
-            $('#3dcanvas').fadeIn(100, function() {
+            $('#modelviewer').fadeIn(100, function() {
               if ( currModel.sharecamera ) {
                 defineIntroAnim(currModel, scene)()
               }
@@ -130,7 +131,7 @@ var MapHelper = {
         $('#modeltitle').fadeOut(3000, function() {
           $('#modeltitle').remove()
           $('#map').fadeOut(400)
-          $('#3dcanvas').fadeIn(400, function() {
+          $('#modelviewer').fadeIn(400, function() {
             if ( currModel.sharecamera ) {
               MapHelper.onSceneReadyCallback( function() {
                 defineIntroAnim(currModel, scene)()
@@ -158,20 +159,27 @@ var MapHelper = {
     $(window).on('keyframe:moveto', hideinfoscreen)
     $(window).on('infoscreen:hide', hideinfoscreen)
 
-    $('#loadingScreen').hide()
-    $('#3dcanvas').hide()
+    $(window).on('keyframe:moveto', function(event,data) {
+      console.log("moving to " + data.frameNr )
+    });
 
-    var loc = { longitude: MapHelper.AvailableModels[0].loc[1],
-                latitude: MapHelper.AvailableModels[0].loc[0] }
+    $('#loadingScreen').hide()
+    $('#modelviewer').hide()
+
+    var firstKeyframe = MapAnimation.keyFrames[0];
+    var loc = {
+      longitude: firstKeyframe.position_longitude,
+      latitude:  firstKeyframe.position_latitude
+    }
 
     map = new OSMBuildings({
       container: 'map',
       position: loc,
-      zoom: 17,
+      zoom: firstKeyframe.zoom,
       minZoom: 15,
-      rotation: 39,
+      rotation: firstKeyframe.rotation,
       maxZoom: 21,
-      tilt: 45,
+      tilt: firstKeyframe.tilt,
       attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>© 3D <a href="https://urban-photogrammetry.org">Urban Models</a>',
     })
 
@@ -231,7 +239,7 @@ var MapHelper = {
             url: shareUrl
           })
         } catch ( e ) {prompt( "URL", shareUrl)  }
-      }).error(function(err){
+      }).fail(function(err){
         try {
           TDHelpers.copyToClipboard( shareUrl )
           $(MapHelper.AllButtons["butLoader"]).hide()
@@ -302,10 +310,10 @@ var MapHelper = {
     $('#mapbuttons').css('width', `${sze.width}px`);
     $('#mapbuttons').css('height', `${sze.height}px`);
 
-    MapHelper.addButton( "butLoader1", 45, 5, function(){}, "butLoader");
+    MapHelper.addButton( "butLoader1", "navbutton", function(){}, "butLoader");
     $(MapHelper.AllButtons["butLoader1"]).hide()
 
-    MapHelper.addButton( "butNav", 45, 5, function() {
+    MapHelper.addButton( "butNav", "navbutton", function() {
       var func = function() {
         $(MapHelper.AllButtons["butLoader1"]).hide()
         $(MapHelper.AllButtons["butNav"]).show()
@@ -327,37 +335,37 @@ var MapHelper = {
                            "rotation":24.57576092466016})
     })
 
-    MapHelper.addButton( "butCopied", 90, 93, function() {
+    MapHelper.addButton( "butCopied", "sharebutton", function() {
       $(MapHelper.AllButtons["butShare"]).show()
       $(MapHelper.AllButtons["butCopied"]).hide()
     })
     $(MapHelper.AllButtons["butCopied"]).hide()
 
-    MapHelper.addButton( "butLoader", 90, 93 )
+    MapHelper.addButton( "butLoader", "sharebutton" )
     $(MapHelper.AllButtons["butLoader"]).hide()
 
-    MapHelper.addButton( "butShare", 90, 93, function() {
+    MapHelper.addButton( "butShare", "sharebutton", function() {
       $(MapHelper.AllButtons["butShare"]).hide()
       $(MapHelper.AllButtons["butLoader"]).show()
       map.emit('sharelink')
     })
 
     if ( TDHelpers.isLocalhost() ) {
-      MapHelper.addButton( "butExit", 90, 5, function() {
+      MapHelper.addButton( "butExit", "exitbutton", function() {
         map.emit('keyframe')
       })
-      MapHelper.addButton( "butMute", 90, 10, function() {
+      MapHelper.addButton( "butMute", "mutebutton", function() {
         scene.debugLayer.show({ embedMode: true });
       })
     }
 
-    MapHelper.addButton( "butPlay", 45, 93, function() {
+    MapHelper.addButton( "butPlay", "playbutton", function() {
       $(MapHelper.AllButtons["butPlay"]).hide()
       $(MapHelper.AllButtons["butPause"]).show()
       MapAnimation.play()
     })
 
-    MapHelper.addButton( "butPause", 45, 93, function() {
+    MapHelper.addButton( "butPause", "playbutton", function() {
       $(MapHelper.AllButtons["butPlay"]).show()
       $(MapHelper.AllButtons["butPause"]).hide()
       MapAnimation.pause()
@@ -384,6 +392,8 @@ var MapHelper = {
       MapAnimation.pause()
       $(MapHelper.AllButtons["butPlay"]).show()
       $(MapHelper.AllButtons["butPause"]).hide()
+      $(MapHelper.AllButtons["butNav"]).show()
+      $(MapHelper.AllButtons["butLoader1"]).hide()
     });
 
     map.on('pointerup', e => {

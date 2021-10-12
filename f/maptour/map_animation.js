@@ -11,15 +11,14 @@ var MapAnimation = {
 
 MapAnimation = {...MapAnimation, ...{
   keyFrames: [
-    {"zoom":17,"position_latitude":52.51617,"position_longitude":13.39676,"tilt":45,"rotation":39},
-    {"zoom":17.79999999999999,"position_latitude":52.522604175215335,"position_longitude":13.411049199485836,"tilt":0,"rotation":25.32576092466016},
-    {"zoom":17.79999999999999,"position_latitude":52.52254535721962,"position_longitude":13.410934930020046,"tilt":25.85544373284545,"rotation":-18.098363588958524},
-    {"zoom":17.79999999999999,"position_latitude":52.5228731916832,"position_longitude":13.41056987243975,"tilt":29.643183897529887,"rotation":-113.63143751891943},
-{"zoom":17.79999999999999,"position_latitude":52.51758943154345,"position_longitude":13.397918988654963,"tilt":24.70265324794164,"rotation":-154.81431689635122},
-    {"zoom":17,"position_latitude":52.51697709428457,"position_longitude":13.398000502390245,"tilt":16.394759087066838,"rotation":9.682318415260493},
+    {"zoom":17.564263978867494,"position_latitude":52.52503415310028,"position_longitude":13.421729076654637,"tilt":43.787405574659225,"rotation":-138.04825027720412},
+    {"zoom":17.575728718459676,"position_latitude":52.52201323000966,"position_longitude":13.409346258721442,"tilt":19.799651222693385,"rotation":11.402182219878714},
+    {"zoom":17.79999999999999,"position_latitude":52.520634612119515,"position_longitude":13.408208494688466,"tilt":39.02617544016254,"rotation":-108.84836358895853},
+{"zoom":17.79999999999999,"position_latitude":52.5213523257361,"position_longitude":13.406104321599244,"tilt":43.937995327592226,"rotation":-129.09836358895853},
+    {"zoom":17.79999999999999,"position_latitude":52.51758943154345,"position_longitude":13.397918988654963,"tilt":24.70265324794164,"rotation":-154.81431689635122},
     {"zoom":17.9312481536,"position_latitude":52.516605341692376,"position_longitude":13.397216128811124,"tilt":0,"rotation":13.3936508358626},
 
-    MapAnimation.ViewModelFrame, // schucnk
+    MapAnimation.ViewModelFrame, // schinkel klause
 
     {"zoom":18,"position_latitude":52.51878925498369,"position_longitude":13.403132600849403,"tilt":0,"rotation":21.07874035255887},
     {"zoom":18,"position_latitude":52.51849411964798,"position_longitude":13.402997969815498,"tilt":0,"rotation":207.87095586241188},
