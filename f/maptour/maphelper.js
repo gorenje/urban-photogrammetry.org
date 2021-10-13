@@ -46,6 +46,20 @@ var MapHelper = {
               );
   },
 
+  hide: function(buttonName) {
+    $(MapHelper.AllButtons[buttonName]).hide()
+  },
+
+  show: function(buttonName) {
+    $(MapHelper.AllButtons[buttonName]).show()
+  },
+
+  toggle: function(showButName, hideButName, thirdButName=undefined) {
+    MapHelper.show(showButName)
+    MapHelper.hide(hideButName)
+    if (thirdButName) { MapHelper.hide(thirdButName) }
+  },
+
   addSmallerObj: function(idx,obj) {
     MapHelper.addObj(idx,obj,"smaller-")
   },
@@ -76,8 +90,7 @@ var MapHelper = {
   },
 
   modelExaminerDone: function() { // callback from the model navigator
-    $(MapHelper.AllButtons["butPlay"]).hide()
-    $(MapHelper.AllButtons["butPause"]).show()
+    MapHelper.toggle("butPause", "butPlay")
     MapAnimation.play()
   },
 
@@ -92,8 +105,7 @@ var MapHelper = {
 
     var txt = MapHelper.addModelTitle(mlid);
     MapAnimation.pause()
-    $(MapHelper.AllButtons["butPlay"]).show()
-    $(MapHelper.AllButtons["butPause"]).hide()
+    MapHelper.toggle("butPlay", "butPause")
 
     $('#modeltitle').fadeIn(300, function() {
       if ( engine == null ) {
@@ -183,7 +195,6 @@ var MapHelper = {
       attribution: '© Map & Data <a href="https://openstreetmap.org/copyright/">OpenStreetMap</a>© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>© 3D <a href="https://urban-photogrammetry.org">Urban Models</a>',
     })
 
-
     map.on('keyframe', function() {
       var data = {
         zoom: map.getZoom(),
@@ -224,11 +235,9 @@ var MapHelper = {
 
         try {
           TDHelpers.copyToClipboard( shareUrl )
-          $(MapHelper.AllButtons["butLoader"]).hide()
-          $(MapHelper.AllButtons["butCopied"]).show()
+          MapHelper.toggle("butCopied","butLoader","butShare")
           setTimeout( function() {
-            $(MapHelper.AllButtons["butShare"]).show()
-            $(MapHelper.AllButtons["butCopied"]).hide()
+            MapHelper.toggle("butShare","butCopied","butLoader")
           }, 2500)
         } catch ( e ) {}
 
@@ -242,11 +251,9 @@ var MapHelper = {
       }).fail(function(err){
         try {
           TDHelpers.copyToClipboard( shareUrl )
-          $(MapHelper.AllButtons["butLoader"]).hide()
-          $(MapHelper.AllButtons["butCopied"]).show()
+          MapHelper.toggle("butCopied","butLoader","butShare")
           setTimeout( function() {
-            $(MapHelper.AllButtons["butShare"]).show()
-            $(MapHelper.AllButtons["butCopied"]).hide()
+            MapHelper.toggle("butShare","butCopied","butLoader")
           }, 2500)
         } catch ( e ) {}
 
@@ -310,43 +317,39 @@ var MapHelper = {
     $('#mapbuttons').css('width', `${sze.width}px`);
     $('#mapbuttons').css('height', `${sze.height}px`);
 
-    MapHelper.addButton( "butLoader1", "navbutton", function(){}, "butLoader");
-    $(MapHelper.AllButtons["butLoader1"]).hide()
+    MapHelper.addButton("butLoader1", "navbutton", function(){}, "butLoader");
+    MapHelper.hide("butLoader1")
 
     MapHelper.addButton( "butNav", "navbutton", function() {
       var func = function() {
-        $(MapHelper.AllButtons["butLoader1"]).hide()
-        $(MapHelper.AllButtons["butNav"]).show()
+        MapHelper.toggle("butNav","butLoader1")
         $(window).off("movetopos:complete", func);
       }
       $(window).on("movetopos:complete",func);
-
-      $(MapHelper.AllButtons["butLoader1"]).show()
-      $(MapHelper.AllButtons["butNav"]).hide()
+      MapHelper.toggle("butLoader1", "butNav")
 
       MapAnimation.pause()
-      $(MapHelper.AllButtons["butPlay"]).show()
-      $(MapHelper.AllButtons["butPause"]).hide()
+      MapHelper.toggle("butPlay", "butPause")
 
-      MapAnimation.moveToPos({"zoom":15.999999999999996,
-                           "position_latitude":52.521959731734135,
-                           "position_longitude":13.40975201573759,
-                           "tilt":13.245142620917735,
-                           "rotation":24.57576092466016})
+      MapAnimation.moveToPos({
+        "zoom":15.999999999999996,
+        "position_latitude":52.521959731734135,
+        "position_longitude":13.40975201573759,
+        "tilt":13.245142620917735,
+        "rotation":24.57576092466016
+      })
     })
 
     MapHelper.addButton( "butCopied", "sharebutton", function() {
-      $(MapHelper.AllButtons["butShare"]).show()
-      $(MapHelper.AllButtons["butCopied"]).hide()
+      MapHelper.toggle("butShare", "butLoader", "butCopied")
     })
-    $(MapHelper.AllButtons["butCopied"]).hide()
+    MapHelper.hide("butCopied")
 
     MapHelper.addButton( "butLoader", "sharebutton" )
-    $(MapHelper.AllButtons["butLoader"]).hide()
+    MapHelper.hide("butLoader")
 
     MapHelper.addButton( "butShare", "sharebutton", function() {
-      $(MapHelper.AllButtons["butShare"]).hide()
-      $(MapHelper.AllButtons["butLoader"]).show()
+      MapHelper.toggle("butLoader", "butShare", "butCopied")
       map.emit('sharelink')
     })
 
@@ -360,40 +363,34 @@ var MapHelper = {
     }
 
     MapHelper.addButton( "butPlay", "playbutton", function() {
-      $(MapHelper.AllButtons["butPlay"]).hide()
-      $(MapHelper.AllButtons["butPause"]).show()
+      MapHelper.toggle("butPause","butPlay")
       MapAnimation.play()
     })
 
     MapHelper.addButton( "butPause", "playbutton", function() {
-      $(MapHelper.AllButtons["butPlay"]).show()
-      $(MapHelper.AllButtons["butPause"]).hide()
+      MapHelper.toggle("butPlay","butPause")
       MapAnimation.pause()
     })
 
-    $(MapHelper.AllButtons["butPause"]).hide()
+    MapHelper.hide("butPause")
 
     if ( shareData != undefined ) {
       setTimeout( function() {
         if ( MapAnimation.moveToShareData(shareData) ) {
-          $(MapHelper.AllButtons["butPause"]).show()
-          $(MapHelper.AllButtons["butPlay"]).hide()
+          MapHelper.toggle("butPause","butPlay")
         }
       }, 1000)
     } else {
       setTimeout(function() {
-        $(MapHelper.AllButtons["butPlay"]).hide()
-        $(MapHelper.AllButtons["butPause"]).show()
+        MapHelper.toggle("butPause","butPlay")
         MapAnimation.start()
       }, 1500)
     }
 
     map.on('pointerdown', e => {
       MapAnimation.pause()
-      $(MapHelper.AllButtons["butPlay"]).show()
-      $(MapHelper.AllButtons["butPause"]).hide()
-      $(MapHelper.AllButtons["butNav"]).show()
-      $(MapHelper.AllButtons["butLoader1"]).hide()
+      MapHelper.toggle("butPlay","butPause")
+      MapHelper.toggle("butNav", "butLoader1")
     });
 
     map.on('pointerup', e => {

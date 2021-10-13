@@ -167,7 +167,7 @@ body {
 }
 
 #mapbuttons .navbutton { top: 5%; left: 45%; }
-#mapbuttons .sharebutton { top: 5%; left: 90%; }
+#mapbuttons .sharebutton { top: 5%; right: 5%; }
 #mapbuttons .playbutton { top: 5%; left: 5%; }
 #mapbuttons .mutebutton { top: 20%; left: 90%; /* display: none; */ }
 #mapbuttons .exitbutton { top: 30%; left: 90%; /* display: none; */ }
@@ -187,7 +187,7 @@ body {
     }
 
     #mapbuttons .navbutton { top: 5%; left: 45%; }
-    #mapbuttons .sharebutton { top: 5%; left: 85%; }
+    #mapbuttons .sharebutton { top: 5%; right: 5%; }
     #mapbuttons .playbutton { top: 5%; left: 5%; }
     #mapbuttons .mutebutton { top: 12%; left: 85%; }
     #mapbuttons .exitbutton { top: 20%; left: 85%; }
@@ -202,7 +202,7 @@ body {
     }
 
     #mapbuttons .navbutton { top: 5%; left: 45%; }
-    #mapbuttons .sharebutton { top: 5%; left: 85%; }
+    #mapbuttons .sharebutton { top: 5%; right: 5%; }
     #mapbuttons .playbutton { top: 5%; left: 5%; }
     #mapbuttons .mutebutton { top: 12%; left: 85%; }
     #mapbuttons .exitbutton { top: 20%; left: 85%; }
@@ -214,9 +214,8 @@ body {
         left: 10%;
         width: 80%;
     }
-
-    #mapbuttons .navbutton { top: 5%; left: 45%; }
-    #mapbuttons .sharebutton { top: 5%; left: 85%; }
+    #mapbuttons .navbutton { top: 5%; left: 39%; }
+    #mapbuttons .sharebutton { top: 5%; right: 5%; }
     #mapbuttons .playbutton { top: 5%; left: 5%; }
     #mapbuttons .mutebutton { top: 12%; left: 85%; }
     #mapbuttons .exitbutton { top: 20%; left: 85%; }
@@ -234,7 +233,7 @@ body {
         height: 40px;
     }
     #mapbuttons .navbutton { top: 5%; left: 45%; }
-    #mapbuttons .sharebutton { top: 5%; left: 85%; }
+    #mapbuttons .sharebutton { top: 5%; right: 5%; }
     #mapbuttons .playbutton { top: 5%; left: 5%; }
     #mapbuttons .mutebutton { top: 10%; left: 90%; }
     #mapbuttons .exitbutton { top: 20%; left: 90%; }
@@ -250,8 +249,9 @@ body {
         width: 40px;
         height: 40px;
     }
+
     #mapbuttons .navbutton { top: 5%; left: 45%; }
-    #mapbuttons .sharebutton { top: 5%; left: 90%; }
+    #mapbuttons .sharebutton { top: 5%; right: 5%; }
     #mapbuttons .playbutton { top: 5%; left: 5%; }
     #mapbuttons .mutebutton { top: 20%; left: 90%; }
     #mapbuttons .exitbutton { top: 30%; left: 90%; }
@@ -267,9 +267,12 @@ body {
         width: 40px;
         height: 40px;
     }
+    .mapbutton {
+        background-color: #3e303e33;
+    }
 
     #mapbuttons .navbutton { top: 5%; left: 46%; }
-    #mapbuttons .sharebutton { top: 5%; left: 90%; }
+    #mapbuttons .sharebutton { top: 5%; right: 5%; }
     #mapbuttons .playbutton { top: 5%; left: 5%; }
     #mapbuttons .mutebutton { top: 30%; left: 90%; }
     #mapbuttons .exitbutton { top: 20%; left: 90%; }
@@ -301,6 +304,9 @@ body {
 }
 
 
+@media screen and (max-width: 375px) {
+    #viewerbuttons .mvsharebutton { top: 5%; left: 39%; }
+}
 
 </style>
   </head>
