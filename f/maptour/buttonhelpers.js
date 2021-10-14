@@ -66,6 +66,25 @@ var ButtonHelpers = {
       clearTimeout(autoExitTimeout)
     },
 
+    info: function(evt) {
+      var img = document.createElement('div')
+
+      img.id = "infotextbox"
+      img.className = "infotextbox"
+      img.style = "display: none;"
+      img.onclick = function() {
+        $(this).fadeOut(400, function(){
+          $(this).remove()
+        })
+      }.bind(img)
+
+      $('#viewerbuttons').append( img )
+
+      img.innerHTML = "<strong>Urban Photogrammetry</strong><p><span>Three-Dimensionalisation of urban spaces.<p>Presenting a 3D virtual tour of Berlins cultural history.</span><img class='closer' src='"+ButtonHelpers.ImageMap["butExit"]+"'/><p>[<a target=_blank href='http://urban-photogrammetry.org'>Home</a>]&nbsp;[<a target=_blank href='mailto:info@urban-photogrammetry.org'>Contact</a>]";
+
+      $(img).fadeIn(300);
+    },
+
     mute: function(evt) {
       muteOn = false;
       BABYLON.Engine.audioEngine.setGlobalVolume(1)

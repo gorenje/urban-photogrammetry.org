@@ -16,6 +16,21 @@ var MapHelper = {
     return img;
   },
 
+  addInfoText: function(callback = undefined) {
+    var img = document.createElement('div')
+
+    img.id = "infotextbox"
+    img.className = "infotextbox"
+    img.style = "display: none;"
+    img.onclick = callback || function(){};
+
+    $('#mapbuttons').append( img )
+
+    img.innerHTML = "<strong>Urban Photogrammetry</strong><p><span>Three-Dimensionalisation of urban spaces.<p>Presenting a 3D virtual tour of Berlins cultural history.</span><img class='closer' src='"+ButtonHelpers.ImageMap["butExit"]+"'/><p>[<a target=_blank href='http://urban-photogrammetry.org'>Home</a>]&nbsp;[<a target=_blank href='mailto:info@urban-photogrammetry.org'>Contact</a>]";
+
+    return img;
+  },
+
   addModelTitle: function(mlid) {
     var img = document.createElement('div')
 
@@ -373,6 +388,15 @@ var MapHelper = {
     })
 
     MapHelper.hide("butPause")
+
+    MapHelper.addButton( "butInfo", "infobutton", function() {
+      var textbox = MapHelper.addInfoText(function(){
+        $(textbox).fadeOut(400, function(){
+          $(textbox).remove()
+        })
+      });
+      $(textbox).fadeIn(300);
+    })
 
     if ( shareData != undefined ) {
       setTimeout( function() {

@@ -229,7 +229,7 @@ MapAnimation = {...MapAnimation, ...{
     MapAnimation.currAnim = anime({
       targets:  MapAnimation.animState,
       easing:   'cubicBezier(.62,.28,.56,.88)',
-      duration: Math.max(1500,startPos.distanceTo(endPos) / 0.25),
+      duration: Math.min(2000, startPos.distanceTo(endPos) / 0.25) + 500,
       update:   MapAnimation.animUpdateCallback,
       complete: function() { $(window).trigger("movetopos:complete") },
       ...pos

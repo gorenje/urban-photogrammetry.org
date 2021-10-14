@@ -133,6 +133,7 @@ body {
     text-align: center;
     pointer-events: auto;
 }
+
 .modeltextbox .loader {
     position: absolute;
     left: 0;
@@ -166,9 +167,42 @@ body {
     text-decoration: none;
 }
 
+.infotextbox {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    height: fit-content;
+    width: fit-content;
+    padding: 30px;
+    background-color: #000000aa;
+    border-width: 1px;
+    border-color: #ffffff88;
+    border-style: solid;
+    border-radius: 10px;
+    color: #eee;
+    text-align: center;
+    pointer-events: auto;
+}
+
+.infotextbox .closer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1px 3px;
+    width: 35px;
+    height: 35px;
+    display: inline-block;
+}
+
+.infotextbox a {
+    text-decoration: none;
+}
+
 #mapbuttons .navbutton { top: 5%; left: 45%; }
 #mapbuttons .sharebutton { top: 5%; right: 5%; }
 #mapbuttons .playbutton { top: 5%; left: 5%; }
+#mapbuttons .infobutton { bottom: 5%; left: 5%; }
+
 #mapbuttons .mutebutton { top: 20%; left: 90%; /* display: none; */ }
 #mapbuttons .exitbutton { top: 30%; left: 90%; /* display: none; */ }
 
@@ -177,6 +211,11 @@ body {
 
 @media screen and (max-width: 600px) {
     .modeltextbox {
+        top: 30%;
+        left: 10%;
+        width: 80%;
+    }
+    .infotextbox {
         top: 30%;
         left: 10%;
         width: 80%;
@@ -200,6 +239,11 @@ body {
         left: 10%;
         width: 80%;
     }
+    .infotextbox {
+        top: 30%;
+        left: 10%;
+        width: 80%;
+    }
 
     #mapbuttons .navbutton { top: 5%; left: 45%; }
     #mapbuttons .sharebutton { top: 5%; right: 5%; }
@@ -214,6 +258,12 @@ body {
         left: 10%;
         width: 80%;
     }
+    .infotextbox {
+        top: 30%;
+        left: 10%;
+        width: 80%;
+    }
+
     #mapbuttons .navbutton { top: 5%; left: 39%; }
     #mapbuttons .sharebutton { top: 5%; right: 5%; }
     #mapbuttons .playbutton { top: 5%; left: 5%; }
@@ -224,6 +274,11 @@ body {
 
 @media screen and (max-width: 800px) and (min-width: 600px) and (orientation: portrait) {
     .modeltextbox {
+        top: 30%;
+        left: 30%;
+        width: 40%;
+    }
+    .infotextbox {
         top: 30%;
         left: 30%;
         width: 40%;
@@ -245,6 +300,11 @@ body {
         left: 30%;
         width: 40%;
     }
+    .infotextbox {
+        top: 30%;
+        left: 30%;
+        width: 40%;
+    }
     .modeltextbox .loader {
         width: 40px;
         height: 40px;
@@ -259,6 +319,11 @@ body {
 
 @media screen and (min-width: 800px) {
     .modeltextbox {
+        top: 30%;
+        left: 30%;
+        width: 40%;
+    }
+    .infotextbox {
         top: 30%;
         left: 30%;
         width: 40%;
@@ -294,6 +359,7 @@ body {
 #viewerbuttons .mvsharebutton { top: 5%; left: 45%; }
 #viewerbuttons .mvexitbutton { top: 5%; right: 5%; }
 #viewerbuttons .fullscreenbutton { top: 15%; right: 5%; }
+#viewerbuttons .mvinfobutton { bottom: 5%; left: 5%; }
 
 @media screen and (max-width: 800px) and (min-width: 600px) and (orientation: landscape) {
     #viewerbuttons .fullscreenbutton { top: 20%; right: 5%; }

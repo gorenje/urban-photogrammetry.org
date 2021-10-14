@@ -109,6 +109,8 @@ function displayModel(mlid, model_from_shared = undefined) {
     var button = ButtonHelpers.addButton("butLoader", "mvsharebutton")
     $(button).hide()
 
+    ButtonHelpers.addButton("butInfo", "mvinfobutton", ButtonHelpers.CB.info)
+
     if ( !ButtonHelpers.isSafari() ) {
       ButtonHelpers.addButton("butFS", "fullscreenbutton",
                               ButtonHelpers.CB.fullscreen);
