@@ -62,14 +62,14 @@ var ButtonHelpers = {
       ButtonHelpers.toggle("butPlay", "butPause")
       setTimeout( MapHelper.modelExaminerDone, 750 );
       $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
-      $('#map').fadeIn(200);
+      $('#map').fadeIn(200, function() { $("#mvinfotextbox").remove() });
       clearTimeout(autoExitTimeout)
     },
 
     info: function(evt) {
       var img = document.createElement('div')
 
-      img.id = "infotextbox"
+      img.id = "mvinfotextbox"
       img.className = "infotextbox"
       img.style = "display: none;"
       img.onclick = function() {

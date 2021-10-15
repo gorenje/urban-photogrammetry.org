@@ -16,6 +16,21 @@ var MapHelper = {
     return img;
   },
 
+  addEndOfTourText: function(callback = undefined) {
+    var img = document.createElement('div')
+
+    img.id = "eottextbox"
+    img.className = "infotextbox"
+    img.style = "display: none;"
+    img.onclick = callback || function(){};
+
+    $('#mapbuttons').append( img )
+
+    img.innerHTML = "<strong>End of Tour</strong><p><span>Thanks for watching and we hope you enjoyed it.</span><img class='closer' src='"+ButtonHelpers.ImageMap["butExit"]+"'/><p>[<a target=_blank href='http://urban-photogrammetry.org'>Home</a>]&nbsp;[<a target=_blank href='mailto:info@urban-photogrammetry.org'>Contact</a>]";
+
+    return img;
+  },
+
   addInfoText: function(callback = undefined) {
     var img = document.createElement('div')
 
@@ -105,8 +120,10 @@ var MapHelper = {
   },
 
   modelExaminerDone: function() { // callback from the model navigator
-    MapHelper.toggle("butPause", "butPlay")
-    MapAnimation.play()
+    setTimeout(function() {
+      MapHelper.toggle("butPause", "butPlay")
+      MapAnimation.play()
+    }, 500)
   },
 
   onSceneReadyCallback: function(cb) {
@@ -150,6 +167,7 @@ var MapHelper = {
                 defineIntroAnim(currModel, scene)()
               }
               (opts.callback || function(){})()
+              $(window).trigger('modelviewer:showing', currModel.mlid)
             })
             $('#modeltitle').remove()
           })
@@ -164,6 +182,7 @@ var MapHelper = {
                 defineIntroAnim(currModel, scene)()
               })
             }
+            $(window).trigger('modelviewer:showing', currModel.mlid)
             if (opts.callback) {MapHelper.onSceneReadyCallback(opts.callback)}
           })
         })
@@ -189,6 +208,33 @@ var MapHelper = {
     $(window).on('keyframe:moveto', function(event,data) {
       console.log("moving to " + data.frameNr )
     });
+
+    $(window).on('model:show', function() {
+      $("#infotextbox").fadeOut(400, function(){
+        $("#infotextbox").remove()
+      })
+    })
+    $(window).on('modelviewer:showing', function() {
+      $("#infotextbox").fadeOut(400, function(){
+        $("#infotextbox").remove()
+      })
+    })
+
+    $(window).on('mapanim:tourend', function() {
+      var textbox = MapHelper.addEndOfTourText(function(){
+        $(textbox).fadeOut(400, function(){
+          $(textbox).remove()
+        })
+      });
+
+      $(textbox).fadeIn(300, function() {
+        setTimeout( function() {
+          $(textbox).fadeOut(400, function(){
+            $(textbox).remove()
+          })
+        }, 1500)
+      });
+    })
 
     $('#loadingScreen').hide()
     $('#modelviewer').hide()

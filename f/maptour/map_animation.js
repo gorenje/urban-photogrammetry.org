@@ -11,17 +11,14 @@ var MapAnimation = {
 
 MapAnimation = {...MapAnimation, ...{
   keyFrames: [
-    {"zoom":17.564263978867494,"position_latitude":52.52503415310028,"position_longitude":13.421729076654637,"tilt":43.787405574659225,"rotation":-138.04825027720412},
+    {"zoom":15,"position_latitude":52.51933782361247,"position_longitude":13.410548351194839,"tilt":0,"rotation":-35.235952863502106},
+    {"zoom":17.80418716618937,"position_latitude":52.52795175966379,"position_longitude":13.414907917263811,"tilt":45,"rotation":32.22815041494411},
+
     {"zoom":17.575728718459676,"position_latitude":52.52201323000966,"position_longitude":13.409346258721442,"tilt":19.799651222693385,"rotation":11.402182219878714},
     {"zoom":17.79999999999999,"position_latitude":52.520634612119515,"position_longitude":13.408208494688466,"tilt":39.02617544016254,"rotation":-108.84836358895853},
-{"zoom":17.79999999999999,"position_latitude":52.5213523257361,"position_longitude":13.406104321599244,"tilt":43.937995327592226,"rotation":-129.09836358895853},
-    {"zoom":17.79999999999999,"position_latitude":52.51758943154345,"position_longitude":13.397918988654963,"tilt":24.70265324794164,"rotation":-154.81431689635122},
-    {"zoom":17.9312481536,"position_latitude":52.516605341692376,"position_longitude":13.397216128811124,"tilt":0,"rotation":13.3936508358626},
-
-    MapAnimation.ViewModelFrame, // schinkel klause
-
+    {"zoom":17.79999999999999,"position_latitude":52.5213523257361,"position_longitude":13.406104321599244,"tilt":43.937995327592226,"rotation":-129.09836358895853},
+    //{"zoom":18,"position_latitude":52.51849411964798,"position_longitude":13.402997969815498,"tilt":0,"rotation":207.87095586241188},
     {"zoom":18,"position_latitude":52.51878925498369,"position_longitude":13.403132600849403,"tilt":0,"rotation":21.07874035255887},
-    {"zoom":18,"position_latitude":52.51849411964798,"position_longitude":13.402997969815498,"tilt":0,"rotation":207.87095586241188},
     MapAnimation.ViewModelFrame, // engels
 
     {"zoom":17.6,"position_latitude":52.52036192322607,"position_longitude":13.397809574273278,"tilt":19.133558748943454,"rotation":206.1900220102718},
@@ -87,8 +84,6 @@ MapAnimation = {...MapAnimation, ...{
     {"zoom":18,"position_latitude":52.54050572752514,"position_longitude":13.428048775594958,"tilt":41.96253602305475,"rotation":17.940464241184763},
     {"zoom":15.800000000000008,"position_latitude":52.56913380160043,"position_longitude":13.444883040641702,"tilt":41.96253602305475,"rotation":17.940464241184763},
     {"zoom":18,"position_latitude":52.57024470438567,"position_longitude":13.446422278491994,"tilt":41.96253602305475,"rotation":17.940464241184763},
-    {"zoom":17.1559271546841,"position_latitude":52.56968583253286,"position_longitude":13.445750871722785,"tilt":64.8536613661472,"rotation":17.660308599161418},
-    {"zoom":18,"position_latitude":52.56900237887969,"position_longitude":13.445535257467034,"tilt":22.521613832852978,"rotation":-110.5994130594287},
     {"zoom":18,"position_latitude":52.569218516339504,"position_longitude":13.445453494706767,"tilt":0,"rotation":-109.75894613335865},
     MapAnimation.ViewModelFrame, // buddhist temple
 
@@ -258,6 +253,7 @@ MapAnimation = {...MapAnimation, ...{
     MapAnimation.currKeyFrame += 1
 
     if ( MapAnimation.keyFrames[MapAnimation.currKeyFrame] == undefined ) {
+      $(window).trigger('mapanim:tourend')
       return;
     }
 
@@ -296,6 +292,7 @@ MapAnimation = {...MapAnimation, ...{
       $(MapHelper.AllButtons["butPause"]).hide()
       $(MapHelper.AllButtons["butPlay"]).show()
       MapAnimation.currKeyFrame = 0
+      $(window).trigger('mapanim:tourend')
     }
   },
 

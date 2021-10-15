@@ -1,15 +1,18 @@
 - title: "Froschkönig / Teutoburger Platz"
   mlid: "c50d714f2f7e4534a73e7a0b370498f3"
   loc: "52.53172,13.40886"
+  tourlink: "https://r.upo.sh/inqjQM5f"
 
 - title: "Make Art, Not War"
   mlid: "5d7de3d158cf48a2bb1852f6a6b231ac"
   loc: "52.49955614561258,13.391819901298732"
+  tourlink: "https://r.upo.sh/KCAF6qoW"
 
 - title: "Volksbühne: Façade"
   idx: "Volksbühne"
   mlid: "398e1d82cf6c41369951b15ccfb39df2"
   loc: "52.52642,13.41144"
+  tourlink: "https://r.upo.sh/pOCA38Pb"
 
 - title: "Polka Dot Tree - Gropius Wood"
   idx: "Gropius Wood"
@@ -20,17 +23,20 @@
   mlid: "2c37ef0e1b9043809514e10c59f82661"
   loc: "52.53190,13.41270"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/denkmal-fuer-alois-senefelder/"
+  tourlink: "https://r.upo.sh/BFM6Dkll"
 
 - title: "Marx & Engels Memorial"
   idx: "Marx & Engels"
   mlid: "04684a56cce44825b5912e57cd721121"
   loc: "52.51868,13.40309"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/marx-engels-denkmal/"
+  tourlink: "https://r.upo.sh/CGgd6GWC"
 
 - title: "Ernst Thälmann Memorial"
   idx: "Ernst Thälmann"
   mlid: "f23cafa7b2bf44aa831a460ddfeaac72"
   loc: "52.53813,13.43378"
+  tourlink: "https://r.upo.sh/eFse2tcD"
 
 - title: "Gravestone - Petra Tschortner"
   idx: "Petra Tschortner"
@@ -46,6 +52,7 @@
   mlid: "1db1215c7d7d4d7b91b30ed3f8d47b40"
   loc: "52.52708,13.41407"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/denkmal-fuer-rosa-luxemburg/"
+  tourlink: "https://r.upo.sh/3volnDTT"
 
 - title: "Gravestone - Elias Pipping"
   idx: "Elias Pipping"
@@ -56,6 +63,7 @@
   idx: "Sitting Man"
   mlid: "5c0681f61c9b45a9a0358ac0a2d2dd58"
   loc: "52.52141,13.40474"
+  tourlink: "https://r.upo.sh/1caSN5cg"
 
 - title: "Stolpersteine"
   mlid: "509bf05da34f4928bcdfc12d8865f699"
@@ -65,6 +73,7 @@
   mlid: "3d0f151bf808494a9eb1b2a81665e832"
   loc: "52.52605,13.42966"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/denkmal-fuer-die-deutschen-interbrigadisten/"
+  tourlink: "https://r.upo.sh/AH04Ftpq"
 
 - title: "Heinrich Heine Memorial"
   idx: "Heinrich Heine"
@@ -76,10 +85,12 @@
   idx: "Irene Kubischik"
   mlid: "1b46df238d6e4f26b1c1084815c515af"
   loc: "52.52928,13.42134"
+  tourlink: "https://r.upo.sh/Mb1fQJYQ"
 
 - title: "Struck by Lightening"
   mlid: "8b6a3c122a0d455691436494cc3928aa"
   loc: "52.51683,13.35704"
+  tourlink: "https://r.upo.sh/aNmQ5v7t"
 
 - title: "Gravestone - Manfred Hodapp"
   idx: "Gravestones"
@@ -90,11 +101,13 @@
   idx: "Stauffenberg"
   mlid: "ccbf991eafed45df8e7c0859890999e6"
   loc: "52.50758,13.36298"
+  tourlink: "https://r.upo.sh/sVnGPCjw"
 
 - title: "Liegende Wapiti-Hirsche"
   mlid: "849f0331d956447db09dd03460716ce7"
   loc: "52.51422,13.36938"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/amazone-zu-pferd/"
+  tourlink: "https://r.upo.sh/nAcjsmdE"
 
 - title: "Gravestone - Frieda Seidlitz, Else Jahn & Berthold Manzke"
   idx: "Frieda Seidlitz"
@@ -106,22 +119,25 @@
   mlid: "bb3207ff1bba4465bb331bd38054ffe5"
   loc: "52.50798,13.36619"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/grosser-janus-ii/"
+  tourlink: "https://r.upo.sh/Tz8l2o5m"
 
 - title: "Skulpturen gegen den Krieg, Tiergarten"
   idx: "Skulpturen gegen den Krieg"
   mlid: "dc42a16b3a7e4a7398ac9af1254d1d96"
   loc: "52.51857,13.36789"
+  tourlink: "https://r.upo.sh/BSlN19Ui"
 
 - title: "Gravestone - Maria Jastram"
   idx: "Maria Jastram"
   mlid: "5b809aafd7eb4be5bf1226ae1d99b1b9"
   loc: "52.53773,13.37816"
 
-- title: "Roter Mainsandstein - Iida Yoshikuni"
-  idx: "Iida Yoshikuni"
+- title: "Roter Mainsandstein - Jida Yoshikuni"
+  idx: "Jida Yoshikuni"
   mlid: "b582f8af0b934f4dbbf055c63d4e882e"
   loc: "52.51913,13.36894"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/abstrakte-skulptur-3/"
+  tourlink: "https://r.upo.sh/FxMDMVEt"
 
 - title: "Liebig 34 - Squatter House"
   idx: "Liebig 34"
@@ -156,6 +172,7 @@
 - title: "Schinkel Klause"
   mlid: "d04aea393cbe409ba101c31edcbee55e"
   loc: "52.51625,13.39669"
+  tourlink: "https://r.upo.sh/UAE026HW"
 
 - title: "Schwerkraft Verklagen"
   mlid: "51362befc9624361980eef004af79856"
@@ -165,6 +182,7 @@
   mlid: "7770af0084454d0ba0c98e5eca1661cc"
   loc: "52.52041,13.39808"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/amazone-zu-pferd-2/"
+  tourlink: "https://r.upo.sh/iGrmqeBT"
 
 - title: "Stuck in der Mitte"
   mlid: "f872fa552f714d95a379cda519b3c3e2"
@@ -173,26 +191,31 @@
 - title: "Molkerei"
   mlid: "ee048169659a49dcbb410bf1e9ff84b8"
   loc: "52.53145,13.40613"
+  tourlink: "https://r.upo.sh/15BSOQI3"
 
 - title: "Doppelgängeradmiral"
   mlid: "4aa3f73788464b299ef755cac03f0ca6"
   loc: "52.49724,13.41643"
+  tourlink: "https://r.upo.sh/eAUh1ru1"
 
 - title: "Water Fountain / Kaiser Brunnen"
   idx: "Kaiser Brunnen"
   mlid: "2bae9bf38b8b4a8aa27921405db96e7f"
   loc: "52.54235,13.43003"
+  tourlink: "https://r.upo.sh/d0113qBO"
 
 - title: "Für die Opfer des Widerstandes"
   idx: "Opfer des Widerstandes"
   mlid: "70fcd5892cb346429c04c1d852b96169"
   loc: "52.53858,13.42697"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/fuer-die-opfer-des-widerstandes/"
+  tourlink: "https://r.upo.sh/vVzvzDk0"
 
 - title: "Kniende Engel - Kneeling Angel - 1 of 2"
   idx: "Kneeling Angel #1"
   mlid: "7c6471d3946d4dc0bbe99a1b492a3f01"
   loc: "52.53907,13.37857"
+  tourlink: "https://r.upo.sh/Vl2QpovC"
 
 - title: "Goethe Monument"
   mlid: "b51b20872b914c1287299c2570dc28f7"
@@ -250,11 +273,13 @@
   mlid: "45ce067400d248c6b232401054348bad"
   loc: "52.57091,13.39684"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/julius-fucik-denkmal/"
+  tourlink: "https://r.upo.sh/OfjWoOrK"
 
 - title: "Große Vegetative Landschaft / Giant Vegetative Landscape"
   idx: "Große Vegetative Landschaft"
   mlid: "6f198c61895f4cf8ac029db8998903a6"
   loc: "52.56957,13.39378"
+  tourlink: "https://r.upo.sh/NxdJZyQs"
 
 - title: "Berlin Bullet-Hole Walls"
   mlid: "ad07abe56258493b988bba2fb5f3a374"
@@ -264,6 +289,7 @@
   idx: "Kneeling Angel #2"
   mlid: "e1199bf674984c5092cb46f04660297e"
   loc: "52.53907,13.37857"
+  tourlink: "https://r.upo.sh/StvVxst7"
 
 - title: "Monkey with Gun - Lucuna"
   idx: "Streetart / Lucuna"
@@ -278,15 +304,18 @@
 - title: "Drei Harlekine / Three Harlequins"
   mlid: "924b850d72bd46478ab650cfa353d94d"
   loc: "52.52821,13.39900"
+  tourlink: "https://r.upo.sh/gTYcmmAH"
 
 - title: "Trinkbrunnen mit zwei Seelöwen"
   mlid: "376ca0e2ff6b43f8a80cf3abbca8030b"
   loc: "52.50687,13.28655"
   biburl: "https://bildhauerei-in-berlin.de/bildwerk/trinkbrunnen-mit-zwei-seeloewen/"
+  tourlink: "https://r.upo.sh/O37DlFhF"
 
 - title: "Graveyard of Gravestones"
   mlid: "8e9f528940e44226bc3f6ced6088dd44"
   loc: "52.57124,13.38586"
+  tourlink: "https://r.upo.sh/XqQhZWzY"
 
 - title: "Gravestone Peter Karl Dussmann"
   mlid: "7b48179aaac44e399f9c849e778f9a96"
@@ -311,6 +340,7 @@
 - title: "Wat Buddhavihara"
   mlid: "0ec35096975442188f5278665013bfae"
   loc: "52.56928,13.44615"
+  tourlink: "https://r.upo.sh/btodNtrk"
 
 # - title: ""
 #   mlid: ""
