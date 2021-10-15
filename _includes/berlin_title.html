@@ -1,3 +1,11 @@
+{% capture pnum %}{% include berlin_get_page_idx.html %}{% endcapture %}
+{% assign pnum = pnum | abs %}
+{% assign data = site.data.berlin[pnum] %}
+
 # {{ include.title }}
 
-Part of the [Berlin Three Dimensional Virtual Tour](/berlin).
+{% if data.tourlink %}
+Part of the [Berlin 3D Virtual Tour]({{ data.tourlink }}).
+{% else %}
+Part of the [Berlin Virtual Tour](/berlin).
+{% endif %}

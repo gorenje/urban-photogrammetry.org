@@ -1,5 +1,5 @@
 ---
-title: 3D Tour
+title: Berlin 3D Tour
 permalink: /berlin/maptour
 layout: maptour
 ---

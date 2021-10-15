@@ -3,20 +3,7 @@ var MapHelper = {
 
   AllButtons: {},
 
-  addButton: function(name, cssClass, callback = undefined, icon_name = undefined) {
-    var img = document.createElement('img')
-
-    img.className = `mapbutton ${cssClass}`
-    img.src = ButtonHelpers.ImageMap[icon_name || name]
-    img.onclick = callback || function(){};
-
-    $('#mapbuttons').append( img )
-    MapHelper.AllButtons[name] = img;
-
-    return img;
-  },
-
-  addEndOfTourText: function(callback = undefined) {
+  showEndOfTourText: function(callback = undefined) {
     var img = document.createElement('div')
 
     img.id = "eottextbox"
@@ -31,7 +18,21 @@ var MapHelper = {
     return img;
   },
 
-  addInfoText: function(callback = undefined) {
+  showModelTitle: function(mlid) {
+    var img = document.createElement('div')
+
+    img.id = "modeltitle"
+    img.className = "modeltextbox"
+    img.style = "display: none;"
+
+    $('#mapbuttons').append( img )
+
+    img.innerHTML = "<strong>" + ModelNames[mlid].title + "</strong><span class='moredetails'><a target=_blank href='/berlin/" + mlid + "'>More details</a></span><img class='loader' src='"+ButtonHelpers.ImageMap["butLoader"]+"'/>";
+
+    return img;
+  },
+
+  showInfoText: function(callback = undefined) {
     var img = document.createElement('div')
 
     img.id = "infotextbox"
@@ -46,16 +47,39 @@ var MapHelper = {
     return img;
   },
 
-  addModelTitle: function(mlid) {
+  hideText: function(cb = function(){}) {
+    $('#showtextbox').fadeOut(400, function() {
+      $('#showtextbox').remove()
+      cb()
+    })
+  },
+
+  showText: function(content = { title: "", text: "" }) {
     var img = document.createElement('div')
 
-    img.id = "modeltitle"
-    img.className = "modeltextbox"
+    img.id = "showtextbox"
+    img.className = "infotextbox"
     img.style = "display: none;"
+    img.onclick = MapHelper.hideText;
 
     $('#mapbuttons').append( img )
 
-    img.innerHTML = "<strong>" + ModelNames[mlid].title + "</strong><span class='moredetails'><a target=_blank href='/berlin/" + mlid + "'>More details</a></span><img class='loader' src='"+ButtonHelpers.ImageMap["butLoader"]+"'/>";
+    img.innerHTML = "<strong>"+content.title+"</strong><p><span>"+content.text +
+                    "</span><img class='closer' src='" +
+                    ButtonHelpers.ImageMap["butExit"] + "'/>";
+
+    return $(img);
+  },
+
+  addButton: function(name, cssClass, callback = undefined, icon_name = undefined) {
+    var img = document.createElement('img')
+
+    img.className = `mapbutton ${cssClass}`
+    img.src = ButtonHelpers.ImageMap[icon_name || name]
+    img.onclick = callback || function(){};
+
+    $('#mapbuttons').append( img )
+    MapHelper.AllButtons[name] = img;
 
     return img;
   },
@@ -78,6 +102,10 @@ var MapHelper = {
 
   hide: function(buttonName) {
     $(MapHelper.AllButtons[buttonName]).hide()
+  },
+
+  fadeIn: function(buttonName) {
+    $(MapHelper.AllButtons[buttonName]).fadeIn(300);
   },
 
   show: function(buttonName) {
@@ -135,7 +163,7 @@ var MapHelper = {
     console.log( "Examing model: " + mlid)
     $(window).trigger('model:show', mlid)
 
-    var txt = MapHelper.addModelTitle(mlid);
+    var txt = MapHelper.showModelTitle(mlid);
     MapAnimation.pause()
     MapHelper.toggle("butPlay", "butPause")
 
@@ -209,6 +237,29 @@ var MapHelper = {
       console.log("moving to " + data.frameNr )
     });
 
+    $(window).on('keyframe:moveto', function(event,data) {
+      if ( data.frameNr == 2 ) {
+        MapHelper.showText({
+          title: "Welcome to the Berlin 3D Virtual Tour",
+          text: "This tour will visit some of Berlins cultural history - Enjoy!"
+        }).fadeIn(300);
+      }
+      if ( data.frameNr == 4 ) {
+        MapHelper.hideText(function(){
+          MapHelper.showText({
+            title: "Controls",
+            text: "Pause the tour at any time using the pause button."
+          }).fadeIn(300);
+        })
+      }
+      if ( data.frameNr == 6 ) {
+        MapHelper.hideText()
+      }
+      if ( data.frameNr == 8 ) {
+        MapHelper.hideText()
+      }
+    })
+
     $(window).on('model:show', function() {
       $("#infotextbox").fadeOut(400, function(){
         $("#infotextbox").remove()
@@ -221,7 +272,7 @@ var MapHelper = {
     })
 
     $(window).on('mapanim:tourend', function() {
-      var textbox = MapHelper.addEndOfTourText(function(){
+      var textbox = MapHelper.showEndOfTourText(function(){
         $(textbox).fadeOut(400, function(){
           $(textbox).remove()
         })
@@ -280,8 +331,6 @@ var MapHelper = {
       var url = new URL(window.location)
       var shareUrl = url.origin + url.pathname + "?l=" + window.btoa(
         JSON.stringify(data));
-
-      console.log( shareUrl )
 
       $.ajax({
         url: "https://r.upo.sh/image",
@@ -424,6 +473,7 @@ var MapHelper = {
     }
 
     MapHelper.addButton( "butPlay", "playbutton", function() {
+      if ( $('#modeltitle').length > 0 ) { return; }
       MapHelper.toggle("butPause","butPlay")
       MapAnimation.play()
     })
@@ -436,13 +486,14 @@ var MapHelper = {
     MapHelper.hide("butPause")
 
     MapHelper.addButton( "butInfo", "infobutton", function() {
-      var textbox = MapHelper.addInfoText(function(){
+      var textbox = MapHelper.showInfoText(function(){
         $(textbox).fadeOut(400, function(){
           $(textbox).remove()
         })
       });
       $(textbox).fadeIn(300);
     })
+    MapHelper.hide("butInfo")
 
     if ( shareData != undefined ) {
       setTimeout( function() {
@@ -464,6 +515,8 @@ var MapHelper = {
     });
 
     map.on('pointerup', e => {
+      if ( $('#modeltitle').length > 0 ) { return; }
+
       $.each( e.features || [], function(idx,obj) {
         if ( obj.id.substring(0,3) === "up-" ) {
           MapHelper.examineModel(obj.id.substring(3))

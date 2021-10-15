@@ -237,8 +237,6 @@ MapAnimation = {...MapAnimation, ...{
     var endPos = L.latLng( MapAnimation.keyFrames[frameNr].position_latitude,
                            MapAnimation.keyFrames[frameNr].position_longitude )
 
-    $(window).trigger("keyframe:moveto", { frameNr: frameNr } )
-
     MapAnimation.currAnim = anime({
       targets:  MapAnimation.animState,
       easing:   'cubicBezier(.62,.28,.56,.88)',
@@ -256,6 +254,8 @@ MapAnimation = {...MapAnimation, ...{
       $(window).trigger('mapanim:tourend')
       return;
     }
+
+    $(window).trigger("keyframe:moveto", { frameNr: MapAnimation.currKeyFrame } )
 
     if (MapAnimation.keyFrames[MapAnimation.currKeyFrame] == MapAnimation.ViewModelFrame){
       MapAnimation.currKeyFrame += 1

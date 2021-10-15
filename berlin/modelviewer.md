@@ -84,7 +84,7 @@ layout: modelviewer
     addKeyboardObserver(scene, skyboxMesh);
 
 
-    if ( TDHelpers.isLocalhost() && false ) {
+    if ( TDHelpers.isLocalhost()  ) {
       var wa = document.createElement('script');
       wa.type = 'text/javascript';
       wa.async = true;

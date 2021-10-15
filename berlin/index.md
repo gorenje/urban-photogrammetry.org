@@ -40,7 +40,12 @@ Currently the tour is made up of the following 3D models:
 <ul>
 {%- assign sortedcollection = site.data.berlin | sort: "title" %}
 {%- for site in sortedcollection %}
-  <li><a href="/berlin/{{ site["mlid"] }}">{{site.idx | default: site.title}}</a></li>
+  <li>
+  <a href="/berlin/{{ site["mlid"] }}">{{site.idx | default: site.title}}</a>
+  {%- if site.tourlink %}
+    <a target=_blank href='{{ site.tourlink }}'>(B3DVT)</a>
+  {%- endif %}
+  </li>
   {%- if site.loc and site.loc != "" %}
     {%- include marker.js loc=site.loc mlid=site.mlid cnt=cnt title=site.title %}
   {%- endif %}
