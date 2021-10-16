@@ -64,9 +64,15 @@ var MapHelper = {
 
     $('#mapbuttons').append( img )
 
-    img.innerHTML = "<strong>"+content.title+"</strong><p><span>"+content.text +
-                    "</span><img class='closer' src='" +
-                    ButtonHelpers.ImageMap["butExit"] + "'/>";
+    if ( content.button ) {
+      img.innerHTML = "<strong>"+content.title+"</strong><p><div class='row'>"+
+                      "<div class='col-3'><img class='mapbutton' style='width: 40px;' src='" + ButtonHelpers.ImageMap[content.button] + "'/></div><div class='col-9'>"+content.text + "</div></div><img class='closer' src='" +
+                      ButtonHelpers.ImageMap["butExit"] + "'/>";
+    } else {
+      img.innerHTML = "<strong>"+content.title+"</strong><p><span>"+content.text +
+                      "</span><img class='closer' src='" +
+                      ButtonHelpers.ImageMap["butExit"] + "'/>";
+    }
 
     return $(img);
   },
@@ -149,7 +155,6 @@ var MapHelper = {
 
   modelExaminerDone: function() { // callback from the model navigator
     setTimeout(function() {
-      MapHelper.toggle("butPause", "butPlay")
       MapAnimation.play()
     }, 500)
   },
@@ -165,7 +170,6 @@ var MapHelper = {
 
     var txt = MapHelper.showModelTitle(mlid);
     MapAnimation.pause()
-    MapHelper.toggle("butPlay", "butPause")
 
     $('#modeltitle').fadeIn(300, function() {
       if ( engine == null ) {
@@ -244,20 +248,58 @@ var MapHelper = {
           text: "This tour will visit some of Berlins cultural history - Enjoy!"
         }).fadeIn(300);
       }
+
       if ( data.frameNr == 4 ) {
         MapHelper.hideText(function(){
           MapHelper.showText({
-            title: "Controls",
+            title: "Controls - Pause",
+            button: "butPause",
             text: "Pause the tour at any time using the pause button."
           }).fadeIn(300);
         })
       }
-      if ( data.frameNr == 6 ) {
-        MapHelper.hideText()
+
+      if ( data.frameNr == 7 ) {
+        MapHelper.showText({
+          title: "Controls - Play",
+          button: "butPlay",
+          text: "Continue the tour by using the play button."
+        }).fadeIn(300);
       }
-      if ( data.frameNr == 8 ) {
-        MapHelper.hideText()
+
+      if ( data.frameNr == 11 ) {
+        MapHelper.showText({
+          title: "Controls - View",
+          button: "butCursor",
+          text: "Click on a model to view it more closely."
+        }).fadeIn(300);
       }
+
+      if ( data.frameNr == 15 ) {
+        MapHelper.showText({
+          title: "Controls - Share",
+          button: "butShare",
+          text: "Share views of models or locations on the map with friends."
+        }).fadeIn(300);
+      }
+
+      if ( data.frameNr == 19 ) {
+        MapHelper.showText({
+          title: "Controls - Recenter",
+          button: "butNav",
+          text: "Reorientate back to the center of the map."
+        }).fadeIn(300);
+      }
+
+      if ( [6,9,13,17,21].includes(data.frameNr) ) { MapHelper.hideText() }
+    })
+
+    $(window).on('mapanin:paused', function() {
+      MapHelper.toggle("butPlay","butPause")
+    })
+
+    $(window).on('mapanin:playing', function() {
+      MapHelper.toggle("butPause","butPlay")
     })
 
     $(window).on('model:show', function() {
@@ -503,14 +545,12 @@ var MapHelper = {
       }, 1000)
     } else {
       setTimeout(function() {
-        MapHelper.toggle("butPause","butPlay")
         MapAnimation.start()
       }, 1500)
     }
 
     map.on('pointerdown', e => {
       MapAnimation.pause()
-      MapHelper.toggle("butPlay","butPause")
       MapHelper.toggle("butNav", "butLoader1")
     });
 

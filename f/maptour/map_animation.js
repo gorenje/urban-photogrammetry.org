@@ -280,12 +280,18 @@ MapAnimation = {...MapAnimation, ...{
   },
 
   pause: function() {
+    $(window).trigger("mapanin:paused")
     clearTimeout( MapAnimation.currTimeout )
     MapAnimation.currAnim.pause()
   },
 
   play: function() {
+    $(window).trigger("mapanin:playing")
     if (MapAnimation.currKeyFrame < MapAnimation.keyFrames.length ) {
+      $(window).trigger("keyframe:moveto", {
+        frameNr: MapAnimation.currKeyFrame
+      })
+
       MapAnimation.stateFromCamera()
       MapAnimation.moveToFrame(MapAnimation.currKeyFrame)
     } else {
@@ -303,6 +309,10 @@ MapAnimation = {...MapAnimation, ...{
     }
 
     MapAnimation.currKeyFrame += 1
+    $(window).trigger("keyframe:moveto", {
+      frameNr: MapAnimation.currKeyFrame
+    })
+    $(window).trigger("mapanin:playing")
     MapAnimation.moveToFrame(MapAnimation.currKeyFrame)
   },
 
