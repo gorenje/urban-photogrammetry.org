@@ -52,9 +52,13 @@ var TDHelpers = {
 
   setupAutoExit: function(start_after = 2000) {
     MapHelper.showTextMV({
-      title: "Returning to Tour",
+      title: "Controls - Exit Button",
       button: "butExit",
-      text: "Exit the model viewer using the exit button. Click on model to stop automatic exit."
+      text: "Automatically exiting the model viewer. Click here to prevent exiting viewer.",
+      callback: function() {
+        clearTimeout(autoExitTimeout)
+        $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
+      }
     }).fadeIn(200, function() {
       autoExitTimeout = setTimeout( function() {
         var button = ButtonHelpers.AllButtons["butExit"]

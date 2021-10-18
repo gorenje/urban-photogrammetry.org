@@ -59,13 +59,17 @@ var MapHelper = {
   },
 
   showText: function(content = {title: "", text: ""}){
-    console.log(content)
+    $('#showtextbox').remove()
     var img = document.createElement('div')
+    var cb = content.callback;
 
     img.id = "showtextbox"
     img.className = "infotextbox"
     img.style = "display: none;"
-    img.onclick = MapHelper.hideText;
+    img.onclick = function() {
+      (cb || function(){})();
+      MapHelper.hideText();
+    }
 
     $(content.container || "#mapbuttons").append( img )
 
@@ -255,13 +259,11 @@ var MapHelper = {
       }
 
       if ( data.frameNr == 4 ) {
-        MapHelper.hideText(function(){
-          MapHelper.showText({
-            title: "Controls - Pause",
-            button: "butPause",
-            text: "Pause the tour at any time using the pause button."
-          }).fadeIn(300);
-        })
+        MapHelper.showText({
+          title: "Controls - Pause",
+          button: "butPause",
+          text: "Pause the tour at any time using the pause button."
+        }).fadeIn(300);
       }
 
       if ( data.frameNr == 7 ) {
@@ -296,7 +298,7 @@ var MapHelper = {
         }).fadeIn(300);
       }
 
-      if ( [6,9,13,17,21].includes(data.frameNr) ) { MapHelper.hideText() }
+      if ( [3,6,9,13,17,21].includes(data.frameNr) ) { MapHelper.hideText() }
     })
 
     $(window).on('mapanin:paused', function() {

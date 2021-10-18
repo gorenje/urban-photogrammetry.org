@@ -44,21 +44,19 @@ var autoExitTimeout = null;
 var map = null;
 
 $(function(){
+  window.browser = bowser.getParser(window.navigator.userAgent);
+
   $(document).bind("scroll keypress touchstart click keydown keyup mousemove mousedown mouseup", function(){
     clearTimeout(autoExitTimeout)
-    MapHelper.hideText()
     $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
   });
   $(window).bind("scroll keypress touchstart click keydown keyup mousemove mousedown mouseup", function(){
     clearTimeout(autoExitTimeout)
-    MapHelper.hideText()
     $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
   });
 });
 
 function displayModel(mlid, model_from_shared = undefined) {
-  window.browser = bowser.getParser(window.navigator.userAgent);
-
   canvas = document.getElementById("3dcanvas");
   currModel = model_from_shared || UPModels.modelForMlid(mlid);
 

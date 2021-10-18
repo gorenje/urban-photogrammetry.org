@@ -196,7 +196,7 @@ function initCamera(scene) {
 }
 
 function createSkyBox(scene) {
-  var skyboxMesh = BABYLON.Mesh.CreateBox("hdrSkyBox64", 1000.0, scene);
+  var skyboxMesh = BABYLON.Mesh.CreateSphere("hdrSkyBox64", 32, 300, scene);
   skyboxMesh.infiniteDistance = true;
 
   var multimat = new BABYLON.MultiMaterial("multi", scene);
@@ -318,14 +318,30 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
         BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-1k.glb",scene).then(
           function(mesh) {
             var cMlid = mlid;
-            modelMesh.addLODLevel(20,modelMesh.clone())
-            modelMesh.addLODLevel(6,mesh.meshes[1])
-            for ( var idx = 1; idx < 2; idx++ ) {
-              loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
+            mesh.meshes[1].setEnabled(false)
+
+            if (cMlid == currModel.mlid) {
+              modelMesh.addLODLevel(20,modelMesh.clone())
+              mesh.meshes[1].setEnabled(true)
+              modelMesh.addLODLevel(6,mesh.meshes[1])
             }
-            setTimeout( function() {
-              ModelCache.cachePrevAndNext(this)
-            }.bind(mlid), 1000)
+
+            BABYLON.SceneLoader.ImportMeshAsync("", "/m/"+mlid+"/","model-2k.glb",scene).then(
+              function (mesh) {
+                var cMlid = mlid;
+                mesh.meshes[1].setEnabled(false)
+
+                if (cMlid == currModel.mlid) {
+                  mesh.meshes[1].setEnabled(true)
+                  modelMesh.addLODLevel(3,mesh.meshes[1])
+                }
+                for ( var idx = 1; idx < 3; idx++ ) {
+                  loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
+                }
+                setTimeout( function() {
+                  ModelCache.cachePrevAndNext(this)
+                }.bind(mlid), 1000)
+              })
           })
       } else {
         // desktop devics get complete resolution and details.
@@ -335,7 +351,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
             mesh.meshes[1].setEnabled(false)
 
             if (cMlid == currModel.mlid) {
-              modelMesh.addLODLevel(20,modelMesh.clone())
+              modelMesh.addLODLevel(10,modelMesh.clone())
               mesh.meshes[1].setEnabled(true)
               modelMesh.addLODLevel(6,mesh.meshes[1])
             }
@@ -357,7 +373,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                     // ensure mesh matches currently displayed mesh
                     if (cMlid == currModel.mlid) {
                       mesh.meshes[1].setEnabled(true)
-                      modelMesh.addLODLevel(0,mesh.meshes[1])
+                      modelMesh.addLODLevel(0.5,mesh.meshes[1])
                     }
                     for ( var idx = 1; idx < sizes.length; idx++ ) {
                       loadSkyBoxMaterial(mlid,
