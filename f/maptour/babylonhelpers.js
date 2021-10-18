@@ -179,7 +179,7 @@ function initCamera(scene) {
   });
   framingBehavior.zoomOnBoundingInfo(worldExtends.min, worldExtends.max);
 
-  camera.pinchPrecision = 200 / camera.radius;
+  //camera.pinchPrecision = 200 / camera.radius;
   camera.upperRadiusLimit = 5 * camera.radius;
 
   /* camera.wheelDeltaPercentage = 0.01;

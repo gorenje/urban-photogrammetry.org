@@ -51,31 +51,38 @@ var TDHelpers = {
   },
 
   setupAutoExit: function(start_after = 2000) {
-    autoExitTimeout = setTimeout( function() {
-      var button = ButtonHelpers.AllButtons["butExit"]
+    MapHelper.showTextMV({
+      title: "Returning to Tour",
+      button: "butExit",
+      text: "Exit the model viewer using the exit button. Click on model to stop automatic exit."
+    }).fadeIn(200, function() {
       autoExitTimeout = setTimeout( function() {
-        $(button).css("background-color", '#ff000033')
+        var button = ButtonHelpers.AllButtons["butExit"]
         autoExitTimeout = setTimeout( function() {
-          $(button).css("background-color", '#f0f00033')
+          $(button).css("background-color", '#ff000033')
           autoExitTimeout = setTimeout( function() {
-            $(button).css("background-color", '#ff000033')
+            $(button).css("background-color", '#f0f00033')
             autoExitTimeout = setTimeout( function() {
-              $(button).css("background-color", '#f0f00033')
+              $(button).css("background-color", '#ff000033')
               autoExitTimeout = setTimeout( function() {
-                $(button).css("background-color", '#ff000033')
+                $(button).css("background-color", '#f0f00033')
                 autoExitTimeout = setTimeout( function() {
-                  $(button).css("background-color", '#f0f00033')
+                  $(button).css("background-color", '#ff000033')
                   autoExitTimeout = setTimeout( function() {
-                    ButtonHelpers.CB.exit()
-                    $(button).css("background-color", '#00000033')
+                    $(button).css("background-color", '#f0f00033')
+                    autoExitTimeout = setTimeout( function() {
+                      ButtonHelpers.CB.exit()
+                      MapHelper.hideText()
+                      $(button).css("background-color", '#00000033')
+                    }, 300);
                   }, 300);
                 }, 300);
               }, 300);
             }, 300);
           }, 300);
-        }, 300);
-      }, 300)
-    }, start_after )
+        }, 300)
+      }, start_after )
+    })
   },
 
   resize: function() {

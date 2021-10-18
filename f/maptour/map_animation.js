@@ -12,13 +12,14 @@ var MapAnimation = {
 MapAnimation = {...MapAnimation, ...{
   keyFrames: [
     {"zoom":15,"position_latitude":52.51933782361247,"position_longitude":13.410548351194839,"tilt":0,"rotation":-35.235952863502106},
-    {"zoom":17.80418716618937,"position_latitude":52.52795175966379,"position_longitude":13.414907917263811,"tilt":45,"rotation":32.22815041494411},
 
-    {"zoom":17.575728718459676,"position_latitude":52.52201323000966,"position_longitude":13.409346258721442,"tilt":19.799651222693385,"rotation":11.402182219878714},
-    {"zoom":17.79999999999999,"position_latitude":52.520634612119515,"position_longitude":13.408208494688466,"tilt":39.02617544016254,"rotation":-108.84836358895853},
-    {"zoom":17.79999999999999,"position_latitude":52.5213523257361,"position_longitude":13.406104321599244,"tilt":43.937995327592226,"rotation":-129.09836358895853},
-    //{"zoom":18,"position_latitude":52.51849411964798,"position_longitude":13.402997969815498,"tilt":0,"rotation":207.87095586241188},
+    {"zoom":16.749463516079736,"position_latitude":52.520909961488414,"position_longitude":13.408273082973917,"tilt":26.347487808466163,"rotation":24.5269566869575},
+    {"zoom":17.493296070253333,"position_latitude":52.52006974296186,"position_longitude":13.407667504959733,"tilt":23.038514046597264,"rotation":-125.86810694604945},
+    {"zoom":17.199999999999992,"position_latitude":52.526839435591526,"position_longitude":13.414215081921345,"tilt":45,"rotation":-184.8238778307547},
+
+    {"zoom":17.79999999999999,"position_latitude":52.52233921297637,"position_longitude":13.40682238062128,"tilt":21.63329834347055,"rotation":-188.37503634753358},
     {"zoom":18,"position_latitude":52.51878925498369,"position_longitude":13.403132600849403,"tilt":0,"rotation":21.07874035255887},
+
     MapAnimation.ViewModelFrame, // engels
 
     {"zoom":17.6,"position_latitude":52.52036192322607,"position_longitude":13.397809574273278,"tilt":19.133558748943454,"rotation":206.1900220102718},

@@ -222,8 +222,9 @@ var ButtonHelpers = {
       }
 
       var camera = scene.activeCamera;
-      var idxSecondToLastFrame = currModel.flythrough.length - 2
-      var idxLastFrame = currModel.flythrough.length - 1
+      var flythrough = [...currModel.flythrough]
+      var idxSecondToLastFrame = flythrough.length - 2
+      var idxLastFrame = flythrough.length - 1
 
       attrs.first[0].push({ frame: 0, value: camera.position.clone() })
       attrs.first[1].push({ frame: 0, value: camera.alpha })
@@ -231,7 +232,7 @@ var ButtonHelpers = {
       attrs.first[3].push({ frame: 0, value: camera.radius })
       attrs.first[4].push({ frame: 0, value: camera.target.clone() })
 
-      $.each( currModel.flythrough, function(idx,keyframe) {
+      $.each( flythrough, function(idx,keyframe) {
         var frame = keyframe.frame - startFrame + frameRate;
 
         var dp = [

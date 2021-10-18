@@ -46,10 +46,12 @@ var map = null;
 $(function(){
   $(document).bind("scroll keypress touchstart click keydown keyup mousemove mousedown mouseup", function(){
     clearTimeout(autoExitTimeout)
+    MapHelper.hideText()
     $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
   });
   $(window).bind("scroll keypress touchstart click keydown keyup mousemove mousedown mouseup", function(){
     clearTimeout(autoExitTimeout)
+    MapHelper.hideText()
     $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
   });
 });

@@ -54,7 +54,12 @@ var MapHelper = {
     })
   },
 
-  showText: function(content = { title: "", text: "" }) {
+  showTextMV: function(content){
+    return MapHelper.showText({ ...content, container: "#viewerbuttons" })
+  },
+
+  showText: function(content = {title: "", text: ""}){
+    console.log(content)
     var img = document.createElement('div')
 
     img.id = "showtextbox"
@@ -62,7 +67,7 @@ var MapHelper = {
     img.style = "display: none;"
     img.onclick = MapHelper.hideText;
 
-    $('#mapbuttons').append( img )
+    $(content.container || "#mapbuttons").append( img )
 
     if ( content.button ) {
       img.innerHTML = "<strong>"+content.title+"</strong><p><div class='row'>"+
@@ -244,8 +249,8 @@ var MapHelper = {
     $(window).on('keyframe:moveto', function(event,data) {
       if ( data.frameNr == 2 ) {
         MapHelper.showText({
-          title: "Welcome to the Berlin 3D Virtual Tour",
-          text: "This tour will visit some of Berlins cultural history - Enjoy!"
+          title: "Berlin 3D Virtual Tour",
+          text: "Welcome! This tour will visit some of Berlins cultural history."
         }).fadeIn(300);
       }
 
@@ -271,7 +276,7 @@ var MapHelper = {
         MapHelper.showText({
           title: "Controls - View",
           button: "butCursor",
-          text: "Click on a model to view it more closely."
+          text: "Click on models to view them more closely."
         }).fadeIn(300);
       }
 
@@ -287,7 +292,7 @@ var MapHelper = {
         MapHelper.showText({
           title: "Controls - Recenter",
           button: "butNav",
-          text: "Reorientate back to the center of the map."
+          text: "Reorientate view back to the center of the map."
         }).fadeIn(300);
       }
 
