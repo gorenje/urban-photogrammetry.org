@@ -207,8 +207,22 @@ body {
 #mapbuttons .mutebutton { top: 20%; left: 90%; /* display: none; */ }
 #mapbuttons .exitbutton { top: 30%; left: 90%; /* display: none; */ }
 
-/* Button Specifics for various resolutions */
+.viewerbutton {
+    position: absolute;
+    width: 45px;
+    background-color: #00000033;
+    border-width: 1px;
+    border-color: #ffffff88;
+    border-style: solid;
+    border-radius: 10px;
+    pointer-events: auto;
+}
 
+#viewerbuttons .mvplaybutton { top: 5%; left: 5%; }
+#viewerbuttons .mvsharebutton { top: 5%; left: 45%; }
+#viewerbuttons .mvexitbutton { top: 5%; right: 5%; }
+#viewerbuttons .fullscreenbutton { top: 15%; right: 5%; }
+#viewerbuttons .mvinfobutton { bottom: 5%; left: 5%; }
 
 @media screen and (max-width: 600px) {
     .modeltextbox {
@@ -337,30 +351,13 @@ body {
         background-color: #3e303e33;
     }
 
-    #mapbuttons .navbutton { top: 5%; left: 46%; }
+    #mapbuttons .navbutton { top: 5%; left: 49%; }
+    #viewerbuttons .mvsharebutton { top: 5%; left: 49%; }
     #mapbuttons .sharebutton { top: 5%; right: 5%; }
     #mapbuttons .playbutton { top: 5%; left: 5%; }
     #mapbuttons .mutebutton { top: 30%; left: 90%; }
     #mapbuttons .exitbutton { top: 20%; left: 90%; }
 }
-
-/* Model viewer buttons */
-.viewerbutton {
-    position: absolute;
-    width: 45px;
-    background-color: #00000033;
-    border-width: 1px;
-    border-color: #ffffff88;
-    border-style: solid;
-    border-radius: 10px;
-    pointer-events: auto;
-}
-
-#viewerbuttons .mvplaybutton { top: 5%; left: 5%; }
-#viewerbuttons .mvsharebutton { top: 5%; left: 45%; }
-#viewerbuttons .mvexitbutton { top: 5%; right: 5%; }
-#viewerbuttons .fullscreenbutton { top: 15%; right: 5%; }
-#viewerbuttons .mvinfobutton { bottom: 5%; left: 5%; }
 
 @media screen and (max-width: 800px) and (min-width: 600px) and (orientation: landscape) {
     #viewerbuttons .fullscreenbutton { top: 20%; right: 5%; }
@@ -374,6 +371,7 @@ body {
 @media screen and (max-width: 375px) {
     #viewerbuttons .mvsharebutton { top: 5%; left: 43%; }
 }
+
 
 </style>
   </head>
