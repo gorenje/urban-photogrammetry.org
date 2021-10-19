@@ -119,7 +119,7 @@ function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
       configMaterial(mat)
       multimat.subMaterials.push(mat)
       alltextures.push(txt)
-    })
+    }, function(message,excep) {} )
 }
 
 function clearScene(scene, skyboxMesh, alltextures) {
@@ -292,15 +292,10 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
 
       if (typeof(alltextures) == 'undefined' ||  alltextures.length < 2) return;
 
-      if ( TDHelpers.isMobile() ) {
-        if ( num < 3 ) { idx = 0 }
-        if ( num >= 3 && isTextureReady(alltextures[1]) ) { idx = 1 }
-      } else {
-        if ( num < 3 ) { idx = 0 }
-        if ( num >= 3 && num < 6 && isTextureReady(alltextures[1]) ) { idx = 1 }
-        if ( num >= 6 && num < 8 && isTextureReady(alltextures[2]) ) { idx = 2 }
-        if ( num >= 8            && isTextureReady(alltextures[3]) ) { idx = 3 }
-      }
+      if ( num < 3 ) { idx = 0 }
+      if ( num >= 3 && num < 6 && isTextureReady(alltextures[1]) ) { idx = 1 }
+      if ( num >= 6 && num < 8 && isTextureReady(alltextures[2]) ) { idx = 2 }
+      if ( num >= 8            && isTextureReady(alltextures[3]) ) { idx = 3 }
 
       if ( prevLODIdx != idx ) {
         new BABYLON.SubMesh(idx, 0, skyboxMesh.getTotalVertices(),

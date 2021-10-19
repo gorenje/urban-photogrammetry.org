@@ -194,7 +194,6 @@ var TDHelpers = {
 
     $.each( anims, function(idx, anim) {
       // see https://cubic-bezier.com/#.51,.18,.49,.79
-      // .51,.18,.49,.79
       anim.setEasingFunction(new BABYLON.BezierCurveEase(.51,.18,.49,.79))
     });
 

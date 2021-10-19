@@ -36,12 +36,6 @@ var ButtonHelpers = {
 
   showShare: function() {
     return true;
-    /* return browser.satisfies( { mobile: {
-     *   safari: ">=12.1",
-     *   chrome: ">=92",
-     *   firefox: ">=90"
-     * }}
-     * )*/
   },
 
   isSafari: function() {
@@ -80,7 +74,14 @@ var ButtonHelpers = {
 
       $('#viewerbuttons').append( img )
 
-      img.innerHTML = "<strong>Urban Photogrammetry</strong><p><span>Three-Dimensionalisation of urban spaces.<p>Presenting a 3D virtual tour of Berlins cultural history.</span><img class='closer' src='"+ButtonHelpers.ImageMap["butExit"]+"'/><p>[<a target=_blank href='http://urban-photogrammetry.org'>Home</a>]&nbsp;[<a target=_blank href='mailto:info@urban-photogrammetry.org'>Contact</a>]";
+      img.innerHTML = "<strong>Urban Photogrammetry</strong><p><span class='d-none d-md-block'>Three-Dimensionalisation of urban spaces.</span><p>A 3D virtual tour of Berlins cultural history.</span><img class='closer' src='"+ButtonHelpers.ImageMap["butExit"]+"'/><p>"+
+      "<fieldset class='border p-2'><legend>Controls</legend>"+
+
+                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butExit"] + "'/></div><div class='col-9' style='text-align: left'>Exit back to tour</div></div>" +
+                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butShare"] + "'/></div><div class='col-9' style='text-align: left'>Share view with friends</div></div>" +
+                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butPlay"] + "'/></div><div class='col-9' style='text-align: left'>Flythrough this model</div></div>" +
+"</fieldset>" +
+                      "<div class='row pt-2'><div class='col-6'><a target=_blank href='http://urban-photogrammetry.org'>Home</a></div><div class='col-6'><a target=_blank href='mailto:info@urban-photogrammetry.org'>Contact</a></div></div>";
 
       $(img).fadeIn(300);
     },

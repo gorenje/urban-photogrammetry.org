@@ -130,7 +130,7 @@ MapAnimation = {...MapAnimation, ...{
       // position and then open the model examiner
       onAnimComplete = function() {
         setTimeout( function() {
-          sharedata.model.autoExitAfterAnim = true
+          sharedata.model.autoExitAfterAnim = false
           MapHelper.examineModel( sharedata.model.mlid, {
             model_details: sharedata.model
           })
