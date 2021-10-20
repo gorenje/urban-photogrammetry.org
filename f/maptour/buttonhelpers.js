@@ -9,6 +9,8 @@ var ButtonHelpers = {
     "butShare":  "Share views of models or locations on the map with friends.",
     "butNav":    "Reorientate view back to the center of the map.",
     "butExit":   "Exit back to the map view.",
+    "butFS":     "Enter fullscreen mode.",
+    "butFSexit": "Exit fullscreen mode.",
   },
 
   AllButtons: {},
@@ -116,16 +118,16 @@ var ButtonHelpers = {
     },
 
     fullscreen: function(evt) {
-      if ( !engine.isFullscreen ) {
-        engine.enterFullscreen(false)
+      if( TDHelpers.isFullscreen() ){
+        TDHelpers.exitFullscreen();
+      }else {
+        TDHelpers.launchIntoFullscreen(document.getElementById('modelviewer'));
       }
       ButtonHelpers.toggle("butFSexit", "butFS")
     },
 
     fullscreen_exit: function(evt) {
-      if ( engine.isFullscreen ) {
-        engine.exitFullscreen(false)
-      }
+      TDHelpers.exitFullscreen();
       ButtonHelpers.toggle("butFS", "butFSexit")
     },
 

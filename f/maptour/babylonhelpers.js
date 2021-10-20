@@ -262,6 +262,9 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
   scene.stopAllAnimations()
   currFlythrough = null;
 
+  if ( TDHelpers.isFullscreen() ) { ButtonHelpers.toggle("butFSexit","butFS") }
+  else { ButtonHelpers.toggle("butFS","butFSexit") }
+
   BABYLON.SceneLoader.Append(rootUrl, modelName, scene, function (scene) {
     if (ppFadeLevel < 0) stop_transition = false;
 

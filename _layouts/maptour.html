@@ -203,9 +203,10 @@ body {
 #mapbuttons .sharebutton { top: 5%; right: 5%; }
 #mapbuttons .playbutton { top: 5%; left: 5%; }
 #mapbuttons .infobutton { bottom: 5%; left: 5%; }
+#mapbuttons .mpfullscreenbutton { top: 15%; right: 5%; }
 
-#mapbuttons .mutebutton { top: 20%; left: 90%; /* display: none; */ }
-#mapbuttons .exitbutton { top: 30%; left: 90%; /* display: none; */ }
+#mapbuttons .mutebutton { top: 20%; left: 90%; display: none; }
+#mapbuttons .exitbutton { top: 30%; left: 90%; display: none; }
 
 .viewerbutton {
     position: absolute;
@@ -361,17 +362,17 @@ body {
 
 @media screen and (max-width: 800px) and (min-width: 600px) and (orientation: landscape) {
     #viewerbuttons .fullscreenbutton { top: 20%; right: 5%; }
+    #mapbuttons .mpfullscreenbutton { top: 20%; right: 5%; }
 }
 
 @media screen and (min-width: 800px) and (max-height: 428px) and (orientation: landscape) {
     #viewerbuttons .fullscreenbutton { top: 20%; right: 5%; }
+    #mapbuttons .mpfullscreenbutton { top: 20%; right: 5%; }
 }
-
 
 @media screen and (max-width: 375px) {
     #viewerbuttons .mvsharebutton { top: 5%; left: 43%; }
 }
-
 
 </style>
   </head>

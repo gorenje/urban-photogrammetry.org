@@ -168,6 +168,9 @@ var MapHelper = {
   },
 
   modelExaminerDone: function() { // callback from the model navigator
+    if ( TDHelpers.isFullscreen() ) { MapHelper.toggle("butFSexit","butFS") }
+    else { MapHelper.toggle("butFS","butFSexit") }
+
     setTimeout(function() {
       MapAnimation.play()
     }, 500)
@@ -221,8 +224,8 @@ var MapHelper = {
       } else {
         $('#modeltitle').fadeOut(3000, function() {
           $('#modeltitle').remove()
-          $('#map').fadeOut(400)
-          $('#modelviewer').fadeIn(400, function() {
+          $('#map').fadeOut(100)
+          $('#modelviewer').fadeIn(100, function() {
             if ( currModel.sharecamera ) {
               MapHelper.onSceneReadyCallback( function() {
                 defineIntroAnim(currModel, scene)()
@@ -555,6 +558,28 @@ var MapHelper = {
       $(textbox).fadeIn(300);
     })
     MapHelper.hide("butInfo")
+
+
+    MapHelper.addButton( "butFS", "mpfullscreenbutton", function() {
+      var fullscreenElement = document.fullscreenElement ||
+                              document.mozFullScreenElement ||
+                              document.webkitFullscreenElement ||
+                              document.msFullscreenElement;
+      if(fullscreenElement){
+        TDHelpers.exitFullscreen();
+      }else {
+        TDHelpers.launchIntoFullscreen(document.getElementById('map'));
+      }
+      MapHelper.toggle("butFSexit","butFS")
+    })
+
+    MapHelper.addButton( "butFSexit", "mpfullscreenbutton", function() {
+      TDHelpers.exitFullscreen();
+      MapHelper.toggle("butFS","butFSexit")
+    })
+
+    MapHelper.hide("butFSexit")
+
 
     if ( shareData != undefined ) {
       setTimeout( function() {
