@@ -9,7 +9,6 @@ How are 3D models best presented?
 
 ## 1. Simple model
 
-
 {% include model.html mlid="7a97b5567a1d420ebda0d61634fa384a" %}
 
 ## 2. Simple model with 360º Panorama
@@ -24,7 +23,12 @@ How are 3D models best presented?
 
 {% include youtube.html ytid='anVb3x-QwIQ' %}
 
-
 ## 5. Flythrough with 360º Panorama
 
 {% include youtube.html ytid='z7UkefFngqE' %}
+
+## 6. Interactive Streetview with Flythrough
+
+Video coming soon.
+
+A [demo tour](https://urban-photogrammetry.org/berlin/maptour) of Berlin is available [here](https://urban-photogrammetry.org/berlin/maptour). A feature of this tour are [share links](https://r.upo.sh/b8bwguUF) for sharing [specific](https://r.upo.sh/p4f2EBSs) [views](https://r.upo.sh/vVjwLIDW) of [models](https://r.upo.sh/pJQ3ar1B). But they also work for specific [locations](https://r.upo.sh/9FOl7KuE) on the [map](https://r.upo.sh/QGNGh1At).

@@ -74,8 +74,12 @@ var MapHelper = {
     $(content.container || "#mapbuttons").append( img )
 
     if ( content.button ) {
-      img.innerHTML = "<strong>"+content.title+"</strong><p><div class='row'>"+
-                      "<div class='col-3'><img class='mapbutton' style='width: 40px;' src='" + ButtonHelpers.ImageMap[content.button] + "'/></div><div class='col-9'>"+content.text + "</div></div><img class='closer' src='" +
+      img.innerHTML = "<strong>"+content.title+"</strong><p><div class='row'>" +
+                      "<div class='col-3'><img class='mapbutton' style='width: 40px;' src='" +
+                      ButtonHelpers.ImageMap[content.button] +
+                      "'/></div><div class='col-9'>" +
+                      ButtonHelpers.Titles[content.button] +
+                      "</div></div><img class='closer' src='" +
                       ButtonHelpers.ImageMap["butExit"] + "'/>";
     } else {
       img.innerHTML = "<strong>"+content.title+"</strong><p><span>"+content.text +
@@ -92,6 +96,7 @@ var MapHelper = {
     img.className = `mapbutton ${cssClass}`
     img.src = ButtonHelpers.ImageMap[icon_name || name]
     img.onclick = callback || function(){};
+    if ( ButtonHelpers.Titles[name] ) img.title = ButtonHelpers.Titles[name];
 
     $('#mapbuttons').append( img )
     MapHelper.AllButtons[name] = img;
@@ -253,16 +258,27 @@ var MapHelper = {
     $(window).on('keyframe:moveto', function(event,data) {
       if ( data.frameNr == 2 ) {
         MapHelper.showText({
-          title: "Berlin 3D Virtual Tour",
+          title: "Berlin",
           text: "Welcome! This tour will visit some of Berlins cultural history."
         }).fadeIn(300);
+      }
+
+      if ( data.frameNr == 3 && !MapAnimation._alreadyPausedOnFrameThree) {
+        MapAnimation._alreadyPausedOnFrameThree = true
+        MapAnimation.pause()
+        MapHelper.toggle("butPlay","butPause")
+
+        setTimeout(function(){
+          MapHelper.hideText()
+          MapAnimation.play()
+          MapHelper.toggle("butPause","butPlay")
+        }, 1500)
       }
 
       if ( data.frameNr == 4 ) {
         MapHelper.showText({
           title: "Controls - Pause",
-          button: "butPause",
-          text: "Pause the tour at any time using the pause button."
+          button: "butPause"
         }).fadeIn(300);
       }
 
@@ -270,7 +286,6 @@ var MapHelper = {
         MapHelper.showText({
           title: "Controls - Play",
           button: "butPlay",
-          text: "Continue the tour by using the play button."
         }).fadeIn(300);
       }
 
@@ -278,7 +293,6 @@ var MapHelper = {
         MapHelper.showText({
           title: "Controls - View",
           button: "butCursor",
-          text: "Click on models to view them more closely."
         }).fadeIn(300);
       }
 
@@ -286,7 +300,6 @@ var MapHelper = {
         MapHelper.showText({
           title: "Controls - Share",
           button: "butShare",
-          text: "Share views of models or locations on the map with friends."
         }).fadeIn(300);
       }
 
@@ -294,11 +307,10 @@ var MapHelper = {
         MapHelper.showText({
           title: "Controls - Recenter",
           button: "butNav",
-          text: "Reorientate view back to the center of the map."
         }).fadeIn(300);
       }
 
-      if ( [3,6,9,13,17,21].includes(data.frameNr) ) { MapHelper.hideText() }
+      if ( [6,9,13,17,21].includes(data.frameNr) ) { MapHelper.hideText() }
     })
 
     $(window).on('mapanin:paused', function() {
@@ -553,7 +565,7 @@ var MapHelper = {
     } else {
       setTimeout(function() {
         MapAnimation.start()
-      }, 1500)
+      }, 2500)
     }
 
     map.on('pointerdown', e => {

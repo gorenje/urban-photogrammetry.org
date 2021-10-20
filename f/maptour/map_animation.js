@@ -256,9 +256,9 @@ MapAnimation = {...MapAnimation, ...{
       return;
     }
 
-    $(window).trigger("keyframe:moveto", { frameNr: MapAnimation.currKeyFrame } )
 
     if (MapAnimation.keyFrames[MapAnimation.currKeyFrame] == MapAnimation.ViewModelFrame){
+      $(window).trigger("keyframe:moveto", { frameNr: MapAnimation.currKeyFrame } )
       MapAnimation.currKeyFrame += 1
       MapHelper.examineModel( MapHelper.currentVisibleModels()[0].mlid, {
         callback: function() {
@@ -271,6 +271,7 @@ MapAnimation = {...MapAnimation, ...{
       // console.log( "Next frame: " + MapAnimation.currKeyFrame)
       // console.log( MapAnimation.keyFrames[MapAnimation.currKeyFrame] )
       MapAnimation.moveToFrame(MapAnimation.currKeyFrame)
+      $(window).trigger("keyframe:moveto", { frameNr: MapAnimation.currKeyFrame } )
     }
   },
 

@@ -2,6 +2,15 @@ var currFlythrough = null;
 
 var ButtonHelpers = {
 
+  Titles: {
+    "butPause":  "Pause the tour at any time using the pause button.",
+    "butPlay":   "Continue the tour by using the play button.",
+    "butCursor": "Click on models to view them more closely.",
+    "butShare":  "Share views of models or locations on the map with friends.",
+    "butNav":    "Reorientate view back to the center of the map.",
+    "butExit":   "Exit back to the map view.",
+  },
+
   AllButtons: {},
   ImageMap: ButtonImages,
 
@@ -11,6 +20,7 @@ var ButtonHelpers = {
     img.className = `viewerbutton ${cssClass}`
     img.src = ButtonHelpers.ImageMap[icon_name || name] || ButtonHelpers.ImageMap.butUnknown;
     img.onclick = callback || function(){};
+    if ( ButtonHelpers.Titles[name] ) img.title = ButtonHelpers.Titles[name];
 
     $('#viewerbuttons').append( img )
     ButtonHelpers.AllButtons[name] = img;
@@ -62,6 +72,11 @@ var ButtonHelpers = {
 
     info: function(evt) {
       var img = document.createElement('div')
+
+      clearTimeout(autoExitTimeout)
+      $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
+      $("#mvinfotextbox").remove()
+      MapHelper.hideText()
 
       img.id = "mvinfotextbox"
       img.className = "infotextbox"
@@ -135,7 +150,6 @@ var ButtonHelpers = {
       var shareUrl = url.origin + url.pathname + "?l=" + window.btoa(
         JSON.stringify(data)
       );
-      console.log( shareUrl)
 
       ButtonHelpers.toggle("butLoader", "butCopied", "butShare")
 
