@@ -1,6 +1,10 @@
 // Three-D Helpers
 var TDHelpers = {
   disableWebGL2: function() {
+    if ( !window.browser ) {
+      window.browser = bowser.getParser(window.navigator.userAgent);
+    }
+
     return window.browser.satisfies( {
       safari: ">0"
     } ) || false;
@@ -11,6 +15,9 @@ var TDHelpers = {
   },
 
   isMobile: function() {
+    if ( !window.browser ) {
+      window.browser = bowser.getParser(window.navigator.userAgent);
+    }
     return window.browser.getPlatformType() == "mobile"
   },
 

@@ -196,8 +196,7 @@ function initCamera(scene) {
 }
 
 function createSkyBox(scene) {
-  var skyboxMesh = BABYLON.Mesh.CreateSphere("hdrSkyBox64", 32, 300, scene);
-  skyboxMesh.infiniteDistance = true;
+  var skyboxMesh = BABYLON.Mesh.CreateSphere("hdrSkyBox64", 32, 50, scene);
 
   var multimat = new BABYLON.MultiMaterial("multi", scene);
   skyboxMesh.material = multimat

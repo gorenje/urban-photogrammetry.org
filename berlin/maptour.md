@@ -44,8 +44,6 @@ var autoExitTimeout = null;
 var map = null;
 
 $(function(){
-  window.browser = bowser.getParser(window.navigator.userAgent);
-
   $(document).bind("scroll keypress touchstart click keydown keyup mousemove mousedown mouseup", function(){
     clearTimeout(autoExitTimeout)
     $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");

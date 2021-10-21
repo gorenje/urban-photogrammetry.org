@@ -42,7 +42,19 @@ var MapHelper = {
 
     $('#mapbuttons').append( img )
 
-    img.innerHTML = "<strong>Urban Photogrammetry</strong><p><span>Three-Dimensionalisation of urban spaces.<p>Presenting a 3D virtual tour of Berlins cultural history.</span><img class='closer' src='"+ButtonHelpers.ImageMap["butExit"]+"'/><p>[<a target=_blank href='http://urban-photogrammetry.org'>Home</a>]&nbsp;[<a target=_blank href='mailto:info@urban-photogrammetry.org'>Contact</a>]";
+    img.innerHTML = "<strong>Urban Photogrammetry</strong><p><span class='d-none d-md-block'>Three-Dimensionalisation of urban spaces.<p>Presenting a 3D virtual tour of Berlins cultural history.</span><img class='closer' src='"+ButtonHelpers.ImageMap["butExit"]+"'/><p>"+
+      "<fieldset class='border p-2'><legend>Controls</legend>"+
+
+                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butShare"] + "'/></div><div class='col-9' style='text-align: left'>"+ButtonHelpers.Titles["butShare"]+"</div></div>" +
+                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butPlay"] + "'/></div><div class='col-9' style='text-align: left'>"+ButtonHelpers.Titles["butPlay"]+"</div></div>" +
+                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butPause"] + "'/></div><div class='col-9' style='text-align: left'>"+ButtonHelpers.Titles["butPause"]+"</div></div>" +
+
+                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butNav"] + "'/></div><div class='col-9' style='text-align: left'>"+ButtonHelpers.Titles["butNav"] +"</div></div>" +
+
+                      "</fieldset>" +
+
+
+                    "[<a target=_blank href='http://urban-photogrammetry.org'>Home</a>]&nbsp;[<a target=_blank href='mailto:info@urban-photogrammetry.org'>Contact</a>]";
 
     return img;
   },
@@ -170,10 +182,6 @@ var MapHelper = {
   modelExaminerDone: function() { // callback from the model navigator
     if ( TDHelpers.isFullscreen() ) { MapHelper.toggle("butFSexit","butFS") }
     else { MapHelper.toggle("butFS","butFSexit") }
-
-    setTimeout(function() {
-      MapAnimation.play()
-    }, 500)
   },
 
   onSceneReadyCallback: function(cb) {
@@ -240,7 +248,6 @@ var MapHelper = {
   },
 
   createStreetMap: function() {
-    var browser = bowser.getParser(window.navigator.userAgent);
     var shareData = TDHelpers.parseShareLink(window.location)
     $(window).off('infoscreen:close', MapHelper.createStreetMap)
 
@@ -549,7 +556,7 @@ var MapHelper = {
 
     MapHelper.hide("butPause")
 
-    MapHelper.addButton( "butInfo", "infobutton", function() {
+    MapHelper.addButton("butInfo", "infobutton", function() {
       var textbox = MapHelper.showInfoText(function(){
         $(textbox).fadeOut(400, function(){
           $(textbox).remove()
@@ -557,29 +564,23 @@ var MapHelper = {
       });
       $(textbox).fadeIn(300);
     })
-    MapHelper.hide("butInfo")
 
+    if ( !ButtonHelpers.isSafari() ) {
+      MapHelper.addButton( "butFS", "mpfullscreenbutton", function() {
+        if ( TDHelpers.isFullscreen() ) {
+          TDHelpers.exitFullscreen();
+        } else {
+          TDHelpers.launchIntoFullscreen(document.getElementById('map'));
+        }
+        MapHelper.toggle("butFSexit","butFS")
+      })
 
-    MapHelper.addButton( "butFS", "mpfullscreenbutton", function() {
-      var fullscreenElement = document.fullscreenElement ||
-                              document.mozFullScreenElement ||
-                              document.webkitFullscreenElement ||
-                              document.msFullscreenElement;
-      if(fullscreenElement){
+      MapHelper.addButton( "butFSexit", "mpfullscreenbutton", function() {
         TDHelpers.exitFullscreen();
-      }else {
-        TDHelpers.launchIntoFullscreen(document.getElementById('map'));
-      }
-      MapHelper.toggle("butFSexit","butFS")
-    })
-
-    MapHelper.addButton( "butFSexit", "mpfullscreenbutton", function() {
-      TDHelpers.exitFullscreen();
-      MapHelper.toggle("butFS","butFSexit")
-    })
-
-    MapHelper.hide("butFSexit")
-
+        MapHelper.toggle("butFS","butFSexit")
+      })
+      MapHelper.hide("butFSexit")
+    }
 
     if ( shareData != undefined ) {
       setTimeout( function() {

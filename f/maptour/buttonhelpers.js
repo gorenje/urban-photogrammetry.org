@@ -51,7 +51,10 @@ var ButtonHelpers = {
   },
 
   isSafari: function() {
-    return browser.satisfies( { safari: ">0" } )
+    if ( !window.browser ) {
+      window.browser = bowser.getParser(window.navigator.userAgent);
+    }
+    return window.browser.satisfies( { safari: ">0" } )
   },
 
   // Callbacks for the button clicks.
@@ -66,6 +69,8 @@ var ButtonHelpers = {
 
       SoundsHelper.stopAll()
       ButtonHelpers.toggle("butPlay", "butPause")
+      MapHelper.hideText()
+
       setTimeout( MapHelper.modelExaminerDone, 750 );
       $(ButtonHelpers.AllButtons["butExit"]).css('background-color',"#00000033");
       $('#map').fadeIn(200, function() { $("#mvinfotextbox").remove() });
@@ -94,10 +99,12 @@ var ButtonHelpers = {
       img.innerHTML = "<strong>Urban Photogrammetry</strong><p><span class='d-none d-md-block'>Three-Dimensionalisation of urban spaces.</span><p>A 3D virtual tour of Berlins cultural history.</span><img class='closer' src='"+ButtonHelpers.ImageMap["butExit"]+"'/><p>"+
       "<fieldset class='border p-2'><legend>Controls</legend>"+
 
-                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butExit"] + "'/></div><div class='col-9' style='text-align: left'>Exit back to tour</div></div>" +
-                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butShare"] + "'/></div><div class='col-9' style='text-align: left'>Share view with friends</div></div>" +
+                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butShare"] + "'/></div><div class='col-9' style='text-align: left'>"+ButtonHelpers.Titles["butShare"]+"</div></div>" +
                       "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butPlay"] + "'/></div><div class='col-9' style='text-align: left'>Flythrough this model</div></div>" +
-"</fieldset>" +
+
+                      "<div class='row pt-2'><div class='col-3'><img class='mapbutton' style='width: 30px;' src='" + ButtonHelpers.ImageMap["butExit"] + "'/></div><div class='col-9' style='text-align: left'>"+ButtonHelpers.Titles["butExit"] +"</div></div>" +
+
+                      "</fieldset>" +
                       "<div class='row pt-2'><div class='col-6'><a target=_blank href='http://urban-photogrammetry.org'>Home</a></div><div class='col-6'><a target=_blank href='mailto:info@urban-photogrammetry.org'>Contact</a></div></div>";
 
       $(img).fadeIn(300);

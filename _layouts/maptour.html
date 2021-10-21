@@ -205,8 +205,8 @@ body {
 #mapbuttons .infobutton { bottom: 5%; left: 5%; }
 #mapbuttons .mpfullscreenbutton { top: 15%; right: 5%; }
 
-#mapbuttons .mutebutton { top: 20%; left: 90%; display: none; }
-#mapbuttons .exitbutton { top: 30%; left: 90%; display: none; }
+#mapbuttons .mutebutton { top: 20%; left: 90%; /* display: none; */ }
+#mapbuttons .exitbutton { top: 30%; left: 90%; /* display: none; */ }
 
 .viewerbutton {
     position: absolute;
@@ -275,7 +275,7 @@ body {
         width: 80%;
     }
     .infotextbox {
-        top: 30%;
+        top: 20%;
         left: 10%;
         width: 80%;
     }
@@ -373,6 +373,15 @@ body {
 @media screen and (max-width: 375px) {
     #viewerbuttons .mvsharebutton { top: 5%; left: 43%; }
 }
+
+@media screen and (max-width: 320px) {
+    .infotextbox {
+        top: 15%;
+        left: 10%;
+        width: 80%;
+    }
+}
+
 
 </style>
   </head>

@@ -13,6 +13,15 @@ reason to the tour, it is simply an active documentation of Berlins urban space.
 <script src="/f/leaflet.js"></script>
 
 <style>
+#map img.leaflet-tile {
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1);
+}
+#map canvas {
+  cursor: pointer;
+  opacity: 0.85;
+}
+
 .leaflet-popup-content {
     width: 350px !important;
     height: 300px;

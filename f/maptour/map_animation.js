@@ -15,7 +15,7 @@ MapAnimation = {...MapAnimation, ...{
 
     {"zoom":16.749463516079736,"position_latitude":52.520909961488414,"position_longitude":13.408273082973917,"tilt":26.347487808466163,"rotation":24.5269566869575},
     {"zoom":17.493296070253333,"position_latitude":52.52006974296186,"position_longitude":13.407667504959733,"tilt":23.038514046597264,"rotation":-125.86810694604945},
-    {"zoom":17.199999999999992,"position_latitude":52.526839435591526,"position_longitude":13.414215081921345,"tilt":45,"rotation":-184.8238778307547},
+    {"zoom":17.199999999999992,"position_latitude":52.526839435591526,"position_longitude":13.414215081921345,"tilt":40,"rotation":-184.8238778307547},
 
     {"zoom":17.79999999999999,"position_latitude":52.52233921297637,"position_longitude":13.40682238062128,"tilt":21.63329834347055,"rotation":-188.37503634753358},
     {"zoom":18,"position_latitude":52.51878925498369,"position_longitude":13.403132600849403,"tilt":0,"rotation":21.07874035255887},
@@ -49,7 +49,7 @@ MapAnimation = {...MapAnimation, ...{
     {"zoom":18,"position_latitude":52.507567666135095,"position_longitude":13.362337183393484,"tilt":12.590870667793833,"rotation":205.13352898019113},
     {"zoom":15.600000000000009,"position_latitude":52.507567666135095,"position_longitude":13.362337183393484,"tilt":12.590870667793833,"rotation":205.13352898019113},
     {"zoom":15.600000000000009,"position_latitude":52.54046778346811,"position_longitude":13.378807178013023,"tilt":12.590870667793833,"rotation":205.13352898019113},
-    {"zoom":16.199999999999996,"position_latitude":52.535904085410046,"position_longitude":13.374351176086716,"tilt":55.68460518363935,"rotation":-5.337236467232307},
+    {"zoom":16.199999999999996,"position_latitude":52.535904085410046,"position_longitude":13.374351176086716,"tilt":35.68460518363935,"rotation":-5.337236467232307},
     {"zoom":18,"position_latitude":52.53775770525703,"position_longitude":13.377584785752653,"tilt":12.590870667793833,"rotation":205.13352898019113},
     {"zoom":18,"position_latitude":52.53854603161615,"position_longitude":13.3786339448949,"tilt":0,"rotation":166.47205038096948},
     MapAnimation.ViewModelFrame, // engel - friedhof
@@ -71,7 +71,7 @@ MapAnimation = {...MapAnimation, ...{
     {"zoom":18,"position_latitude":52.52925248345829,"position_longitude":13.421054293694445,"tilt":27.19780219780224,"rotation":-182.59941305942772},
     {"zoom":16.400000000000006,"position_latitude":52.52790781433654,"position_longitude":13.430399974921865,"tilt":27.19780219780224,"rotation":-182.59941305942772},
     {"zoom":17.400000000000002,"position_latitude":52.52584770108563,"position_longitude":13.430422834955356,"tilt":27.19780219780224,"rotation":-182.59941305942772},
-    {"zoom":17.400000000000002,"position_latitude":52.52607693487538,"position_longitude":13.429835319271255,"tilt":42,"rotation":-331.4583087649501},
+    {"zoom":17.400000000000002,"position_latitude":52.52607693487538,"position_longitude":13.429835319271255,"tilt":35,"rotation":-331.4583087649501},
     {"zoom":17.400000000000002,"position_latitude":52.525813725479736,"position_longitude":13.431416525259271,"tilt":0,"rotation":-318.57114923187595},
     MapAnimation.ViewModelFrame, // spainische krieger denkmal
 
@@ -81,7 +81,7 @@ MapAnimation = {...MapAnimation, ...{
     {"zoom":18,"position_latitude":52.5381851436698,"position_longitude":13.43343240926975,"tilt":0,"rotation":-57.30280997045976},
     MapAnimation.ViewModelFrame, // ernst thaelmann
 
-    {"zoom":17.6,"position_latitude":52.53862645142186,"position_longitude":13.426624640446189,"tilt":43.96253602305475,"rotation":17.940464241184763},
+    {"zoom":17.6,"position_latitude":52.53862645142186,"position_longitude":13.426624640446189,"tilt":42,"rotation":17.940464241184763},
     {"zoom":18,"position_latitude":52.54050572752514,"position_longitude":13.428048775594958,"tilt":41.96253602305475,"rotation":17.940464241184763},
     {"zoom":15.800000000000008,"position_latitude":52.56913380160043,"position_longitude":13.444883040641702,"tilt":41.96253602305475,"rotation":17.940464241184763},
     {"zoom":18,"position_latitude":52.57024470438567,"position_longitude":13.446422278491994,"tilt":41.96253602305475,"rotation":17.940464241184763},
@@ -97,7 +97,7 @@ MapAnimation = {...MapAnimation, ...{
     {"zoom":15.999999999999996,"position_latitude":52.56981876935501,"position_longitude":13.393942801841346,"tilt":22.521613832852978,"rotation":-110.5994130594287},
     {"zoom":17.59999999999999,"position_latitude":52.57168891211305,"position_longitude":13.386199568519876,"tilt":22.521613832852978,"rotation":-110.5994130594287},
     {"zoom":15,"position_latitude":52.50827405347126,"position_longitude":13.279230307661816,"tilt":42,"rotation":-272.7098425072809},
-    {"zoom":15,"position_latitude":52.50075194713044,"position_longitude":13.300630881970854,"tilt":56.98627630375114,"rotation":-282.0534231246126},
+    {"zoom":15,"position_latitude":52.50075194713044,"position_longitude":13.300630881970854,"tilt":36.98627630375114,"rotation":-282.0534231246126},
     {"zoom":18,"position_latitude":52.507198628666764,"position_longitude":13.286118650911469,"tilt":21.82997118155617,"rotation":-275.36014925574733},
     {"zoom":18,"position_latitude":52.50722677642856,"position_longitude":13.2865878032603,"tilt":0,"rotation":-273.6792154036072},
     MapAnimation.ViewModelFrame, // seals in charlottenburg
