@@ -332,7 +332,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                   mesh.meshes[1].setEnabled(true)
                   modelMesh.addLODLevel(3,mesh.meshes[1])
                 }
-                for ( var idx = 1; idx < 3; idx++ ) {
+                for ( var idx = 1; idx < sizes.length; idx++ ) {
                   loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
                 }
                 setTimeout( function() {
