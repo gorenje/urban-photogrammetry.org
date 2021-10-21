@@ -109,6 +109,8 @@ function configMaterial(material) {
 
 function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
   var filename = '/m/' + mlid +'/background-' + sze + '.jpg';
+  if ( sze > 512 ) { filename = '/m/' + mlid + '/background-512.jpg'; }
+
   var cacheEntry = ModelCache.getEntry(filename)
   if ( cacheEntry != undefined ) { filename = cacheEntry; }
 
