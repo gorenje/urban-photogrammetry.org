@@ -224,16 +224,40 @@ function defineIntroAnim(model, scene) {
     attrs[3].push({ frame: 0, value: camera.radius })
     attrs[4].push({ frame: 0, value: camera.target.clone() })
 
-    attrs[0].push({ frame: frameRate*2,
+    var v = new BABYLON.Vector3(camera.alpha, camera.beta, camera.radius)
+    var v2 = new BABYLON.Vector3(model.sharecamera.alpha,
+                                 model.sharecamera.beta,
+                                 model.sharecamera.radius)
+    var dist = {
+      cp: BABYLON.Vector3.Distance( camera.position,
+                                    vector3FromHash(model.sharecamera.position)),
+      ta: BABYLON.Vector3.Distance( camera.target,
+                                    vector3FromHash(model.sharecamera.target)),
+      rd: BABYLON.Vector3.Distance(v, v2)
+    }
+
+    dist.total = dist.cp + dist.ta + dist.rd;
+
+    var distfct = 2
+    if ( dist.total > 30 ) { distfct = 3 }
+    if ( dist.total > 50 ) { distfct = 4 }
+    if ( dist.total > 70 ) { distfct = 5 }
+    if ( dist.total > 90 ) { distfct = 6 }
+
+    attrs[0].push({ frame: frameRate*distfct,
                     value: model.sharecamera.position.clone() })
-    attrs[1].push({ frame: frameRate*2, value: model.sharecamera.alpha })
-    attrs[2].push({ frame: frameRate*2, value: model.sharecamera.beta })
-    attrs[3].push({ frame: frameRate*2, value: model.sharecamera.radius })
-    attrs[4].push({ frame: frameRate*2,
+    attrs[1].push({ frame: frameRate*distfct, value: model.sharecamera.alpha })
+    attrs[2].push({ frame: frameRate*distfct, value: model.sharecamera.beta })
+    attrs[3].push({ frame: frameRate*distfct, value: model.sharecamera.radius })
+    attrs[4].push({ frame: frameRate*distfct,
                     value: model.sharecamera.target.clone() })
 
     $.each(anims, function( index, anim ) { anim.setKeys( attrs[index] ) })
-    var anim = scene.beginDirectAnimation(camera,anims,0,2*frameRate,false);
+    var anim = scene.beginDirectAnimation(camera,
+                                          anims,
+                                          0,
+                                          distfct*frameRate,
+                                          false);
     anim.disposeOnEnd = true
 
     if ( model.autoExitAfterAnim ) {
