@@ -70,6 +70,31 @@ var MapHelper = {
     return MapHelper.showText({ ...content, container: "#viewerbuttons" })
   },
 
+  showQrImage: function(content = { lnk: "", container: undefined }){
+    $('#showtextbox').remove()
+    var img = document.createElement('div')
+    var cb = content.callback;
+
+    img.id = "showtextbox"
+    img.className = "infotextbox"
+    img.style = "display: none;"
+    /* img.onclick = function() {
+     *   (cb || function(){})();
+     *   MapHelper.hideText();
+     * }
+     */
+    $(content.container || "#mapbuttons").append( img )
+
+    img.innerHTML = "<strong>"+content.lnk+"</strong><p><span>" +
+                    "<img style='background-color: white;' src='" +
+                    content.lnk + "/qr'/>" +
+                    "</span><img onclick='MapHelper.hideText()' "+
+                    "class='closer' src='" +
+                    ButtonHelpers.ImageMap["butExit"] + "'/>";
+
+    return $(img);
+  },
+
   showText: function(content = {title: "", text: ""}){
     $('#showtextbox').remove()
     var img = document.createElement('div')
@@ -428,7 +453,10 @@ var MapHelper = {
             text: "Link to Urban-Photogrammetry.org",
             url: shareUrl
           })
-        } catch ( e ) {prompt( "URL", shareUrl)  }
+        } catch ( e ) {
+          MapHelper.showQrImage({ lnk: shareUrl }).fadeIn(300)
+          // prompt("URL", shareUrl)
+        }
       }).fail(function(err){
         try {
           TDHelpers.copyToClipboard( shareUrl )
@@ -444,7 +472,9 @@ var MapHelper = {
             text: "Link to Urban-Photogrammetry.org",
             url: shareUrl
           })
-        } catch ( e ) { prompt( "URL", shareUrl) }
+        } catch ( e ) {
+          prompt( "URL", shareUrl)
+        }
       })
     });
 
