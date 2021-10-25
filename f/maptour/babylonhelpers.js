@@ -239,10 +239,18 @@ function defineIntroAnim(model, scene) {
     dist.total = dist.cp + dist.ta + dist.rd;
 
     var distfct = 2
-    if ( dist.total > 30 ) { distfct = 3 }
-    if ( dist.total > 50 ) { distfct = 4 }
-    if ( dist.total > 70 ) { distfct = 5 }
-    if ( dist.total > 90 ) { distfct = 6 }
+    if ( dist.total > 30 ) {
+      distfct = 3
+      if ( dist.total > 50 ) {
+        distfct = 4
+        if ( dist.total > 70 ) {
+          distfct = 5
+          if ( dist.total > 90 ) {
+            distfct = 6
+          }
+        }
+      }
+    }
 
     attrs[0].push({ frame: frameRate*distfct,
                     value: model.sharecamera.position.clone() })
