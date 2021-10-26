@@ -70,6 +70,7 @@ var MapHelper = {
     setTimeout( function() {
       document.getElementsByClassName('sharelink')[0].focus()
       document.getElementsByClassName('sharelink')[0].select()
+      document.execCommand("copy");
     }, 20)
   },
 
@@ -462,12 +463,7 @@ var MapHelper = {
             url: shareUrl
           })
         } catch ( e ) {
-          MapHelper.showQrImage({ lnk: shareUrl }).fadeIn(300,function(){
-            setTimeout( function() {
-              /* document.getElementsByClassName('sharelink')[0].focus()
-               * document.getElementsByClassName('sharelink')[0].select()*/
-            }, 20)
-          })
+          MapHelper.showQrImage({ lnk: shareUrl }).fadeIn(300)
           // prompt("URL", shareUrl)
         }
       }).fail(function(err){
