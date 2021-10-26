@@ -91,9 +91,10 @@ var MapHelper = {
     img.innerHTML = "<input type='text' class='sharelink' value='"+
                     content.lnk + "'/><p><span>" +
                     "<img onclick='MapHelper.highlightShareLink();' "+
-                    "style='background-color: white;' src='" +
+                    "style='margin-top: 10px; background-color: white;' src='" +
                     content.lnk + "/qr'/>" +
-                    "</span><img onclick='MapHelper.hideText()' "+
+                    "</span><p><span>Click QR to Copy</span>"+
+                    "<img onclick='MapHelper.hideText()' "+
                     "class='closer' src='" +
                     ButtonHelpers.ImageMap["butExit"] + "'/>";
 
