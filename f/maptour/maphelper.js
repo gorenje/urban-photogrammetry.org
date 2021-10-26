@@ -66,6 +66,13 @@ var MapHelper = {
     })
   },
 
+  highlightShareLink: function() {
+    setTimeout( function() {
+      document.getElementsByClassName('sharelink')[0].focus()
+      document.getElementsByClassName('sharelink')[0].select()
+    }, 20)
+  },
+
   showQrImageMV: function(content = { lnk: undefined }){
     return MapHelper.showQrImage({...content, container: "#viewerbuttons"})
   },
@@ -82,7 +89,8 @@ var MapHelper = {
 
     img.innerHTML = "<input type='text' class='sharelink' value='"+
                     content.lnk + "'/><p><span>" +
-                    "<img style='background-color: white;' src='" +
+                    "<img onclick='MapHelper.highlightShareLink();' "+
+                    "style='background-color: white;' src='" +
                     content.lnk + "/qr'/>" +
                     "</span><img onclick='MapHelper.hideText()' "+
                     "class='closer' src='" +
@@ -456,8 +464,8 @@ var MapHelper = {
         } catch ( e ) {
           MapHelper.showQrImage({ lnk: shareUrl }).fadeIn(300,function(){
             setTimeout( function() {
-              document.getElementsByClassName('sharelink')[0].focus()
-              document.getElementsByClassName('sharelink')[0].select()
+              /* document.getElementsByClassName('sharelink')[0].focus()
+               * document.getElementsByClassName('sharelink')[0].select()*/
             }, 20)
           })
           // prompt("URL", shareUrl)
