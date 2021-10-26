@@ -66,8 +66,8 @@ var MapHelper = {
     })
   },
 
-  showTextMV: function(content){
-    return MapHelper.showText({ ...content, container: "#viewerbuttons" })
+  showQrImageMV: function(content = { lnk: undefined }){
+    return MapHelper.showQrImage({...content, container: "#viewerbuttons"})
   },
 
   showQrImage: function(content = { lnk: "", container: undefined }){
@@ -78,14 +78,10 @@ var MapHelper = {
     img.id = "showtextbox"
     img.className = "infotextbox"
     img.style = "display: none;"
-    /* img.onclick = function() {
-     *   (cb || function(){})();
-     *   MapHelper.hideText();
-     * }
-     */
     $(content.container || "#mapbuttons").append( img )
 
-    img.innerHTML = "<strong>"+content.lnk+"</strong><p><span>" +
+    img.innerHTML = "<input type='text' class='sharelink' value='"+
+                    content.lnk + "'/><p><span>" +
                     "<img style='background-color: white;' src='" +
                     content.lnk + "/qr'/>" +
                     "</span><img onclick='MapHelper.hideText()' "+
@@ -93,6 +89,10 @@ var MapHelper = {
                     ButtonHelpers.ImageMap["butExit"] + "'/>";
 
     return $(img);
+  },
+
+  showTextMV: function(content){
+    return MapHelper.showText({ ...content, container: "#viewerbuttons" })
   },
 
   showText: function(content = {title: "", text: ""}){
@@ -454,7 +454,12 @@ var MapHelper = {
             url: shareUrl
           })
         } catch ( e ) {
-          MapHelper.showQrImage({ lnk: shareUrl }).fadeIn(300)
+          MapHelper.showQrImage({ lnk: shareUrl }).fadeIn(300,function(){
+            setTimeout( function() {
+              document.getElementsByClassName('sharelink')[0].focus()
+              document.getElementsByClassName('sharelink')[0].select()
+            }, 20)
+          })
           // prompt("URL", shareUrl)
         }
       }).fail(function(err){

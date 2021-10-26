@@ -187,7 +187,15 @@ var ButtonHelpers = {
             text: "Check out the model @ Urban-Photogrammetry.org",
             url: shareUrl
           })
-        } catch ( e ) { prompt("URL",shareUrl) }
+        } catch ( e ) {
+          MapHelper.showQrImageMV({lnk: shareUrl}).fadeIn(300, function(){
+            setTimeout( function() {
+              document.getElementsByClassName('sharelink')[0].focus()
+              document.getElementsByClassName('sharelink')[0].select()
+            }, 20)
+          })
+          // prompt("URL",shareUrl)
+        }
       }).fail(function(err){
         try {
           TDHelpers.copyToClipboard( shareUrl )
