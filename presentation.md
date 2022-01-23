@@ -3,9 +3,13 @@ permalink: /presentation
 title: Presentation of Digital Heritage
 ---
 
-# Digitally Presenting 3D Models
+# Digitally Presentation of 3D Heritage
 
-How are 3D models best presented?
+How is our cultural heritage best presented in a digital 3D environment? From
+the simple to the complex, everything is possible!
+
+An [intial Open Street Map](/berlin) is one way. However this is absolutely not
+submersive nor is there a clear story that is being told.
 
 ## 1. Simple model
 
