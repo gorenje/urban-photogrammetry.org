@@ -3,7 +3,7 @@ title: Berlin Tour
 permalink: /berlin
 ---
 
-# Berlin 3D Virtual Tour
+# Berlin Virtual Tour
 
 Presenting a three dimensional virtual tour of Berlin! The tour is made up of
 interesting urban objects found within Berlin. There is neither rhyme nor
@@ -52,7 +52,7 @@ Currently the tour is made up of the following 3D models:
   <li>
   <a href="/berlin/{{ site["mlid"] }}">{{site.idx | default: site.title}}</a>
   {%- if site.tourlink %}
-    <a target=_blank href='{{ site.tourlink }}'>(B3DVT)</a>
+    <a target=_blank href='{{ site.tourlink }}'>(Berlin 3D Tour)</a>
   {%- endif %}
   </li>
   {%- if site.loc and site.loc != "" %}
