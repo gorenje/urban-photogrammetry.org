@@ -182,10 +182,10 @@ function initCamera(scene) {
   camera.pinchPrecision = 200 / camera.radius;
   camera.upperRadiusLimit = 5 * camera.radius;
 
-  /* camera.wheelDeltaPercentage = 0.01;
-   * camera.pinchDeltaPercentage = 0.01;*/
-  camera.wheelPrecision = 130;
-  camera.pinchPrecision = 130;
+  camera.wheelDeltaPercentage = 0.1;
+  camera.pinchDeltaPercentage = 0.1;
+  //camera.wheelPrecision = 130;
+  //camera.pinchPrecision = 130;
   // camera.zoomToMouseLocation = true;
   camera.checkCollisions = false;
   camera.minZ = 0.001;
