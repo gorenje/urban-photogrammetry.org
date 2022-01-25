@@ -6,7 +6,7 @@ permalink: /berlin
 # Berlin Virtual Tour
 
 Presenting a three dimensional virtual tour of Berlin! The tour is made up of
-interesting urban objects found within Berlin. There is neither rhyme nor
+interesting urban objects in and around Berlin. There is neither rhyme nor
 reason to the tour, it is simply an active documentation of Berlins urban space.
 
 <link rel="stylesheet" href="/f/leaflet.css"/>

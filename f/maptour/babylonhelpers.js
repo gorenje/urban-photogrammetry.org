@@ -50,6 +50,9 @@ function addKeyboardObserver(scene, skyboxMesh) {
             camera.beta     = Math.PI / 2
             camera.radius   = 0
             break
+          case "8":
+            console.log(modelMesh.getLODLevels())
+            break
         }
 			  break;
 		}})
@@ -109,7 +112,9 @@ function configMaterial(material) {
 
 function loadSkyBoxMaterial(mlid,sze,alltextures,multimat,scene) {
   var filename = '/m/' + mlid +'/background-' + sze + '.jpg';
-  if ( sze > 512 ) { filename = '/m/' + mlid + '/background-512.jpg'; }
+  if ( sze > 512 && TDHelpers.isMobile() ) { // there is a 1024 size ...
+    filename = '/m/' + mlid + '/background-512.jpg';
+  }
 
   var cacheEntry = ModelCache.getEntry(filename)
   if ( cacheEntry != undefined ) { filename = cacheEntry; }
@@ -364,7 +369,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
 
                 if (cMlid == currModel.mlid) {
                   mesh.meshes[1].setEnabled(true)
-                  modelMesh.addLODLevel(3,mesh.meshes[1])
+                  modelMesh.addLODLevel(0,mesh.meshes[1])
                 }
                 for ( var idx = 1; idx < sizes.length; idx++ ) {
                   loadSkyBoxMaterial(mlid,sizes[idx],alltextures,multimat,scene)
@@ -382,7 +387,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
             mesh.meshes[1].setEnabled(false)
 
             if (cMlid == currModel.mlid) {
-              modelMesh.addLODLevel(10,modelMesh.clone())
+              modelMesh.addLODLevel(15,modelMesh.clone())
               mesh.meshes[1].setEnabled(true)
               modelMesh.addLODLevel(6,mesh.meshes[1])
             }
@@ -404,7 +409,7 @@ function loadModel(model, scene, skyboxMesh, multimat, sizes) {
                     // ensure mesh matches currently displayed mesh
                     if (cMlid == currModel.mlid) {
                       mesh.meshes[1].setEnabled(true)
-                      modelMesh.addLODLevel(0.5,mesh.meshes[1])
+                      modelMesh.addLODLevel(0,mesh.meshes[1])
                     }
                     for ( var idx = 1; idx < sizes.length; idx++ ) {
                       loadSkyBoxMaterial(mlid,

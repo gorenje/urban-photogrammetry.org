@@ -225,7 +225,6 @@ var MapHelper = {
   },
 
   examineModel: function(mlid, opts = {}) {
-    console.log( "Examing model: " + mlid)
     $(window).trigger('model:show', mlid)
 
     var txt = MapHelper.showModelTitle(mlid);
@@ -295,10 +294,6 @@ var MapHelper = {
     };
     $(window).on('keyframe:moveto', hideinfoscreen)
     $(window).on('infoscreen:hide', hideinfoscreen)
-
-    $(window).on('keyframe:moveto', function(event,data) {
-      console.log("moving to " + data.frameNr )
-    });
 
     $(window).on('keyframe:moveto', function(event,data) {
       if ( data.frameNr == 2 ) {
