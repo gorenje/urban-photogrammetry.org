@@ -5,26 +5,22 @@ title: Urban Photogrammetry
 
 # Urban Photogrammetry
 
-This project aims to create a three dimensional digital archive of our
+Urban Photogrammetry aims to create a three dimensional digital archive of our
 ever changing urban environments.
 
+Taking advantage of [photogrammetry](https://en.wikipedia.org/wiki/Photogrammetry) to provide a deeper perspectives than photos can.
+
 Not only do 3D digital models provide a beautiful representation of environment
-around us today but they also provide future digital archaeology with a basis.
+around us today but they also provide future digital archaeology as a basis.
 
-Taking advantage of advances in [photogrammetry](https://en.wikipedia.org/wiki/Photogrammetry) to provide a deeper perspectives than photos can.
+## Berlin Virtual Tour
 
-## Why Urban Photogrammetry?
+{% include image.html filename="cultural-tour.png" link="/berlin/maptour" %}
 
-{% include youtube.html ytid='oCSVOW5bIpU' %}
-
-## Flythrough Video
-
-{% include youtube.html ytid='V1B6eTx58hk' %}
-
-## 3D Virtual Tour
-
-An initial [Berlin Virtual Tour](/berlin) is a tour of Berlin in 3D models. This is an active collection that is constantly being updated and will never be complete!
+An initial [Berlin Virtual Tour](/berlin/maptour) is a cultural tour of Berlin in 3D digital models.
 
 ## Presenting Cultural Heritage in 3D
 
-How are cultural heritage models best [presented](/presentation)?
+How is cultural heritage best presented in a digital 3D world?
+
+The [presentation](/presentation) page demostrates various possibilities.

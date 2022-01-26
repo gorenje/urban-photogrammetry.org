@@ -52,7 +52,7 @@ Currently the tour is made up of the following 3D models:
   <li>
   <a href="/berlin/{{ site["mlid"] }}">{{site.idx | default: site.title}}</a>
   {%- if site.tourlink %}
-    <a target=_blank href='{{ site.tourlink }}'>(Berlin 3D Tour)</a>
+    <!-- <a target=_blank href='{{ site.tourlink }}'>(Berlin 3D Tour)</a> -->
   {%- endif %}
   </li>
   {%- if site.loc and site.loc != "" %}

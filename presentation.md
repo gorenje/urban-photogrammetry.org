@@ -15,24 +15,30 @@ submersive nor is there a clear story that is being told.
 
 {% include model.html mlid="7a97b5567a1d420ebda0d61634fa384a" %}
 
-## 2. Simple model with 360º Panorama
+## 2. Open Street Map with Pins
+
+{% include image.html filename="osm-tour.png" link="/berlin" %}
+
+An initial [Berlin Virtual Tour](/berlin) is a tour of Berlin in 3D models.
+
+## 3. Simple model with 360º Panorama
 
 {% include model.html mlid="0ec35096975442188f5278665013bfae" %}
 
-## 3. Scene with Annotations
+## 4. Scene with Annotations
 
 {% include model.html mlid="7fe1e240b25347c2bcd120a583c72649" %}
 
-## 4. Flythrough
+## 5. Flythrough
 
 {% include youtube.html ytid='anVb3x-QwIQ' %}
 
-## 5. Flythrough with 360º Panorama
+## 6. 360º Panorama Flythrough
 
 {% include youtube.html ytid='z7UkefFngqE' %}
 
-## 6. Interactive Streetview with Flythrough
+## 7. Interactive Streetview
 
-Video coming soon.
+{% include image.html filename="cultural-tour.png" link="/berlin/maptour" %}
 
-A [demo tour](https://urban-photogrammetry.org/berlin/maptour) of Berlin is available [here](https://urban-photogrammetry.org/berlin/maptour). A feature of this tour are [share links](https://r.upo.sh/b8bwguUF) for sharing [specific](https://r.upo.sh/p4f2EBSs) [views](https://r.upo.sh/vVjwLIDW) of [models](https://r.upo.sh/pJQ3ar1B). But they also work for specific [locations](https://r.upo.sh/9FOl7KuE) on the [map](https://r.upo.sh/QGNGh1At).
+A [interactive cultural tour](https://urban-photogrammetry.org/berlin/maptour) of Berlin. A feature of this tour are [share links](https://r.upo.sh/b8bwguUF) for sharing [specific](https://r.upo.sh/p4f2EBSs) [views](https://r.upo.sh/vVjwLIDW) of [models](https://r.upo.sh/pJQ3ar1B). But they also work for specific [locations](https://r.upo.sh/9FOl7KuE) on the [map](https://r.upo.sh/QGNGh1At).
