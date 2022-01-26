@@ -108,8 +108,11 @@ var ButtonHelpers = {
 
       ButtonHelpers.toggle("butLoader", "butCopied", "butShare")
 
+      var url = "https://r.upo.sh/image"
+      if ( TDHelpers.isLocalhost() ) { url = "http://localhost:8082/image" }
+
       $.ajax({
-        url: "https://r.upo.sh/image",
+        url: url,
         method: "post",
         async: true,
         data: { },

@@ -88,7 +88,7 @@ var MapHelper = {
     img.style = "display: none;"
     $(content.container || "#mapbuttons").append( img )
 
-    img.innerHTML = "<input type='text' class='sharelink' value='"+
+    img.innerHTML = "<input type='text' size=25 class='sharelink' value='"+
                     content.lnk + "'/><p><span>" +
                     "<img onclick='MapHelper.highlightShareLink();' "+
                     "style='margin-top: 10px; background-color: white;' src='" +
