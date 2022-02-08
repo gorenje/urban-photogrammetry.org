@@ -28,6 +28,16 @@
       {% assign pnum = pnum | abs %}
       <meta http-equiv="Refresh" content="0; url='{{ page.rurl | default: site.data.berlin[pnum]["mlid"] }}'" />
     {%- endif %}
+      <script type="text/javascript">
+        function contactClick() {
+          try {
+            window.location = "mailto:" + "contact".replace("contact","info") + " - at - " + "website - dot - urban-photogrammetry.org".replace("website","email");
+          } catch(e) {
+            alert( "Javascript required for this. Please send an email to " + "contact".replace("contact","info") + " - att - " + "website - dott - urban-photogrammetry - doot - org".replace("website","email"))
+          }
+          return false;
+        }
+    </script>
   </head>
 
   <body>
@@ -37,7 +47,7 @@
         {{ content }}
 
         <div class="footer-div">
-          <a href="mailto:contact@website.urban-photogrammetry.org">Contact</a>
+          <a id='contact' href="#" onclick="contactClick(); return false;">Contact</a>
           <a href="/">Home</a>
           <div style="float: right;">
           <a href="https://www.instagram.com/urban.photogrammetry/">Instagram</a>
